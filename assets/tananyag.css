@@ -178,3 +178,6 @@ details.deeper>summary::before{content:"+";display:inline-grid;place-items:cente
 details.deeper[open]>summary::before{content:"−"}
 details.deeper>*:not(summary){margin-bottom:16px}
 .m-hero>*{min-width:0}.hero-fig{max-width:100%}
+
+/* — visszajelzés az anyag végén — */
+.feedback{margin:var(--s-6,48px) 0 0;padding:20px 22px;border-left:3px solid var(--gold);background:var(--bg-2);font:450 16px/1.55 var(--font-disp);max-width:760px}
