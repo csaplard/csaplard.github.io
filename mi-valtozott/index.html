@@ -1,0 +1,118 @@
+<!doctype html>
+<!--
+  Mi változott? — havi összefoglaló az AI gyakorlati világáról
+  © 2026 Csaplár Dániel · CC BY-NC-SA 4.0
+  https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu
+  A bejegyzések a bejegyzesek.json fájlban vannak; útmutató: OLVASSEL.md.
+-->
+<html lang="hu">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi változott? · AI-tananyagok</title>
+<meta name="description" content="Havonta 3–5 rövid tétel arról, mi történt az AI gyakorlati világában, egyszerűen elmagyarázva, forrásokkal.">
+<meta name="author" content="Csaplár Dániel">
+<link rel="canonical" href="https://csaplard.github.io/mi-valtozott/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230b0c0e'/><rect x='7' y='8' width='18' height='17' fill='none' stroke='%23eceae4' stroke-width='1.5'/><path d='M7 13h18' stroke='%23eceae4' stroke-width='1.5'/><circle cx='20' cy='19' r='2.4' fill='%23e8b44c'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:slnt,wght,CRSV,SHRP@-12..0,100..900,0..1,0..100&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('ait-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/ait.css">
+<link rel="stylesheet" href="/assets/tananyag.css">
+<style>
+.entry{padding:var(--s-7,96px) 0 0;scroll-margin-top:64px}
+.entry .month{font:450 13px/1 var(--font-disp);letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.entry>h2{font-size:clamp(28px,3.6vw,42px);letter-spacing:-.03em;margin:10px 0 14px;max-width:24ch}
+.entry .intro-p{font-size:19px;line-height:1.55;color:var(--ink-2);max-width:60ch}
+.item{padding:26px 0;border-top:1px solid var(--line)}
+.item:first-of-type{margin-top:22px}
+.item h3{font-size:23px;margin:0 0 14px;display:flex;gap:12px;align-items:baseline}
+.item h3 .n{font:300 26px/1 var(--font-disp);font-variation-settings:"SHRP" 100;color:var(--gold)}
+.item .lbl{display:block;font:560 13px/1 var(--font-disp);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin:14px 0 6px}
+.item .src{font:450 14px/1.6 var(--font-disp);color:var(--ink-3);margin-top:12px}
+.item .src a{color:var(--ink-2)}
+.draft-flag{display:inline-block;margin-left:10px;padding:3px 9px;font:600 12px/1.2 var(--font-disp);background:var(--alert-wash);color:var(--alert);vertical-align:middle}
+.archive{list-style:none;margin:14px 0 0;padding:0;border-top:1px solid var(--line)}
+.archive li{border-bottom:1px solid var(--line)}
+.archive a{display:grid;grid-template-columns:140px minmax(0,1fr);gap:12px;padding:12px 0;text-decoration:none}
+.archive .m{font:450 14px/1.5 var(--font-disp);color:var(--ink-3)}
+.empty{padding:28px 0 0;color:var(--ink-2)}
+</style>
+</head>
+<body>
+<header class="top fixed">
+  <a class="brand" href="/">AI-tananyagok</a>
+  <nav aria-label="Navigáció"><a href="/#anyagok">Minden anyag</a><a class="wide" href="#archivum">Archívum</a></nav>
+  <button class="theme" type="button" data-theme-toggle aria-label="Színtéma váltása"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+</header>
+
+<main class="page-top">
+<div class="lesson-wrap">
+  <a class="crumb" href="/">Vissza az AI-tananyagokhoz</a>
+  <section class="m-hero" aria-label="Bevezető">
+    <div>
+      <h1>Mi változott?</h1>
+      <p class="lede">Havonta 3–5 rövid tétel arról, mi történt az AI gyakorlati világában, és mit jelent ez egyszerűen elmagyarázva. Minden tételhez forrás tartozik.</p>
+      <p class="facts">Minden tétel két kérdésre felel: <b>Mi történt?</b> és <b>Mit jelent ez egyszerűen?</b> Ahol lehet, a tétel a kapcsolódó tananyagrészre is mutat, hogy a változást az időtálló alapokhoz lehessen kötni.</p>
+    </div>
+  </section>
+
+  <div class="lesson-col">
+    <div id="entries" aria-live="polite">
+      <p class="empty">Az első havi összefoglaló hamarosan megjelenik.</p>
+    </div>
+    <section class="kit-sec" id="archivum" aria-labelledby="h-arch">
+      <h2 id="h-arch">Archívum</h2>
+      <ol class="archive" id="archive"><li><span class="empty">Még nincs korábbi bejegyzés.</span></li></ol>
+    </section>
+  </div>
+</div>
+</main>
+<footer class="foot wrap"><span>© 2026 Csaplár Dániel · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu" rel="license">CC BY-NC-SA 4.0</a></span><a href="mailto:csaplar.d@gmail.com">Kapcsolat</a></footer>
+
+<script src="/assets/ait.js"></script>
+<script>
+(function () {
+  var HONAP = ["január", "február", "március", "április", "május", "június", "július", "augusztus", "szeptember", "október", "november", "december"];
+  function honapNev(h) { var p = String(h).split("-"); return p[0] + ". " + HONAP[(+p[1] || 1) - 1]; }
+  function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  /* a piszkozatok csak ?minta=1 címmel látszanak (előnézet) */
+  var minta = /[?&]minta=1\b/.test(location.search);
+  fetch("bejegyzesek.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).then(function (lista) {
+    var lathato = lista.filter(function (b) { return minta || !b.piszkozat; })
+      .sort(function (a, b) { return a.honap < b.honap ? 1 : -1; });
+    if (!lathato.length) return;
+    var legutobbi = lathato[0];
+    document.getElementById("entries").innerHTML = bejegyzes(legutobbi);
+    document.getElementById("archive").innerHTML = lathato.map(function (b) {
+      return '<li><a href="#h-' + esc(b.honap) + '" data-honap="' + esc(b.honap) + '"><span class="m">' + honapNev(b.honap) + "</span><span>" + esc(b.cim) + (b.piszkozat ? '<span class="draft-flag">piszkozat</span>' : "") + "</span></a></li>";
+    }).join("");
+    Array.prototype.forEach.call(document.querySelectorAll("#archive a"), function (a) {
+      a.addEventListener("click", function (e) {
+        e.preventDefault();
+        var b = lathato.filter(function (x) { return x.honap === a.getAttribute("data-honap"); })[0];
+        document.getElementById("entries").innerHTML = bejegyzes(b);
+        document.getElementById("entries").scrollIntoView({ behavior: "smooth" });
+      });
+    });
+  }).catch(function () {});
+  function bejegyzes(b) {
+    return '<article class="entry" id="h-' + esc(b.honap) + '"><p class="month">' + honapNev(b.honap) + (b.piszkozat ? '<span class="draft-flag">piszkozat · csak előnézet</span>' : "") + "</p>" +
+      "<h2>" + esc(b.cim) + '</h2><p class="intro-p">' + esc(b.bevezeto) + "</p>" +
+      (b.tetelek || []).map(function (t, i) {
+        return '<section class="item"><h3><span class="n">' + (i + 1) + "</span>" + esc(t.cim) + "</h3>" +
+          '<span class="lbl">Mi történt?</span><p>' + esc(t.mi_tortent) + "</p>" +
+          '<span class="lbl">Mit jelent ez egyszerűen?</span><p>' + esc(t.mit_jelent) + "</p>" +
+          (t.kapcsolodo ? '<p class="src">Kapcsolódó tananyag: <a href="' + esc(t.kapcsolodo) + '">' + esc(t.kapcsolodo) + "</a></p>" : "") +
+          '<p class="src">Forrás: ' + (t.forrasok || []).map(function (f) { return '<a href="' + esc(f.url) + '">' + esc(f.nev) + "</a>"; }).join(" · ") + "</p></section>";
+      }).join("") + "</article>";
+  }
+})();
+</script>
+<!-- ────────────────────────────────────────────────────────────────
+     GoatCounter — süti nélküli, IP-tárolás nélküli látogatásszámláló.
+     A statisztika: https://csaplard.goatcounter.com/
+     ──────────────────────────────────────────────────────────────── -->
+<script data-goatcounter="https://csaplard.goatcounter.com/count"
+        async src="https://gc.zgo.at/count.js"></script>
+</body>
+</html>

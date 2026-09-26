@@ -25,7 +25,7 @@
 <body>
 <header class="top fixed">
   <a class="brand" href="/">AI-tananyagok</a>
-  <nav aria-label="Fő navigáció"><a class="wide" href="#honnan">Honnan kezdjem?</a><a href="#anyagok">Minden anyag</a><a class="wide" href="#valtozas">Mi változott?</a></nav>
+  <nav aria-label="Fő navigáció"><a class="wide" href="#honnan">Honnan kezdjem?</a><a href="#anyagok">Minden anyag</a><a class="wide" href="/mi-valtozott/">Mi változott?</a></nav>
   <button class="theme" type="button" data-theme-toggle aria-label="Színtéma váltása"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
 </header>
 <main>
@@ -69,7 +69,20 @@
     <li><h4><a href="/transformer-3d/">3D Transformer</a></h4><p>Egy kis, négyrétegű transzformer háromdimenziós modellje: egy token útja a következő token kiválasztásáig. Rövid film és négy részletes ábra, valódi számértékekkel.</p><div class="f">28 mp film + 4 ábra · 15 perc · kezdő · <span>frissítve 2026. 09. 26.</span></div></li>
   </ul></div>
 </div></section>
-<section class="news" id="valtozas" aria-label="Mi változott?"><div class="wrap"><p><span class="dim">Mi változott? · hamarosan.</span> Havonta 3–5 rövid tétel arról, mi történt az AI gyakorlati világában, egyszerűen elmagyarázva, forrásokkal.</p></div></section>
+<section class="news" id="valtozas" aria-label="Mi változott?"><div class="wrap"><p><span class="dim">Mi változott? · <span data-news-month>havi összefoglaló</span>.</span> <span data-news-title>Havonta 3–5 rövid tétel arról, mi történt az AI gyakorlati világában, egyszerűen elmagyarázva, forrásokkal. Az első hamarosan megjelenik.</span> <a href="/mi-valtozott/">Megnyitás →</a></p></div></section>
+<script>
+/* a legfrissebb közzétett „Mi változott?” bejegyzés címe (a piszkozatok nem látszanak) */
+(function () {
+  var H = ["január","február","március","április","május","június","július","augusztus","szeptember","október","november","december"];
+  fetch("/mi-valtozott/bejegyzesek.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).then(function (l) {
+    var k = l.filter(function (b) { return !b.piszkozat; }).sort(function (a, b) { return a.honap < b.honap ? 1 : -1; })[0];
+    if (!k) return;
+    var p = k.honap.split("-");
+    document.querySelector("[data-news-month]").textContent = p[0] + ". " + H[(+p[1] || 1) - 1];
+    document.querySelector("[data-news-title]").textContent = k.cim;
+  }).catch(function () {});
+})();
+</script>
 </main>
 <footer class="foot wrap"><span>© 2026 Csaplár Dániel · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu" rel="license">CC BY-NC-SA 4.0</a></span><a href="mailto:csaplar.d@gmail.com">Kapcsolat</a></footer>
 <script src="/assets/ait.js"></script>

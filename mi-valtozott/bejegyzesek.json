@@ -1,0 +1,35 @@
+[
+  {
+    "honap": "2026-10",
+    "cim": "[A hónap címe: egy mondat, ami összefoglalja a legfontosabb változást]",
+    "piszkozat": true,
+    "bevezeto": "[2–3 mondat: mi volt a hónap fő iránya, kinek érdemes figyelnie.]",
+    "tetelek": [
+      {
+        "cim": "[1. tétel rövid címe]",
+        "mi_tortent": "[Mi történt? Tényszerűen, 2–3 mondatban, dátummal.]",
+        "mit_jelent": "[Mit jelent ez egyszerűen? Egy hétköznapi példával, 2–3 mondatban. Mire figyelj, mit érdemes kipróbálni?]",
+        "kapcsolodo": "/ai-atlasz/#fejezet-5",
+        "forrasok": [
+          { "nev": "[Forrás neve — cím]", "url": "https://example.org/" }
+        ]
+      },
+      {
+        "cim": "[2. tétel rövid címe]",
+        "mi_tortent": "[…]",
+        "mit_jelent": "[…]",
+        "forrasok": [
+          { "nev": "[Forrás neve — cím]", "url": "https://example.org/" }
+        ]
+      },
+      {
+        "cim": "[3. tétel rövid címe]",
+        "mi_tortent": "[…]",
+        "mit_jelent": "[…]",
+        "forrasok": [
+          { "nev": "[Forrás neve — cím]", "url": "https://example.org/" }
+        ]
+      }
+    ]
+  }
+]
