@@ -1,0 +1,650 @@
+<!doctype html>
+<!--
+  Python-alapok — gyakorlófüzet
+  © 2026 Csaplár Dániel · CC BY-NC-SA 4.0
+  https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu
+-->
+<html lang="hu">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python-alapok · AI-tananyagok</title>
+<meta name="description" content="Nyolc hét, napi 25 perc kód: változók, listák, dictek, ciklusok, függvények, fájlok, osztályok, venv és git, hétköznapi példákon, szintenkénti gyakorlólappal és zárófeladattal.">
+<meta name="author" content="Csaplár Dániel">
+<link rel="canonical" href="https://csaplard.github.io/python-alapok/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230b0c0e'/><text x='16' y='21' text-anchor='middle' font-family='monospace' font-size='13' fill='%23e8b44c'>&gt;_</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:slnt,wght,CRSV,SHRP@-12..0,100..900,0..1,0..100&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('ait-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/ait.css">
+<link rel="stylesheet" href="/assets/tananyag.css">
+</head>
+<body data-material="python-alapok" data-store="py_progress_v1" data-levels="12" data-quizname="gyakorlólapjának">
+<header class="top fixed">
+  <a class="brand" href="/">AI-tananyagok</a>
+  <nav aria-label="Anyagon belüli navigáció"><a class="wide" href="#szintek">Szintek</a><a class="wide" href="#zarofeladat">Zárófeladat</a><a href="#fogalomtar">Fogalomtár</a></nav>
+  <button class="theme" type="button" data-theme-toggle aria-label="Színtéma váltása"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+</header>
+
+<main class="page-top">
+<div class="lesson-wrap">
+  <a class="crumb" href="/">Vissza az AI-tananyagokhoz</a>
+
+  <section class="m-hero" aria-label="Bevezető">
+    <div>
+      <h1>Python-alapok</h1>
+      <p class="lede">Nyolc hét, napi 25 perc kód. Annyi programozás, amennyi a tananyagok kódrészleteinek megértéséhez és a saját első kísérleteidhez kell.</p>
+      <p class="facts">12 szint és egy zárófeladat · kezdő. Minden szint egy gyakorlólappal zárul: a következő szint a feladatok kétharmadának helyes megoldásával nyílik meg.</p>
+      <a class="start" href="#hasznalat">Kezdés a használati útmutatóval →</a>
+    </div>
+    <figure class="hero-fig">
+<pre class="hero-code" aria-label="Példa: egy rövid Python-program"><code><span class="tk-kw">for</span> nap, fok <span class="tk-kw">in</span> <span class="tk-kw">enumerate</span>(homersekletek):
+    <span class="tk-kw">if</span> <span class="tk-kw">abs</span>(fok - <span class="tk-num">21.0</span>) &gt; <span class="tk-num">1.0</span>:
+        <span class="tk-kw">print</span>(<span class="tk-str">f"{nap}. nap: {fok} fok"</span>)</code></pre>
+      <figcaption>Nyolc hét múlva ezt a három sort gondolkodás nélkül el tudod olvasni, és meg is tudod írni.</figcaption>
+    </figure>
+  </section>
+
+  <section class="overview" id="szintek" aria-labelledby="h-szintek">
+    <div>
+      <h2 id="h-szintek">Tizenkét szint, egy zárófeladat</h2>
+      <p>A példák hétköznapi adatokon futnak: egy kis bolt készletén, egy szobahőmérséklet-naplón és eladási adatokon. Nem azért, hogy szórakoztató legyen, hanem mert ismerős adaton hamarabb észreveszed, ha valami nem stimmel.</p>
+      <ol class="lvl-index">
+        <li data-level="1"><a href="#szint-1"><span class="n">1</span><span class="t">Változó és típus</span><span class="st"></span></a></li>
+        <li data-level="2"><a href="#szint-2"><span class="n">2</span><span class="t">Lista</span><span class="st"></span></a></li>
+        <li data-level="3"><a href="#szint-3"><span class="n">3</span><span class="t">Dict: kulcs és érték</span><span class="st"></span></a></li>
+        <li data-level="4"><a href="#szint-4"><span class="n">4</span><span class="t">Feltétel</span><span class="st"></span></a></li>
+        <li data-level="5"><a href="#szint-5"><span class="n">5</span><span class="t">Ciklus</span><span class="st"></span></a></li>
+        <li data-level="6"><a href="#szint-6"><span class="n">6</span><span class="t">Függvény</span><span class="st"></span></a></li>
+        <li data-level="7"><a href="#szint-7"><span class="n">7</span><span class="t">Hibakezelés</span><span class="st"></span></a></li>
+        <li data-level="8"><a href="#szint-8"><span class="n">8</span><span class="t">Fájl, CSV, JSON</span><span class="st"></span></a></li>
+        <li data-level="9"><a href="#szint-9"><span class="n">9</span><span class="t">Osztály, alapszinten</span><span class="st"></span></a></li>
+        <li data-level="10"><a href="#szint-10"><span class="n">10</span><span class="t">Modul és projektstruktúra</span><span class="st"></span></a></li>
+        <li data-level="11"><a href="#szint-11"><span class="n">11</span><span class="t">venv és pip</span><span class="st"></span></a></li>
+        <li data-level="12"><a href="#szint-12"><span class="n">12</span><span class="t">Git</span><span class="st"></span></a></li>
+      </ol>
+    </div>
+    <div>
+      <div class="layers" data-total="12" data-done="0"><svg viewBox="0 0 140 200" aria-hidden="true"></svg><div><div class="count"><span data-count>0</span><span> / 12</span></div><p>Minden teljesített gyakorlólap egy réteg. A haladásod csak ebben a böngészőben tárolódik.</p></div></div>
+      <div class="tools"><button class="pill" type="button" data-unlock-all>Minden szint feloldása</button><button class="pill" type="button" data-reset>Haladás törlése</button></div>
+      <p class="tools-note" data-unlocked-note hidden>Minden szint fel van oldva áttekintéshez. A gyakorlólapok eredményei megmaradnak.</p>
+    </div>
+  </section>
+
+  <div class="lesson-col">
+
+<section class="intro-sec" id="hasznalat" aria-labelledby="h-hasznalat">
+  <h2 id="h-hasznalat">Hogyan használd</h2>
+  <div class="lvl-body">
+    <p>Ez az anyag nem videó és nem olvasmány. Minden szint végén egy <b>gyakorlólap</b> van: próbáld ki magad, mielőtt továbbmész. Ha egy gyakorlólapon elakadsz, olvasd újra a szintet. Ez nem szégyen, a gyakorlólap pont erre való.</p>
+    <p class="key"><b>A legfontosabb szabály.</b> A kódot te írod. Kereshetsz, dokumentációt olvashatsz, hibaüzenetet bemásolhatsz, de a megoldást ne generáltasd. Az egyetlen dolog, amit nem lehet megjátszani: hogy a saját kódodat soronként el tudod-e magyarázni.</p>
+    <h3>Nyolchetes menetrend</h3>
+    <div class="tbl"><table>
+      <thead><tr><th scope="col" class="n">Hét</th><th scope="col">Szint</th><th scope="col">Mikorra kész</th></tr></thead>
+      <tbody>
+        <tr><td class="n">1</td><td>1–2 · változó, lista</td><td>napi 3 apró feladat</td></tr>
+        <tr><td class="n">2</td><td>3–4 · dict, feltétel</td><td>napi 3 apró feladat</td></tr>
+        <tr><td class="n">3</td><td>5 · ciklus</td><td>mindent ciklussal oldj meg</td></tr>
+        <tr><td class="n">4</td><td>6 · függvény</td><td>bontsd fel a korábbi kódjaidat</td></tr>
+        <tr><td class="n">5</td><td>7–8 · hibakezelés, fájl</td><td>valódi CSV-vel dolgozz</td></tr>
+        <tr><td class="n">6</td><td>9–10 · osztály, modul</td><td>több fájlra bontás</td></tr>
+        <tr><td class="n">7</td><td>11–12 · venv, git</td><td>első repó</td></tr>
+        <tr><td class="n">8</td><td>zárófeladat</td><td>működő eszköz, README-vel</td></tr>
+      </tbody>
+    </table></div>
+    <h3>Mire lesz szükséged</h3>
+    <p>Telepíts Pythont (python.org), és nyiss egy kódszerkesztőt; egy ingyenes szerkesztő bőven elég. A fájlt <code>.py</code> kiterjesztéssel mented, a terminálban a <code>python fajlnev.py</code> paranccsal futtatod. Ennyi az egész eszköztár a hatodik hétig.</p>
+  </div>
+</section>
+
+<!-- ================= 1 ================= -->
+<section class="level" id="szint-1" data-level="1" aria-labelledby="h-1">
+  <header class="lvl"><div class="numeral" aria-hidden="true">1</div><div>
+    <p class="lvl-meta">1. szint a 12-ből · 1. hét · gyakorlólappal</p>
+    <h2 id="h-1">Változó és típus</h2>
+    <p class="lvl-goal"><b>Cél:</b>értékeket névvel tárolni, és tudni, miért nem ugyanaz a <code>"150"</code> és a <code>150</code>.</p>
+    <p class="lock" hidden><span class="lock-text"></span></p>
+  </div></header>
+  <div class="lvl-body">
+    <p>A változó egy felcímkézett doboz. A címkét te adod, a tartalmat te teszed bele. Semmi több misztikum nincs benne.</p>
+<pre class="py" data-name="termek.py"># egy termék adatai a bolt nyilvántartásában
+termek_nev = "zabpehely"     # str: szöveg
+ar = 890                     # int: egész szám (forint)
+keszlet_db = 40              # int
+suly_kg = 0.5                # float: tizedes tört
+bio = True                   # bool: igaz vagy hamis
+
+print(termek_nev, ar)</pre>
+    <p>Négy típus, amellyel az idő nagy részében dolgozni fogsz: <code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code>. A típus nem dekoráció: meghatározza, mit lehet csinálni az értékkel.</p>
+<pre class="py" data-name="tipusok.py">3 + 4            # 7: összeadás
+"3" + "4"        # "34": összefűzés!
+"3" + 4          # TypeError: hiba</pre>
+    <p class="warn"><b>Klasszikus buktató.</b> Ha CSV-ből vagy beviteli mezőből olvasol számot, az <b>szövegként</b> érkezik. A <code>"150"</code> nem ugyanaz, mint a <code>150</code>. Átalakítás: <code>int("150")</code> vagy <code>float("0.5")</code>.</p>
+    <h3>f-string: szöveg és érték együtt</h3>
+<pre class="py" data-name="cimke.py">cimke = f"{termek_nev}: {ar} Ft ({keszlet_db} db raktáron)"
+print(cimke)   # zabpehely: 890 Ft (40 db raktáron)</pre>
+    <details class="deeper"><summary>Mélyebben: miért nincs típusdeklaráció?</summary>
+      <p>Pythonban a típus az értékhez tartozik, nem a változóhoz. Ugyanaz a név ma <code>int</code>-et, holnap <code>str</code>-t tarthat. Ez kényelmes, de ez a későn kiderülő hibák leggyakoribb forrása. Ezért írnak sokan típusjelölést (<em>type hint</em>): <code>suly_kg: float = 0.5</code>. A Python nem kényszeríti ki, de a szerkesztő szól, és az olvasó érti.</p>
+    </details>
+    <div class="quiz" data-level="1" data-title="Gyakorlólap 01"></div>
+  </div>
+</section>
+
+<!-- ================= 2 ================= -->
+<section class="level" id="szint-2" data-level="2" aria-labelledby="h-2">
+  <header class="lvl"><div class="numeral" aria-hidden="true">2</div><div>
+    <p class="lvl-meta">2. szint a 12-ből · 1. hét · gyakorlólappal</p>
+    <h2 id="h-2">Lista</h2>
+    <p class="lvl-goal"><b>Cél:</b>sok egyforma adatot egy helyen kezelni, elemet elérni, szeletelni és összegezni.</p>
+    <p class="lock" hidden><span class="lock-text"></span></p>
+  </div></header>
+  <div class="lvl-body">
+    <p>A lista sorrendtartó gyűjtemény. Akkor használod, ha <em>ugyanolyan fajta</em> dolgokból van több: napi hőmérsékletek, árak, dolgozatpontszámok.</p>
+<pre class="py" data-name="lista.py">homersekletek = [21.2, 20.9, 21.5, 19.8, 22.0]   # öt nap szobahőmérséklete [°C]
+
+print(homersekletek[0])       # 21.2: az első elem indexe 0!
+print(homersekletek[-1])      # 22.0: az utolsó
+print(len(homersekletek))     # 5: hány elem van
+
+homersekletek.append(21.4)    # hozzáfűz a végére
+homersekletek.remove(19.8)    # kivesz egy konkrét értéket</pre>
+    <p class="warn"><b>Nulláról indexelünk.</b> Az első elem a <code>[0]</code>. Egy ötelemű lista utolsó eleme a <code>[4]</code>. Az <code>[5]</code> már <code>IndexError</code>. Ez az első hét leggyakoribb hibája, és soha nem szűnik meg teljesen.</p>
+    <h3>Szeletelés</h3>
+<pre class="py" data-name="szelet.py">homersekletek[1:3]     # [20.9, 21.5]: 1-től 3-ig, a 3 NEM kell
+homersekletek[:2]      # az első kettő
+homersekletek[-2:]     # az utolsó kettő</pre>
+    <h3>Hasznos beépített függvények</h3>
+<pre class="py" data-name="beepitett.py">sum(homersekletek)                       # összeg
+max(homersekletek)                       # legnagyobb
+min(homersekletek)                       # legkisebb
+sum(homersekletek) / len(homersekletek)  # átlag
+sorted(homersekletek)                    # rendezett MÁSOLAT</pre>
+    <div class="quiz" data-level="2" data-title="Gyakorlólap 02"></div>
+  </div>
+</section>
+
+<!-- ================= 3 ================= -->
+<section class="level" id="szint-3" data-level="3" aria-labelledby="h-3">
+  <header class="lvl"><div class="numeral" aria-hidden="true">3</div><div>
+    <p class="lvl-meta">3. szint a 12-ből · 2. hét · gyakorlólappal</p>
+    <h2 id="h-3">Dict: kulcs és érték</h2>
+    <p class="lvl-goal"><b>Cél:</b>egy dolog tulajdonságait névvel tárolni, és a „dictek listája” szerkezetet magabiztosan olvasni.</p>
+    <p class="lock" hidden><span class="lock-text"></span></p>
+  </div></header>
+  <div class="lvl-body">
+    <p>A listában ugyanolyan fajta dolgokból van sok, a dictben viszont <em>egy dolog különböző tulajdonságai</em> vannak. Egy termék nem négy szám egymás után, hanem név, ár, kategória, tömeg, és mindegyiknek neve van.</p>
+<pre class="py" data-name="dict.py">termek = {
+    "nev": "zabpehely",
+    "ar": 890,
+    "kategoria": "reggeli",
+    "suly_kg": 0.5,
+}
+
+print(termek["kategoria"])        # reggeli
+print(termek.get("akcio"))        # None: nincs ilyen kulcs, de nem áll le
+print(termek.get("akcio", 0))     # 0: alapérték, ha nincs kulcs
+
+termek["bio"] = True              # új kulcs felvétele</pre>
+    <p class="note"><b>Mikor melyik.</b> A <code>lista[0]</code> hibát dob, ha nincs elem. A <code>dict["kulcs"]</code> szintén (<code>KeyError</code>). A <code>.get()</code> viszont csendben <code>None</code>-t ad. Éles kódban a <code>.get()</code> alapértékkel gyakran biztonságosabb, de vigyázz: a csendes <code>None</code> később, messzebb okoz hibát.</p>
+    <h3>Dictek listája: ez a leggyakoribb szerkezet</h3>
+<pre class="py" data-name="keszlet.py">keszlet = [
+    {"nev": "alma",   "ar": 450, "db": 12},
+    {"nev": "körte",  "ar": 690, "db": 4},
+    {"nev": "szilva", "ar": 790, "db": 0},
+]
+
+print(keszlet[1]["nev"])   # körte</pre>
+    <p>Ez a forma köszön vissza minden CSV-beolvasásnál, minden API-válasznál és minden adatbázis-lekérdezésnél. Ha ezt érted, a későbbi anyag fele már ismerős lesz.</p>
+    <div class="quiz" data-level="3" data-title="Gyakorlólap 03"></div>
+  </div>
+</section>
+
+<!-- ================= 4 ================= -->
+<section class="level" id="szint-4" data-level="4" aria-labelledby="h-4">
+  <header class="lvl"><div class="numeral" aria-hidden="true">4</div><div>
+    <p class="lvl-meta">4. szint a 12-ből · 2. hét · gyakorlólappal</p>
+    <h2 id="h-4">Feltétel</h2>
+    <p class="lvl-goal"><b>Cél:</b>döntéseket kódban leírni, és elkerülni a két leggyakoribb kezdő hibát.</p>
+    <p class="lock" hidden><span class="lock-text"></span></p>
+  </div></header>
+  <div class="lvl-body">
+    <p>Az <code>if</code> ott dönt, ahol te is döntenél. A hétköznapi döntések pont ilyenek: elég meleg van-e, van-e még raktáron, jár-e kedvezmény. A példában a szobahőmérséklet célja 21 fok, legfeljebb 1 fok eltéréssel.</p>
+<pre class="py" data-name="homerseklet.py">homerseklet = 22.5
+cel = 21.0
+elteres_hatar = 1.0
+
+if abs(homerseklet - cel) &lt;= elteres_hatar:
+    print("RENDBEN")
+elif homerseklet &gt; cel:
+    print("TÚL MELEG")
+else:
+    print("TÚL HIDEG")</pre>
+    <p class="warn"><b>A behúzás nem stílus.</b> Pythonban a behúzás (4 szóköz) <b>a szintaxis része</b>. Ami beljebb van, az tartozik az <code>if</code>-hez. Rossz behúzás más programot jelent, vagy <code>IndentationError</code>-t. Ez a nyelv egyetlen igazán szokatlan vonása; egy hét alatt megszokod.</p>
+    <h3>Összehasonlítás és logika</h3>
+    <div class="tbl"><table>
+      <thead><tr><th scope="col">Jel</th><th scope="col">Jelentés</th><th scope="col">Példa</th></tr></thead>
+      <tbody>
+        <tr><td><code>==</code></td><td>egyenlő</td><td><code>ar == 890</code></td></tr>
+        <tr><td><code>!=</code></td><td>nem egyenlő</td><td><code>kategoria != "reggeli"</code></td></tr>
+        <tr><td><code>&gt;=</code> <code>&lt;=</code></td><td>nagyobb/kisebb vagy egyenlő</td><td><code>db &gt;= 10</code></td></tr>
+        <tr><td><code>and</code></td><td>mindkettő igaz</td><td><code>ar &gt; 500 and db &gt; 0</code></td></tr>
+        <tr><td><code>or</code></td><td>legalább az egyik</td><td><code>akcios or kifuto</code></td></tr>
+        <tr><td><code>not</code></td><td>tagadás</td><td><code>not bio</code></td></tr>
+        <tr><td><code>in</code></td><td>benne van-e</td><td><code>"alma" in kosar</code></td></tr>
+      </tbody>
+    </table></div>
+    <p class="warn"><b>Egy = vagy két ==.</b> Az <code>=</code> értékadás, a <code>==</code> összehasonlítás. Az <code>if ar = 890:</code> szintaktikai hiba. Ez a klasszikus kezdő elgépelés.</p>
+    <div class="quiz" data-level="4" data-title="Gyakorlólap 04"></div>
+  </div>
+</section>
+
+<!-- ================= 5 ================= -->
+<section class="level" id="szint-5" data-level="5" aria-labelledby="h-5">
+  <header class="lvl"><div class="numeral" aria-hidden="true">5</div><div>
+    <p class="lvl-meta">5. szint a 12-ből · 3. hét · gyakorlólappal</p>
+    <h2 id="h-5">Ciklus</h2>
+    <p class="lvl-goal"><b>Cél:</b>ugyanazt a műveletet egy gyűjtemény minden elemén elvégezni, és közben szűrni.</p>
+    <p class="lock" hidden><span class="lock-text"></span></p>
+  </div></header>
+  <div class="lvl-body">
+    <p>Ha egy műveletet sok elemen kell elvégezned, nem másolod le ötvenszer. A <code>for</code> végigmegy egy gyűjteményen.</p>
+<pre class="py" data-name="ciklus.py">meresek = [21.2, 20.9, 22.5, 19.8]   # négy nap szobahőmérséklete [°C]
+
+for fok in meresek:
+    print(fok)</pre>
+    <p>A <code>fok</code> nevet te adod, és minden körben a következő elemet tartalmazza. Ennyi.</p>
+    <h3>Ciklus és feltétel: szűrés</h3>
+<pre class="py" data-name="szures.py">kilogo = []
+
+for fok in meresek:
+    if abs(fok - 21.0) &gt; 1.0:
+        kilogo.append(fok)
+
+print(f"{len(kilogo)} nap lógott ki a kényelmes sávból")   # 2 nap (22.5 és 19.8)</pre>
+    <h3>Dictek listáján végigmenni</h3>
+<pre class="py" data-name="elfogyott.py">for tetel in keszlet:
+    if tetel["db"] == 0:
+        print(f"ELFOGYOTT: {tetel['nev']}")   # ELFOGYOTT: szilva</pre>
+    <p class="note"><b>Számláló, ha kell.</b> Ha a sorszám is érdekel: <code>for i, fok in enumerate(meresek):</code>. Az <code>i</code> a 0-tól induló index.</p>
+    <details class="deeper"><summary>Mélyebben: listaértelmezés (list comprehension)</summary>
+      <p>A fenti szűrés egy sorban is leírható:</p>
+<pre class="py" data-name="egysoros.py">kilogo = [f for f in meresek if abs(f - 21.0) &gt; 1.0]</pre>
+      <p>Tömör és pythonos, de az első hónapban maradj a hosszú formánál. Előbb tudj ciklusban gondolkodni, csak utána rövidíts. A rövid forma nem okosabb kód, csak kevesebb sor.</p>
+    </details>
+    <p class="warn"><b>Amit ne csinálj.</b> Ne módosítsd azt a listát, amelyen épp végigmész. Elemek fognak kimaradni, és órákig keresed majd, miért. Gyűjts egy új listába, aztán cserélj.</p>
+    <div class="quiz" data-level="5" data-title="Gyakorlólap 05"></div>
+  </div>
+</section>
+
+<!-- ================= 6 ================= -->
+<section class="level" id="szint-6" data-level="6" aria-labelledby="h-6">
+  <header class="lvl"><div class="numeral" aria-hidden="true">6</div><div>
+    <p class="lvl-meta">6. szint a 12-ből · 4. hét · gyakorlólappal</p>
+    <h2 id="h-6">Függvény</h2>
+    <p class="lvl-goal"><b>Cél:</b>ismétlődő kódból elnevezett, újrahasználható műveletet csinálni.</p>
+    <p class="lock" hidden><span class="lock-text"></span></p>
+  </div></header>
+  <div class="lvl-body">
+    <p>A függvény egy megnevezett művelet, amelyet többször használsz. Ha ugyanazt a kódot kétszer másolod le, függvény kell.</p>
+<pre class="py" data-name="fuggveny.py">def rendben(ertek, cel, hatar):
+    """Igaz, ha az érték legfeljebb 'hatar'-nyira tér el a céltól."""
+    return abs(ertek - cel) &lt;= hatar
+
+
+if rendben(21.5, 21.0, 1.0):
+    print("OK")</pre>
+    <p>Három része van: a név (<code>rendben</code>), a bemenetek (<code>ertek, cel, hatar</code>) és a visszatérési érték (<code>return</code>). Ha nincs <code>return</code>, a függvény <code>None</code>-t ad vissza; ez is gyakori hibaforrás.</p>
+    <h3>Alapértelmezett paraméter</h3>
+<pre class="py" data-name="alapertek.py">def rendben(ertek, cel, hatar=1.0):
+    return abs(ertek - cel) &lt;= hatar
+
+rendben(21.5, 21.0)              # 1.0-s határral számol: True
+rendben(21.5, 21.0, hatar=0.2)   # felülírva: False</pre>
+    <p class="note"><b>A jó függvény ismérve.</b> Egy dolgot csinál, és a neve elárulja, mit. Ha a névbe „és” kerül (<code>beolvas_es_kiertekel</code>), akkor két függvény kell. Ez a szabály többet ér bármilyen szintaktikai tudásnál.</p>
+    <p class="warn"><b>Buktató.</b> A <code>print()</code> és a <code>return</code> nem ugyanaz. A <code>print</code> kiír a képernyőre, a <code>return</code> értéket ad vissza a hívónak. Számoló függvényben szinte mindig <code>return</code> kell.</p>
+    <div class="quiz" data-level="6" data-title="Gyakorlólap 06"></div>
+  </div>
+</section>
+
+<!-- ================= 7 ================= -->
+<section class="level" id="szint-7" data-level="7" aria-labelledby="h-7">
+  <header class="lvl"><div class="numeral" aria-hidden="true">7</div><div>
+    <p class="lvl-meta">7. szint a 12-ből · 5. hét · gyakorlólappal</p>
+    <h2 id="h-7">Hibakezelés</h2>
+    <p class="lvl-goal"><b>Cél:</b>a hibát kontrolláltan kezelni, és felismerni a leggyakoribb hibatípusokat.</p>
+    <p class="lock" hidden><span class="lock-text"></span></p>
+  </div></header>
+  <div class="lvl-body">
+    <p>A kód el fog hasalni. A kérdés csak az, hogy kontrolláltan vagy váratlanul. Valódi adatokkal dolgozva ez nem elméleti különbség.</p>
+<pre class="py" data-name="hibakezeles.py">try:
+    ar = int(sor["ar"])
+except ValueError:
+    print(f"Hibás ár: {sor['ar']}")
+    ar = None
+except KeyError:
+    print("Hiányzik az ár oszlop")
+    ar = None</pre>
+    <h3>A leggyakoribb hibatípusok</h3>
+    <div class="tbl"><table>
+      <thead><tr><th scope="col">Hiba</th><th scope="col">Mit jelent</th></tr></thead>
+      <tbody>
+        <tr><td><code>ValueError</code></td><td>Jó típus, rossz érték: <code>int("kismedve")</code></td></tr>
+        <tr><td><code>TypeError</code></td><td>Rossz típus: <code>"3" + 4</code></td></tr>
+        <tr><td><code>KeyError</code></td><td>Nincs ilyen kulcs a dictben</td></tr>
+        <tr><td><code>IndexError</code></td><td>Nincs ilyen indexű elem a listában</td></tr>
+        <tr><td><code>FileNotFoundError</code></td><td>Nincs meg a fájl</td></tr>
+        <tr><td><code>ZeroDivisionError</code></td><td>Nullával osztás</td></tr>
+      </tbody>
+    </table></div>
+    <p class="warn"><b>Amit soha.</b> Ne írj <code>except:</code> vagy <code>except Exception: pass</code> formát. Ez elnyeli az összes hibát, azokat is, amelyekről tudnod kellene. Egy elnyelt hiba rosszabb, mint egy leálló program: a leálló programról tudsz, az elnyelt hibáról nem.</p>
+    <details class="deeper"><summary>Mélyebben: mikor kapd el, és mikor ne</summary>
+      <p>Csak azt a hibát kapd el, amelyre van értelmes válaszod. Ha a válaszod annyi, hogy „kiírom és megyek tovább”, általában jobb hagyni, hogy a hiba továbbmenjen, és a hívó szinten dönteni. A hibakezelés nem a hiba eltüntetéséről szól, hanem arról, hogy a program <em>ismert állapotba</em> kerüljön.</p>
+      <p>Komolyabb programban a <code>print</code> helyett a <code>logging</code> modul a helyes megoldás: időbélyeggel, szinttel, fájlba írva.</p>
+    </details>
+    <div class="quiz" data-level="7" data-title="Gyakorlólap 07"></div>
+  </div>
+</section>
+
+<!-- ================= 8 ================= -->
+<section class="level" id="szint-8" data-level="8" aria-labelledby="h-8">
+  <header class="lvl"><div class="numeral" aria-hidden="true">8</div><div>
+    <p class="lvl-meta">8. szint a 12-ből · 5. hét · gyakorlólappal</p>
+    <h2 id="h-8">Fájl, CSV, JSON</h2>
+    <p class="lvl-goal"><b>Cél:</b>a saját fájljaidból dolgozni: szöveget, CSV-t és JSON-t olvasni és írni.</p>
+    <p class="lock" hidden><span class="lock-text"></span></p>
+  </div></header>
+  <div class="lvl-body">
+    <p>Itt kezd a Python valódi eszközzé válni: amikor nem beírt adatokkal, hanem a saját fájljaiddal dolgozol.</p>
+    <h3>Szövegfájl</h3>
+<pre class="py" data-name="szoveg.py">with open("naplo.txt", encoding="utf-8") as f:
+    for sor in f:
+        print(sor.strip())</pre>
+    <p>A <code>with</code> gondoskodik róla, hogy a fájl akkor is bezáruljon, ha hiba történik. A <code>strip()</code> levágja a sorvégi újsort. Az <code>encoding="utf-8"</code> nélkül az ékezetek elszállhatnak; magyar szöveggel ez nem opcionális.</p>
+    <h3>CSV: a táblázatos adatok közös nyelve</h3>
+<pre class="py" data-name="csv_olvasas.py">import csv
+
+with open("eladasok.csv", encoding="utf-8", newline="") as f:
+    olvaso = csv.DictReader(f)
+    for sor in olvaso:
+        print(sor["termek"], sor["kategoria"])</pre>
+    <p>A <code>DictReader</code> minden sort dictté alakít, a fejléc alapján. Vagyis pontosan azt a szerkezetet kapod, amelyet a 3. szinten kézzel építettél.</p>
+    <p class="warn"><b>Táblázatkezelőből jövő CSV.</b> A magyar beállítású táblázatkezelők gyakran pontosvesszővel mentenek, nem vesszővel, és a tizedesjel vessző. Ilyenkor: <code>csv.DictReader(f, delimiter=";")</code>, a számoknál pedig <code>float(ertek.replace(",", "."))</code>. Magyar környezetben ez nem kivétel, hanem az alapeset.</p>
+    <h3>JSON: a programok közti adatcsere nyelve</h3>
+<pre class="py" data-name="json_pelda.py">import json
+
+# kiírás
+with open("keszlet.json", "w", encoding="utf-8") as f:
+    json.dump(keszlet, f, ensure_ascii=False, indent=2)
+
+# beolvasás
+with open("keszlet.json", encoding="utf-8") as f:
+    keszlet = json.load(f)</pre>
+    <p>A JSON szerkezete pontosan a Python listák és dictek szerkezete. Ezért lesz ismerős minden API-válasz, például a RAG-laborban.</p>
+    <div class="quiz" data-level="8" data-title="Gyakorlólap 08"></div>
+  </div>
+</section>
+
+<!-- ================= 9 ================= -->
+<section class="level" id="szint-9" data-level="9" aria-labelledby="h-9">
+  <header class="lvl"><div class="numeral" aria-hidden="true">9</div><div>
+    <p class="lvl-meta">9. szint a 12-ből · 6. hét · gyakorlólappal</p>
+    <h2 id="h-9">Osztály, alapszinten</h2>
+    <p class="lvl-goal"><b>Cél:</b>osztályt olvasni és írni, és tudni, mikor nem kell.</p>
+    <p class="lock" hidden><span class="lock-text"></span></p>
+  </div></header>
+  <div class="lvl-body">
+    <p>Az osztály összecsomagolja az adatot és a rá vonatkozó műveleteket. Nem kell szeretni, és nem kell mindent osztályba tenni, de olvasni tudnod kell, mert a legtöbb könyvtár így épül.</p>
+<pre class="py" data-name="osztaly.py">class Termek:
+    def __init__(self, nev, ar, db):
+        self.nev = nev
+        self.ar = ar
+        self.db = db
+
+    def cimke(self):
+        return f"{self.nev}: {self.ar} Ft"
+
+
+t = Termek("zabpehely", 890, 40)
+print(t.cimke())     # zabpehely: 890 Ft
+print(t.ar)          # 890</pre>
+    <p>Az <code>__init__</code> a létrehozáskor fut le. A <code>self</code> maga a példány: minden metódus első paramétere, és hívásnál nem te adod meg.</p>
+    <p class="note"><b>Mikor kell osztály.</b> Ha ugyanaz az adathalmaz és a rá vonatkozó műveletek együtt mozognak, és több példány van belőlük. Egyszerű adattároláshoz a dict vagy a <code>dataclass</code> elég. A „mindent osztályba” reflex más nyelvekből hozott szokás; Pythonban nem érdem.</p>
+    <details class="deeper"><summary>Mélyebben: dataclass</summary>
+<pre class="py" data-name="dataclass_pelda.py">from dataclasses import dataclass
+
+@dataclass
+class Termek:
+    nev: str
+    ar: int
+    db: int</pre>
+      <p>Ugyanaz, kevesebb gépeléssel: automatikus <code>__init__</code>, olvasható kiírás, összehasonlíthatóság. Adatot tároló osztályoknál szinte mindig ez a jobb választás.</p>
+    </details>
+    <div class="quiz" data-level="9" data-title="Gyakorlólap 09"></div>
+  </div>
+</section>
+
+<!-- ================= 10 ================= -->
+<section class="level" id="szint-10" data-level="10" aria-labelledby="h-10">
+  <header class="lvl"><div class="numeral" aria-hidden="true">10</div><div>
+    <p class="lvl-meta">10. szint a 12-ből · 6. hét · gyakorlólappal</p>
+    <h2 id="h-10">Modul és projektstruktúra</h2>
+    <p class="lvl-goal"><b>Cél:</b>egy nagyobb programot több fájlra bontani, és úgy megírni, hogy más is el tudja indítani.</p>
+    <p class="lock" hidden><span class="lock-text"></span></p>
+  </div></header>
+  <div class="lvl-body">
+    <p>Amikor a fájlod 200 sor fölé nő, szét kell szedni. Minden <code>.py</code> fájl egy modul, amelyet importálhatsz.</p>
+<pre class="py" data-name="mappaszerkezet">bolt_elemzo/
+├── main.py           # belépési pont
+├── beolvasas.py      # CSV-kezelés
+├── ellenorzes.py     # eltérés a tervtől
+├── adatok/
+│   └── eladasok.csv
+├── requirements.txt
+└── README.md</pre>
+<pre class="py" data-name="main.py"># main.py
+from beolvasas import csv_betolt
+from ellenorzes import rendben
+
+sorok = csv_betolt("adatok/eladasok.csv")
+for sor in sorok:
+    ...</pre>
+    <p class="note"><b>A <code>__main__</code> trükk.</b> Az <code>if __name__ == "__main__":</code> alá írt blokk csak akkor fut, ha a fájlt közvetlenül indítod, importáláskor nem. Enélkül az importálásnak mellékhatásai lennének. Minden komolyabb Python-fájlban látni fogod.</p>
+<pre class="py" data-name="main.py, a végén">if __name__ == "__main__":
+    fomuvelet()</pre>
+    <h3>README: ez is a munka része</h3>
+    <p>Négy dolog kell bele: mit csinál, hogyan telepíted, hogyan futtatod, és milyen a bemenet formátuma. Öt sor is elég. Egy README nélküli projektből az derül ki, hogy a szerzője nem számolt azzal, hogy más is használni fogja.</p>
+    <div class="quiz" data-level="10" data-title="Gyakorlólap 10"></div>
+  </div>
+</section>
+
+<!-- ================= 11 ================= -->
+<section class="level" id="szint-11" data-level="11" aria-labelledby="h-11">
+  <header class="lvl"><div class="numeral" aria-hidden="true">11</div><div>
+    <p class="lvl-meta">11. szint a 12-ből · 7. hét · gyakorlólappal</p>
+    <h2 id="h-11">venv és pip</h2>
+    <p class="lvl-goal"><b>Cél:</b>projektenként elkülönített környezetet használni, és a függőségeket rögzíteni.</p>
+    <p class="lock" hidden><span class="lock-text"></span></p>
+  </div></header>
+  <div class="lvl-body">
+    <p>Minden projektnek saját, elkülönített környezete van. Így nem törik el az egyik projekt attól, hogy a másikhoz frissítettél egy csomagot.</p>
+<pre class="py" data-name="terminál"># környezet létrehozása (a projekt mappájában)
+python -m venv .venv
+
+# aktiválás: Windows
+.venv\Scripts\activate
+
+# aktiválás: Linux és macOS
+source .venv/bin/activate
+
+# csomag telepítése
+pip install requests
+
+# a jelenlegi állapot rögzítése
+pip freeze &gt; requirements.txt
+
+# máshol ugyanez visszaállítható
+pip install -r requirements.txt</pre>
+    <p class="note"><b>Miért számít.</b> A <code>requirements.txt</code> miatt fut a kódod más gépen is. Ez nem formalitás: a „nálam működik” a programozás legrégebbi kifogása, és a venv az egyik válasz rá.</p>
+    <p class="warn"><b>Ne tedd verziókövetésbe.</b> A <code>.venv</code> mappát soha ne tedd gitbe: nagy, gépfüggő és felesleges. Erre való a <code>.gitignore</code>.</p>
+    <div class="quiz" data-level="11" data-title="Gyakorlólap 11"></div>
+  </div>
+</section>
+
+<!-- ================= 12 ================= -->
+<section class="level" id="szint-12" data-level="12" aria-labelledby="h-12">
+  <header class="lvl"><div class="numeral" aria-hidden="true">12</div><div>
+    <p class="lvl-meta">12. szint a 12-ből · 7. hét · gyakorlólappal</p>
+    <h2 id="h-12">Git</h2>
+    <p class="lvl-goal"><b>Cél:</b>a munkádat lépésenként menteni, visszanézni és ágakon kísérletezni.</p>
+    <p class="lock" hidden><span class="lock-text"></span></p>
+  </div></header>
+  <div class="lvl-body">
+    <p>Nem AI, és nem is Python, de enélkül nincs rendezett munka. A git megmutatja, hogyan dolgozol: mikor, mit, milyen lépésekben.</p>
+<pre class="py" data-name="terminál">git init                        # új repó a mappában
+git status                      # mi változott
+git add .                       # a változások előkészítése
+git commit -m "CSV-beolvasás"   # mentés üzenettel
+git log --oneline               # előzmények
+git diff                        # mi változott pontosan, soronként</pre>
+    <h3>Ágak</h3>
+<pre class="py" data-name="terminál">git branch elteres-vizsgalat    # új ág
+git switch elteres-vizsgalat    # átváltás
+git switch main                 # vissza</pre>
+    <p class="note"><b>Commit-üzenet.</b> Azt írd le, <em>mit</em> és <em>miért</em> változtattál, ne azt, hogy „módosítás” vagy „javítás2”. Jó példa: <code>eltérésvizsgálat kiterjesztése a terv alatti értékekre</code>. Aki a kódodat olvassa, a commitok listájából érti meg leggyorsabban, hogyan gondolkodtál.</p>
+    <p class="warn"><b>.gitignore.</b> Legalább ennyi legyen benne: <code>.venv/</code>, <code>__pycache__/</code>, <code>*.pyc</code>, és minden, ami személyes adatot vagy kulcsot tartalmaz. Egy véletlenül nyilvánosan feltöltött API-kulcs vagy személyes adat nem vonható vissza.</p>
+    <div class="quiz" data-level="12" data-title="Gyakorlólap 12"></div>
+  </div>
+</section>
+
+<section class="intro-sec" id="zarofeladat" aria-labelledby="h-zaro">
+  <h2 id="h-zaro">Zárófeladat: eladásinapló-elemző</h2>
+  <div class="lvl-body">
+    <p>Nyolc hét után ezt kell tudnod megírni, segítség nélkül, két-három óra alatt. Ha megy, készen állsz a RAG-laborra.</p>
+    <h3>A feladat</h3>
+    <p>Készíts eszközt, amely beolvas egy CSV-t egy bolt havi eladásaival, és jelentést ad arról, mi tért el jelentősen a tervtől.</p>
+    <h3>Bemenet</h3>
+<pre class="py" data-name="eladasok.csv">azonosito;termek;kategoria;bevetel_eft;terv_eft
+E-001;zabpehely;reggeli;412,5;400,0
+E-002;alma;gyümölcs;331,0;400,0
+E-003;tej;tejtermék;408,2;400,0</pre>
+    <h3>Követelmények</h3>
+    <ol>
+      <li>Olvassa be a CSV-t (pontosvessző, tizedesvessző, UTF-8).</li>
+      <li>Számolja ki soronként a százalékos eltérést a tervtől.</li>
+      <li>Jelölje meg, ami 10%-nál többel eltér a tervtől (a példában az E-002: −17,25%).</li>
+      <li>Írja ki: összes tétel, rendben lévő, eltérő, átlagos eltérés.</li>
+      <li>Mentse az eltérő tételeket külön CSV-be.</li>
+      <li>Kezelje: hiányzó fájl, hiányzó oszlop, számmá nem alakítható érték.</li>
+      <li>Legyen benne legalább három függvény, külön modulokban.</li>
+      <li>Legyen git-repó, értelmes commitokkal és README-vel.</li>
+    </ol>
+    <h3>Bővítés, ha könnyen ment</h3>
+    <ul>
+      <li>Kategóriánként külön statisztika.</li>
+      <li>Parancssori paraméter az eltérési határra (<code>argparse</code>).</li>
+      <li><code>logging</code> a <code>print</code> helyett.</li>
+    </ul>
+    <p class="note"><b>Önellenőrzés.</b> Nyisd meg a kész kódot egy hét múlva. Ha bármelyik soráról azt mondod, hogy „nem tudom, miért írtam”, ott van egy lyuk. Ennél jobb visszamérés nem létezik.</p>
+  </div>
+</section>
+
+<section class="kit-sec" id="fogalomtar" aria-labelledby="h-fog">
+  <h2 id="h-fog">Fogalomtár</h2>
+  <dl class="gloss full">
+    <div><dt><b>int, float, str, bool</b></dt><dd>Egész szám, tizedes tört, szöveg, igaz-hamis érték.</dd></div>
+    <div><dt><b>Lista</b></dt><dd>Sorrendtartó gyűjtemény, az elemei index szerint érhetők el.</dd></div>
+    <div><dt><b>Dict</b></dt><dd>Kulcs–érték párok gyűjteménye.</dd></div>
+    <div><dt><b>Index</b></dt><dd>Egy elem sorszáma a listában, 0-tól számolva.</dd></div>
+    <div><dt><b>Szelet</b><span>slice</span></dt><dd>A <code>[a:b]</code> kifejezés: a-tól b-ig, b nélkül.</dd></div>
+    <div><dt><b>Iteráció</b></dt><dd>Végigmenés egy gyűjtemény elemein.</dd></div>
+    <div><dt><b>Paraméter, argumentum</b></dt><dd>A függvény bemenetének neve, illetve a hívásnál ténylegesen átadott érték.</dd></div>
+    <div><dt><b>return</b></dt><dd>A függvény visszaadott értéke.</dd></div>
+    <div><dt><b>Kivétel</b><span>exception</span></dt><dd>Futás közben keletkező hiba, amely elkapható és kezelhető.</dd></div>
+    <div><dt><b>Modul</b></dt><dd>Egy <code>.py</code> fájl, amely importálható.</dd></div>
+    <div><dt><b>Csomag</b><span>package</span></dt><dd>Modulok mappája.</dd></div>
+    <div><dt><b>venv</b></dt><dd>Projektszintű, elkülönített Python-környezet.</dd></div>
+    <div><dt><b>Commit</b></dt><dd>Egy mentett változtatáscsomag a gitben.</dd></div>
+    <div><dt><b>Repó</b><span>repository</span></dt><dd>Verziókövetett projektmappa.</dd></div>
+  </dl>
+  <h3>Hova tovább</h3>
+  <p>A következő lépés a szoftverfejlesztés alapjai: API-hívás, tesztelés (<code>pytest</code>), naplózás (<code>logging</code>). Ha az összes gyakorlólap teljesítve van, a RAG-labor a következő jó állomás: ott egy teljes, dokumentumokból válaszoló rendszert építesz meg nulláról.</p>
+</section>
+
+<p class="m-foot-note">A példák kitalált adatokkal dolgoznak.</p>
+  </div>
+</div>
+</main>
+<footer class="foot wrap"><span>© 2026 Csaplár Dániel · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu" rel="license">CC BY-NC-SA 4.0</a></span><a href="mailto:csaplar.d@gmail.com">Kapcsolat</a></footer>
+
+<script>
+/* Gyakorlólapok. Feleletválasztós kérdésnél a: a helyes válasz sorszáma (0-tól),
+   kitöltősnél fill: az elfogadott válaszok. code: a kérdéshez tartozó kódrészlet. */
+window.KVIZ = {
+ 1: [
+  { q: 'Mit ír ki?', code: 'a = "20"\nb = "5"\nprint(a + b)',
+    o: ['25', '205', 'TypeError'], a: 1, x: 'Mindkét érték szöveg, ezért a + összefűz, nem összead.' },
+  { q: 'A CSV-ből a <code>"40"</code> érkezett, számként kell. Egészítsd ki: <code>keszlet_db = ____("40")</code>', fill: ['int'], ph: 'függvény neve',
+    x: 'Az <code>int()</code> egész számmá alakít. A <code>float()</code> is működne, de darabszámnál egész érték kell.' },
+  { q: 'Milyen típusú a <code>suly_kg = 0.5</code>?', o: ['int', 'str', 'float'], a: 2, x: 'A 0.5 tizedes tört, tehát float.' }
+ ],
+ 2: [
+  { q: 'Mit ír ki?', code: 'pontok = [25, 50, 80, 100]\nprint(pontok[2])', o: ['80', '50', '100'], a: 0, x: 'Az indexelés 0-tól indul, tehát a [2] a harmadik elem.' },
+  { q: 'Mit ad vissza a <code>pontok[1:3]</code>, ha <code>pontok = [25, 50, 80, 100]</code>?', o: ['[50, 80, 100]', '[50, 80]', '[25, 50, 80]'], a: 1, x: 'A szelet a záró indexet nem tartalmazza: az 1. és a 2. indexű elem jön vissza.' },
+  { q: 'Fűzz hozzá egy értéket a lista végéhez: <code>pontok.____(90)</code>', fill: ['append'], ph: 'metódus neve', x: 'Az <code>append()</code> a lista végére fűz egy elemet.' },
+  { q: 'Mi történik? <code>pontok = [25, 50, 80, 100]</code>, majd <code>print(pontok[4])</code>', o: ['None-t ír ki', '100-at ír ki', 'IndexError'], a: 2, x: 'Négyelemű listánál a legnagyobb index a 3, a [4] már nem létezik.' }
+ ],
+ 3: [
+  { q: 'Mit ír ki?', code: 'k = {"nev": "alma"}\nprint(k.get("ar"))', o: ['KeyError', 'None', '0'], a: 1, x: 'A .get() nem dob hibát, hanem None-t ad vissza a hiányzó kulcsra.' },
+  { q: 'És ez, ugyanazzal a <code>k</code>-val?', code: 'print(k["ar"])', o: ['KeyError', 'None', 'üres sor'], a: 0, x: 'Szögletes zárójellel a hiányzó kulcs KeyError-t okoz.' },
+  { q: 'A fenti <code>keszlet</code> listából hogyan kérnéd le az első tétel darabszámát? Írd le a teljes kifejezést.', fill: ['keszlet[0]["db"]', "keszlet[0]['db']"], ph: 'pl. valami[…]["…"]', x: 'Előbb a lista indexe (<code>[0]</code>), utána a dict kulcsa (<code>["db"]</code>).' }
+ ],
+ 4: [
+  { q: 'A fenti hőmérséklet-példa mit ír ki <code>homerseklet = 22.5</code> esetén?', o: ['RENDBEN', 'TÚL MELEG', 'TÚL HIDEG'], a: 1, x: '22,5 − 21,0 = 1,5, ami nagyobb az 1,0-s határnál, és a mért érték nagyobb a célnál.' },
+  { q: 'Javítsd: <code>if kategoria ____ "reggeli":</code>', fill: ['=='], ph: 'operátor', x: 'Az összehasonlítás két egyenlőségjel; egy = értékadás lenne.' },
+  { q: '<code>ar = 790</code>, <code>db = 0</code>. Mi az értéke: <code>ar &gt; 500 and db &gt; 0</code>?', o: ['True', 'Hibát dob', 'False'], a: 2, x: 'Az and mindkét feltételt megköveteli. Az ár feltétele teljesül, de a db = 0 nem nagyobb nullánál.' }
+ ],
+ 5: [
+  { q: 'Hány elem kerül a <code>kilogo</code> listába a fenti szűrésnél?', code: 'meresek = [21.2, 20.9, 22.5, 19.8]\n# feltétel: abs(fok - 21.0) > 1.0', o: ['1', '2', '0'], a: 1, x: 'Az eltérések: 0,2; 0,1; 1,5; 1,2. Az 1,0-nál nagyobb eltérés két értéknél van: a 22,5-nél és a 19,8-nál.' },
+  { q: 'Egészítsd ki: <code>____ tetel in keszlet:</code>', fill: ['for'], ph: 'kulcsszó', x: 'A <code>for</code> kulcsszó indítja a bejárást.' },
+  { q: 'Mire való az <code>enumerate()</code>?', o: ['Rendezi a listát.', 'Megszámolja az elemeket.', 'Sorszámot ad az elemek mellé.'], a: 2, x: 'Az enumerate (sorszám, elem) párokat ad vissza, a sorszám 0-tól indul.' }
+ ],
+ 6: [
+  { q: 'Mit ír ki?', code: 'def osszead(a, b):\n    print(a + b)\n\nx = osszead(2, 3)\nprint(x)', o: ['5, majd 5', '5, majd None', 'None, majd 5'], a: 1, x: 'A függvény kiírja az 5-öt, de nincs benne return, ezért None-t ad vissza, és x értéke None.' },
+  { q: 'Egészítsd ki: <code>____ osszeg_szamit(ar, db):</code>', fill: ['def'], ph: 'kulcsszó', x: 'A <code>def</code> kulcsszóval definiálsz függvényt.' },
+  { q: 'Melyik függvénynév jelez tervezési hibát?', o: ['szamit_osszeget', 'ellenoriz_keszletet', 'beolvas_es_kiment'], a: 2, x: 'A jó függvény egy dolgot csinál; az „és” a névben két feladat jele.' }
+ ],
+ 7: [
+  { q: 'Milyen hibát okoz az <code>int("890 Ft")</code>?', o: ['ValueError', 'TypeError', 'KeyError'], a: 0, x: 'A típus jó (szöveg), csak az értéke nem alakítható egész számmá: ez ValueError.' },
+  { q: 'Miért rossz az <code>except Exception: pass</code>?', o: ['Lassítja a programot.', 'Azokat a hibákat is elrejti, amelyeket látni kellene.', 'Szintaktikailag hibás.'], a: 1, x: 'Az általános elnyelés minden hibát eltüntet, azokat is, amelyekről tudnod kellene.' },
+  { q: 'Milyen hibát okoz a <code>termek["akcio"]</code>, ha nincs ilyen kulcs? Írd le a hiba nevét.', fill: ['KeyError'], ph: 'hiba neve', x: 'Hiányzó dict-kulcs KeyError-t okoz.' }
+ ],
+ 8: [
+  { q: 'Mire jó a <code>with open(...)</code> szerkezet?', o: ['Gyorsabban olvas.', 'Automatikusan javítja a kódolást.', 'Hiba esetén is lezárja a fájlt.'], a: 2, x: 'A with blokk garantálja a fájl lezárását, akkor is, ha közben hiba történik.' },
+  { q: 'Mit ad vissza soronként a <code>csv.DictReader</code>?', o: ['Dictet, a fejléc kulcsaival.', 'Listát, index szerint.', 'Egyetlen hosszú szöveget.'], a: 0, x: 'A DictReader a fejléc alapján minden sort dictté alakít.' },
+  { q: 'Milyen kódolást adj meg magyar szöveges fájlnál? <code>encoding="____"</code>', fill: ['utf-8', 'utf8'], ph: 'kódolás', x: 'Magyar ékezetes szöveghez az utf-8 kódolás kell.' }
+ ],
+ 9: [
+  { q: 'Mikor fut le az <code>__init__</code>?', o: ['A program indulásakor.', 'Amikor létrehozol egy példányt.', 'Minden metódushívásnál.'], a: 1, x: 'Az __init__ a példány létrehozásakor fut le, és beállítja a kezdőállapotot.' },
+  { q: 'Mi a <code>self</code>?', o: ['Maga a példány.', 'Az osztály neve.', 'Egy kötelező, üres paraméter.'], a: 0, x: 'A self magára a példányra hivatkozik; hívásnál nem te adod meg.' },
+  { q: 'Mikor jó választás a <code>dataclass</code>?', o: ['Ha az osztály főleg adatot tárol.', 'Ha nagyon sok metódus kell.', 'Soha, mert lassú.'], a: 0, x: 'Adattároló osztálynál megírja helyetted az __init__-et, a kiírást és az összehasonlítást.' }
+ ],
+ 10: [
+  { q: 'Mit ér el az <code>if __name__ == "__main__":</code> blokk?', o: ['Gyorsítja az indulást.', 'Elrejti a hibákat.', 'Importáláskor nem futtatja a kódot.'], a: 2, x: 'A blokk csak akkor fut, ha a fájlt közvetlenül indítod, importáláskor nem.' },
+  { q: 'Egészítsd ki: <code>from ellenorzes ____ rendben</code>', fill: ['import'], ph: 'kulcsszó', x: 'A <code>from … import …</code> szerkezettel hozol be egy nevet egy másik modulból.' },
+  { q: 'Mi kerüljön legalább a README-be?', o: ['Mit csinál, hogyan kell telepíteni és futtatni.', 'A teljes forráskód soronkénti magyarázata.', 'A fejlesztő szakmai életrajza.'], a: 0, x: 'Négy dolog: mit csinál, hogyan telepíted, hogyan futtatod, milyen a bemenet formátuma.' }
+ ],
+ 11: [
+  { q: 'Mi a virtuális környezet fő haszna?', o: ['Gyorsabb futás.', 'Projektenként elkülönített csomagok.', 'Automatikus hibajavítás.'], a: 1, x: 'A venv projektenként külön csomagkörnyezetet ad, így nem ütköznek a függőségek.' },
+  { q: 'Mi a szokásos fájlnév? <code>pip freeze &gt; ____</code>', fill: ['requirements.txt'], ph: 'fájlnév', x: 'A <code>pip freeze</code> kimenetét hagyományosan a requirements.txt fájlba mentjük.' },
+  { q: 'Bekerüljön-e a <code>.venv</code> mappa a gitbe?', o: ['Nem, erre való a .gitignore.', 'Igen, különben nem fut a kód.', 'Csak a requirements.txt helyett.'], a: 0, x: 'A .venv nagy és gépfüggő; a requirements.txt-ből bárhol újra létrehozható.' }
+ ],
+ 12: [
+  { q: 'Egészítsd ki: <code>git ____ -m "üzenet"</code>', fill: ['commit'], ph: 'parancs', x: 'A <code>git commit</code> rögzíti az előkészített változásokat.' },
+  { q: 'Melyik NE kerüljön be a repóba?', o: ['A .venv mappa', 'A README.md', 'A requirements.txt'], a: 0, x: 'A .gitignore-ba a generált, gépfüggő és bizalmas dolgok kerülnek.' },
+  { q: 'Melyik paranccsal nézed meg soronként, pontosan mi változott? <code>git ____</code>', fill: ['diff'], ph: 'parancs', x: 'A <code>git diff</code> soronként mutatja a változásokat; a <code>git status</code> csak azt, mely fájlok változtak.' }
+ ]
+};
+</script>
+<script src="/assets/tananyag.js"></script>
+<script src="/assets/ait.js"></script>
+</body>
+</html>

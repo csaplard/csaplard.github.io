@@ -155,3 +155,25 @@
 .hm-chain .ax.val{fill:var(--ink);font-weight:560}
 code{font:400 .86em ui-monospace,Menlo,monospace;background:var(--bg-2);padding:.1em .35em}
 .fig svg text{font-family:var(--font-disp)}
+
+/* — kitöltős feladat és kódrészlet a kvízben — */
+.q .q-code{margin:0 0 14px 44px;padding:12px 16px;background:var(--bg);font:400 15px/1.6 ui-monospace,"SF Mono","Cascadia Mono",Menlo,monospace;overflow-x:auto;white-space:pre}
+.fillin{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-left:44px}
+.fillin input{font:400 16px/1.2 ui-monospace,Menlo,monospace;color:var(--ink);background:var(--bg);border:1px solid var(--line-2);padding:10px 12px;min-width:0;width:min(100%,260px)}
+.fillin input:focus{outline:2px solid var(--gold);outline-offset:1px}
+.fillin .pill{padding:9px 16px;font-size:14px}
+.fillin .mark{font:560 14px/1.3 var(--font-disp)}
+.q.fill-right .fillin input{border-color:var(--ok);background:var(--ok-wash)}
+.q.fill-right .fillin .mark{color:var(--ok)}
+.q.fill-wrong .fillin input{border-color:var(--alert);background:var(--alert-wash)}
+.q.fill-wrong .fillin .mark{color:var(--alert)}
+@media (max-width:560px){.q .q-code,.fillin{margin-left:0}}
+
+/* — kódminta a nyitó blokkban, „Mélyebben” lenyitható — */
+.hero-code{margin:0;padding:22px 24px;background:var(--bg-2);border-left:3px solid var(--gold);font:400 15px/1.75 ui-monospace,"SF Mono","Cascadia Mono",Menlo,monospace;overflow-x:auto;white-space:pre}
+details.deeper{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:0}
+details.deeper>summary{cursor:pointer;padding:14px 0;font:560 16px/1.3 var(--font-disp);list-style:none;display:flex;gap:10px;align-items:center}
+details.deeper>summary::-webkit-details-marker{display:none}
+details.deeper>summary::before{content:"+";display:inline-grid;place-items:center;width:22px;height:22px;border:1.5px solid var(--gold);color:var(--gold);font:600 15px/1 var(--font-disp)}
+details.deeper[open]>summary::before{content:"−"}
+details.deeper>*:not(summary){margin-bottom:16px}

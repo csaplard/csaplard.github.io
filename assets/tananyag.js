@@ -56,7 +56,7 @@ function applyLocks() {
       if (lk) {
         lk.hidden = open;
         $(".lock-text", lk).textContent = "Zárolva. " + (art(n - 1) === "az" ? "Az " : "A ") + (n - 1) +
-          ". szint kvízének teljesítésével nyílik meg (" + NEED + " helyes válasz kell). Áttekintéshez az összes szintet feloldhatod.";
+          ". szint " + (body.getAttribute("data-quizname") || "kvízének") + " teljesítésével nyílik meg" + (body.hasAttribute("data-need") ? " (" + NEED + " helyes válasz kell)" : "") + ". Áttekintéshez az összes szintet feloldhatod.";
       }
     }
     var li = $('.lvl-index li[data-level="' + n + '"]');
@@ -81,30 +81,43 @@ function renderQuiz(box) {
   var n = +box.getAttribute("data-level"), qs = (window.KVIZ || {})[n];
   if (!qs) return;
   box._ait = 1; /* az ait.js saját kvízkezelője ne kapcsolódjon rá */
-  var h = '<h3>Szintzáró kvíz</h3><p class="ui">' + qs.length + " kérdés · a továbblépéshez " + NEED +
+  /* a szükséges helyes válaszok száma: a kvíz saját data-need értéke, különben az anyagé,
+     különben a kérdések kétharmada felfelé kerekítve */
+  var NEED = +box.getAttribute("data-need") || (body.hasAttribute("data-need") ? +body.getAttribute("data-need") : Math.ceil(qs.length * 2 / 3));
+  if (NEED > qs.length) NEED = qs.length;
+  var title = box.getAttribute("data-title") || "Szintzáró kvíz";
+  var h = '<h3>' + title + '</h3><p class="ui">' + qs.length + " kérdés · a továbblépéshez " + NEED +
     " helyes válasz kell" + (isDone(n) ? " · ezt a szintet már teljesítetted" : "") + '</p><ol class="qs">';
   /* a válaszok sorrendje minden kitöltésnél véletlen; a value az eredeti sorszám */
   var orders = qs.map(function (q) {
+    if (!q.o) return [];
     var o = q.o.map(function (_, j) { return j; });
     for (var k = o.length - 1; k > 0; k--) { var r = Math.floor(Math.random() * (k + 1)), t = o[k]; o[k] = o[r]; o[r] = t; }
     return o;
   });
   qs.forEach(function (q, i) {
-    h += '<li class="q"><fieldset><legend>' + q.q + '</legend><div class="opts">';
-    orders[i].forEach(function (j) {
-      h += '<label class="opt"><input type="radio" name="q' + n + "_" + i + '" value="' + j + '"><span>' + q.o[j] + '</span><span class="mark"></span></label>';
-    });
-    h += '</div></fieldset><p class="fb" hidden></p></li>';
+    h += '<li class="q"><fieldset><legend><span class="qt">' + q.q + '</span></legend>' + (q.code ? '<pre class="q-code"><code>' + esc(q.code) + '</code></pre>' : '');
+    if (q.fill) {
+      h += '<div class="fillin"><input type="text" autocomplete="off" spellcheck="false" aria-label="Válasz" placeholder="' + esc(q.ph || "válasz") + '"><button class="pill" type="button">Ellenőrzés</button><span class="mark"></span></div>';
+    } else {
+      h += '<div class="opts">';
+      orders[i].forEach(function (j) {
+        h += '<label class="opt"><input type="radio" name="q' + n + "_" + i + '" value="' + j + '"><span>' + q.o[j] + '</span><span class="mark"></span></label>';
+      });
+      h += '</div>';
+    }
+    h += '</fieldset><p class="fb" hidden></p></li>';
   });
   h += '</ol><div class="quiz-foot"><div><div class="track"></div><p class="score-text"></p></div>' +
     '<div class="quiz-act"><a class="pill next" hidden></a><button class="pill" type="button" data-retry hidden>Újrakezdés</button></div></div>';
   box.innerHTML = h;
   var track = $(".track", box), txt = $(".score-text", box), retry = $("[data-retry]", box), next = $(".next", box);
   track.innerHTML = qs.map(function () { return "<i></i>"; }).join("") + '<b class="need" style="left:' + (NEED / qs.length * 100) + '%"></b>';
-  var answers = qs.map(function () { return -1; });
+  var answers = qs.map(function () { return -1; }); /* -1: nincs válasz; kitöltősnél 1 jó, 0 rossz */
+  function right(i) { return qs[i].fill ? answers[i] === 1 : answers[i] === qs[i].a; }
   function update() {
     var r = 0, a = 0;
-    answers.forEach(function (v, i) { track.children[i].className = v < 0 ? "" : (v === qs[i].a ? "r" : "w"); if (v >= 0) a++; if (v === qs[i].a) r++; });
+    answers.forEach(function (v, i) { track.children[i].className = v < 0 ? "" : (right(i) ? "r" : "w"); if (v >= 0) a++; if (right(i)) r++; });
     var status = a < qs.length ? "open" : (r >= NEED ? "passed" : "failed");
     box.setAttribute("data-status", status);
     if (status === "open") txt.innerHTML = "<b>" + r + "/" + qs.length + "</b> helyes eddig. A továbblépéshez <b>" + NEED + "/" + qs.length + "</b> kell.";
@@ -120,8 +133,26 @@ function renderQuiz(box) {
       try { if (window.goatcounter && goatcounter.count) goatcounter.count({ path: "kviz/" + SLUG + "/szint-" + n, title: SLUG + " " + n + ". szint teljesítve", event: true }); } catch (e) {}
     }
   }
+  function norm(x) { return String(x).toLowerCase().replace(/\s+/g, "").replace(/[“”„]/g, '"').replace(/[‘’]/g, "'"); }
   $$(".q", box).forEach(function (li, i) {
     var q = qs[i], opts = [];
+    if (q.fill) {
+      var inp = $("input", li), btn = $("button", li), mk = $(".mark", li);
+      var ok = [].concat(q.fill).map(norm);
+      var check = function () {
+        if (answers[i] >= 0 || !inp.value.trim()) return;
+        var good = ok.indexOf(norm(inp.value)) >= 0;
+        answers[i] = good ? 1 : 0; li.setAttribute("data-answered", good ? "r" : "w");
+        inp.disabled = true; btn.disabled = true;
+        li.classList.add(good ? "fill-right" : "fill-wrong");
+        mk.textContent = good ? "✓ Helyes" : "✕ A helyes: " + [].concat(q.fill)[0];
+        var fb = $(".fb", li); fb.hidden = false; fb.innerHTML = "<b>Magyarázat.</b> " + q.x;
+        update();
+      };
+      btn.addEventListener("click", check);
+      inp.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); check(); } });
+      return;
+    }
     $$(".opt", li).forEach(function (lab) { opts[+$("input", lab).value] = lab; });
     $$('input[type="radio"]', li).forEach(function (inp) {
       var j = +inp.value;
@@ -171,7 +202,7 @@ function initCode() {
     var id = "kod-" + (++codeN), name = pre.getAttribute("data-name") || "példa.py";
     var fig = doc.createElement("figure"); fig.className = "code";
     fig.innerHTML = '<div class="code-top"><span>' + esc(name) + ' · Python, olvasásra</span><button type="button" data-copy="' + id + '">Másolás</button></div>' +
-      '<pre id="' + id + '"><code>' + lines.map(function (l, i) { return '<span class="ln" data-n="' + (i + 1) + '">' + (hlLine(l) || " ") + "</span>"; }).join("") + "</code></pre>";
+      '<pre id="' + id + '"><code>' + lines.map(function (l, i) { return '<span class="ln" data-n="' + (i + 1) + '"><span class="lc">' + (hlLine(l) || " ") + "</span></span>"; }).join("") + "</code></pre>";
     pre.parentNode.replaceChild(fig, pre);
   });
 }
