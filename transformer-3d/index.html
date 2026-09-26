@@ -100,7 +100,7 @@
     </figure>
     <figure>
       <a href="attention-reszlet.webp"><img src="attention-reszlet.webp" width="1600" height="1067" loading="lazy" alt="Közeli kép a pontozásról, a KV-tárról és a súlyozott Value-összegzésről"></a>
-      <figcaption><b>3. ábra. Attention és KV-tár.</b> A pontozás a forgatott Query és a tárolt Key skalárszorzata. A kiemelkedő elemek magassága a softmax-súllyal arányos, a jövőbeli pozíció lezárva (kauzális maszk). A harmadik token első rétegében például az 1. fej súlyai 0,109 / 0,537 / 0,354, a 4. fejé 0,113 / 0,029 / 0,858: tényleges számítási értékek. A KV-tárban a korábbi tokenek Key- és Value-vektorai maradnak meg, így nem kell őket újraszámolni.</figcaption>
+      <figcaption><b>3. ábra. Attention és KV-tár.</b> A pontozás a forgatott Query és a tárolt Key skalárszorzata. A kiemelkedő elemek magassága a softmax-súllyal arányos, a jövőbeli pozíció lezárva (kauzális maszk). A harmadik token első rétegében például az 1. fej súlyai 0,109 / 0,537 / 0,354, a 4. fejé 0,113 / 0,029 / 0,858: tényleges számítási értékek. A KV-tárban rétegenként megmaradnak a korábbi tokenek Key- és Value-vektorai, így a következő token számításakor nem kell őket újraszámolni.</figcaption>
     </figure>
     <figure>
       <a href="felulnezet.webp"><img src="felulnezet.webp" width="1600" height="733" loading="lazy" alt="A modell felülnézeti elrendezése: rétegek balról jobbra, alul az attention, felül az MLP"></a>
@@ -112,7 +112,7 @@
 <section class="intro-sec" id="modell" aria-labelledby="h-modell">
   <h2 id="h-modell">Pontosan milyen modell ez?</h2>
   <div class="lvl-body">
-    <p>Egy <b>pre-norm, csak dekóderes, kauzális</b> transzformer, teljes többfejű attentionnel. A RoPE pozíciókódolás, az RMSNorm normalizálás és a SwiGLU MLP egy következetes, a mai nyílt modellekre jellemző felépítést ad, de ez nem egy konkrét modell másolata. <a class="ref" href="#ref-1">[1]</a> <a class="ref" href="#ref-2">[2]</a> <a class="ref" href="#ref-3">[3]</a> <a class="ref" href="#ref-4">[4]</a></p>
+    <p>Egy <b>pre-norm, csak dekóderes, kauzális</b> transzformer, teljes többfejű attentionnel. A RoPE pozíciókódolás, az RMSNorm normalizálás és a SwiGLU MLP egy következetes felépítést ad. Ezeket az elemeket sok mai, csak dekóderből álló nyílt modell használja, de nem mind, és ez nem egy konkrét modell másolata. <a class="ref" href="#ref-1">[1]</a> <a class="ref" href="#ref-2">[2]</a> <a class="ref" href="#ref-3">[3]</a> <a class="ref" href="#ref-4">[4]</a></p>
     <dl class="spec">
       <dt>Rétegek</dt><dd>4</dd>
       <dt>Reprezentáció (d_model)</dt><dd>24 koordináta</dd>

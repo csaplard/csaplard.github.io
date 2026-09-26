@@ -135,12 +135,15 @@ def rangfuzio(listak, k=5, konstans=60):
     """Két találati listát fésül össze a RANGOK alapján, nem a pontszámok
     alapján.
 
-    Miért? Mert a koszinusz-hasonlóság 0 és 1 közötti, a BM25 meg lehet 12,3.
-    A kettőt összeadni értelmetlen. A rang viszont összemérhető: az első
+    Miért? Mert a két pontszám más skálán mozog: a koszinusz-hasonlóság
+    legfeljebb 1 (a beépített, nemnegatív vektoroknál 0 és 1 közötti, egy
+    igazi modellnél negatív is lehet), a BM25 meg lehet 12,3. A nyers
+    értékek összege megbízhatatlan. A rang viszont összemérhető: az első
     hely az első hely, bármelyik keresőnél.
 
     A képlet minden listára: 1 / (konstans + rang). A 60-as konstans a
-    szakirodalom szokásos értéke; azt szabályozza, mennyivel ér többet az
+    módszer eredeti cikkéből származik (Cormack, Clarke, Büttcher, 2009),
+    és azóta is gyakran használják; azt szabályozza, mennyivel ér többet az
     1. hely a 10.-nél.
     """
     pontok = {}

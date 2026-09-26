@@ -21,7 +21,7 @@
 <body data-material="rag-labor" data-store="rag_progress_v1" data-levels="10" data-nolock>
 <header class="top fixed">
   <a class="brand" href="/">AI-tananyagok</a>
-  <nav aria-label="Anyagon belüli navigáció"><a class="wide" href="#szintek">Lépések</a><a href="labor.zip" download>Letöltés</a><a class="wide" href="#hibakereso">Hibakereső</a></nav>
+  <nav aria-label="Anyagon belüli navigáció"><a class="wide" href="#szintek">Lépések</a><a href="labor.zip" download>Letöltés</a><a class="wide" href="#hibakereso">Hibakereső</a><a class="wide" href="#irodalom">Irodalom</a></nav>
   <button class="theme" type="button" data-theme-toggle aria-label="Színtéma váltása"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
 </header>
 
@@ -52,7 +52,7 @@ python3 l6_eszkoz.py</code></pre>
   <section class="overview" id="szintek" aria-labelledby="h-szintek">
     <div>
       <h2 id="h-szintek">Mit építünk, és miért pont ezt</h2>
-      <p>A végén ez lesz a kezedben: egy rendszer, amely egy online tanfolyamokat szervező oktatási platform hat belső dokumentumából (két kurzusleírás, ügyfélszolgálati útmutató, adatvédelmi szabályzat, ügyféljegy-kivonat, visszatérítési szabályzat) meg tud válaszolni ügyfélszolgálati kérdéseket: forrásmegjelöléssel, mérhető pontossággal, és ott, ahol számolni kell, eszközhívással. A platform és minden adat kitalált.</p>
+      <p>A végén ez lesz a kezedben: egy rendszer, amely egy online tanfolyamokat szervező oktatási platform hat belső dokumentumából (két kurzusleírás, ügyfélszolgálati útmutató, adatvédelmi szabályzat, ügyféljegy-kivonat, visszatérítési szabályzat) meg tud válaszolni ügyfélszolgálati kérdéseket: forrásmegjelöléssel, mérhető pontossággal, és ott, ahol számolni kell, eszközhívással. A platform és minden adat kitalált. Az ilyen, a válasz előtt keresést futtató felépítést visszakereséssel kiegészített generálásnak (RAG) nevezik. <a class="ref" href="#ref-1">[1]</a></p>
       <p>Miért éppen ez a feladat? Mert ez a legkisebb rendszer, amelyben az összes valódi nehézség benne van. Ha a végén kicseréled a hat dokumentumot a saját anyagodra, működni fog. És három olyan dolgot tanít, amit olvasásból nem lehet megérteni:</p>
       <ol>
         <li><b>A darabolás dönt.</b> A saját méréseiden látod majd, hogy a rendszer minőségét nem a modell, hanem a bemenő adat előkészítése határozza meg.</li>
@@ -243,7 +243,7 @@ for szo in _szavakra_bont(szoveg):
     if hossz == 0:
         return vektor
     return vektor / hossz</pre>
-    <p>Az <code>np.linalg.norm</code> a vektor hossza (Pitagorasz-tétel, csak 256 dimenzióban). Ha ezzel elosztjuk, a vektor egységhosszú lesz: csak irányt hordoz, nagyságot nem. Ennek egyetlen, de nagyon praktikus következménye van: egységhosszú vektoroknál a koszinusz-hasonlóság egyszerű skalárszorzat, <span class="m">cos(a, b) = a · b</span>. Ez a leggyorsabb művelet, ami létezik, ezért normalizál minden vektorkereső rendszer.</p>
+    <p>Az <code>np.linalg.norm</code> a vektor hossza (Pitagorasz-tétel, csak 256 dimenzióban). Ha ezzel elosztjuk, a vektor egységhosszú lesz: csak irányt hordoz, nagyságot nem. Ennek egyetlen, de nagyon praktikus következménye van: egységhosszú vektoroknál a koszinusz-hasonlóság egyszerű skalárszorzat, <span class="m">cos(a, b) = a · b</span>. Ez számításilag kedvező, ezért sok koszinusz-alapú keresőrendszer előre normalizált vektorokkal dolgozik. Nem mind: vannak rendszerek, amelyek normalizálatlan skalárszorzattal vagy euklideszi távolsággal keresnek, a modelltől és az index beállításától függően.</p>
     <p>Az <code>if hossz == 0</code> ág nem elmélet: ha egy darab csupa olyan jelet tartalmaz, amely kiesik a szavakra bontásból, nullvektort kapsz, és a nullával osztás megállítaná a programot. A valós adat tele van ilyennel.</p>
     <h3>4.3 · A kapcsoló</h3>
 <pre class="py" data-name="kozos.py">def embedding(szoveg):
@@ -254,7 +254,7 @@ for szo in _szavakra_bont(szoveg):
     return normalizal(nyers)</pre>
     <p>Ez a hét sor az, amiért az egész labor cserélhető motorral fut. A rendszer többi része soha nem tudja meg, melyik embedder dolgozik. Ez a mintázat (a változó rész egyetlen függvény mögé zárva) teszi lehetővé, hogy egy AI-rendszer túlélje a modellváltásokat. Éles fejlesztésnél ugyanezt csinálod a modellhívással is: egy vékony réteg, amely mögött cserélhető a szolgáltató.</p>
     <details class="deeper"><summary>Mélyebben: amikor igazi embeddingre váltasz</summary>
-      <p>A <code>lokalis</code> mód egy többnyelvű mondat-embedding modellt tölt le és futtat a gépeden (<code>pip install sentence-transformers</code>). Az első futásnál letölti a modellt (néhány száz MB), utána offline is megy. A magyar szöveg működik vele, de a minőség nyelvenként és szakterületenként erősen szór, ezért a saját anyagodon kell mérni, nem a benchmarkokban bízni.</p>
+      <p>A <code>lokalis</code> mód egy többnyelvű mondat-embedding modellt tölt le és futtat a gépeden (<code>pip install sentence-transformers</code>). Az első futásnál letölti a modellt (néhány száz MB), utána offline is megy. Az ilyen modelleket kifejezetten arra tanítják, hogy a jelentésükben hasonló mondatok vektorai közel essenek egymáshoz. <a class="ref" href="#ref-4">[4]</a> A magyar szöveg működik vele, de a minőség nyelvenként és szakterületenként erősen szór, ezért a saját anyagodon kell mérni, nem a benchmarkokban bízni.</p>
       <ul>
         <li><b>Újra kell indexelni.</b> A vektorok nem vihetők át modellek között: a régi és az új tér semmilyen viszonyban nincs egymással. Futtasd újra az <code>l2_index.py</code>-t.</li>
         <li><b>Aszimmetrikus modellek.</b> Sok embedding-modell külön előtagot vár a kérdéshez és a dokumentumhoz (<code>query: …</code> / <code>passage: …</code>). Ha ezt elrontod, mérhetően romlik a találati arány, és nagyon nehéz észrevenni, mert minden „működik”. Nézd meg a modell dokumentációjában.</li>
@@ -332,16 +332,16 @@ legjobbak = np.argsort(pontszamok)[::-1][:k]</pre>
   BM25
     1. [ 9.265] K-405_kurzusleiras.md              | 2. Vizsga
     2. [ 8.915] ugyfeljegy_kivonat_2025.md         | UJ-2025-0501 (K-405)</pre>
-    <p>A beépített vektorkereső itt is talál, mert maga is szószámláló: a kód egyetlen „szóként” mindig ugyanabba a vödörbe esik. Egy igazi embedding-modell viszont a ritka kódokat gyakran elmossa, mert épp az különbözteti meg őket, ami a jelentéstérben nem jelenik meg jól. Ezért kell a BM25 ág. A képlete, amelyet a kódban látsz:</p>
+    <p>A beépített vektorkereső itt is talál, mert maga is szószámláló: a kód egyetlen „szóként” mindig ugyanabba a vödörbe esik. Egy igazi embedding-modell viszont a ritka kódokat gyakran elmossa, mert épp az különbözteti meg őket, ami a jelentéstérben nem jelenik meg jól. Ezért kell a BM25 ág. A képlete, amelyet a kódban látsz <a class="ref" href="#ref-2">[2]</a>:</p>
     <p class="eq">pontszám = Σ<sub>szó</sub> IDF(szó) · <span class="frac"><span>f · (k₁ + 1)</span><span>f + k₁ · (1 − b + b · hossz / átlaghossz)</span></span></p>
     <ul>
       <li><b>IDF: a ritka szó sokat ér.</b> Az „a” és a „nem” minden dokumentumban ott van, tehát semmit nem árul el. A <code>VK-405-1E</code> két darabban fordul elő, tehát ha megtalálod, szinte biztosan jó helyen jársz. A logaritmus miatt a ritkaság hozama csökkenő, nem robbanó.</li>
       <li><b>Telítés (k₁) és hossznormálás (b).</b> Ha egy szó ötvenszer szerepel, az nem ötvenszer olyan releváns, mint ha egyszer: a képlet telítődik. És egy hosszú dokumentumban több szó fér el, ezért az önmagában nem érdem: a b ezt normálja.</li>
     </ul>
     <h3>6.3 · Összefésülés: miért nem adhatók össze a pontszámok</h3>
-    <p>A koszinusz-hasonlóság 0 és 1 között mozog. A BM25 lehet 0,5 vagy 9,3: nincs felső korlátja, és korpuszfüggő. A kettőt összeadni értelmetlen, mert az egyik mindig elnyomná a másikat. A megoldás a rangok használata:</p>
+    <p>A két pontszám más skálán mozog, és mást jelent. A koszinusz-hasonlóság általában −1 és +1 közé esik; a labor beépített, nemnegatív vektorainál 0 és 1 közé, egy igazi embedding-modellnél negatív is lehet. A BM25 lehet 0,5 vagy 9,3: nincs felső korlátja, és korpuszfüggő. A nyers értékek közvetlen összeadása ezért nem megbízható, könnyen az egyik ág dönt. Normalizálással és súlyozással össze lehet őket vonni, de a súlyt hangolni kell. Egyszerűbb, hangolás nélküli megoldás a rangok használata, a reciprok rangfúzió <a class="ref" href="#ref-3">[3]</a>:</p>
 <pre class="py" data-name="l3_kereses.py">pontok[index] = pontok.get(index, 0.0) + 1.0 / (konstans + rang)</pre>
-    <p>Az első helyezett 1/60-ot kap, a második 1/61-et, és így tovább. A rang összemérhető a két lista között, a pontszám nem. Ha egy darab mindkét listán ott van, kétszer kap pontot, és pontosan ezt akarjuk: az a legjobb találat, amelyet mindkét módszer megtalált. A 60-as konstans a szakirodalom szokásos értéke; azt szabályozza, mennyivel ér többet az 1. hely a 10.-nél.</p>
+    <p>Az első helyezett 1/60-ot kap, a második 1/61-et, és így tovább. A rang összemérhető a két lista között, a pontszám nem. Ha egy darab mindkét listán ott van, kétszer kap pontot, és pontosan ezt akarjuk: az a legjobb találat, amelyet mindkét módszer megtalált. A 60-as konstans a módszer eredeti cikkéből származik: a szerzők egy előkísérletben rögzítették, közel optimálisnak találták, és azt írták, hogy a pontos választás nem kritikus <a class="ref" href="#ref-3">[3]</a>. Azóta is gyakran ezt használják. Azt szabályozza, mennyivel ér többet az 1. hely a 10.-nél.</p>
     <h3>6.4 · A tanulságos kudarc</h3>
     <p>Futtasd le az <code>l4_valasz.py</code>-t a K-402 vizsgájáról szóló kérdéssel, és nézd meg az átadott forrásokat:</p>
 <pre class="py" data-name="python3 l4_valasz.py &quot;milyen vizsgával zárul a K-402&quot;">ÁTADOTT FORRÁSOK:
@@ -428,6 +428,7 @@ Válaszolj a fenti szabályok szerint, forrásjelöléssel."""</pre>
       </tbody>
     </table></div>
     <h3>8.2 · Ami kijön (beépített embedderrel)</h3>
+    <p class="note"><b>Saját mérés, nem benchmark.</b> Az alábbi számok a labor mellékelt, kitalált mintakorpuszán és kérdéssorán, a beépített embedderrel mért eredmények. Más korpuszon, más kérdésekkel és más modellel mások lesznek; általános tanulságot csak az irányokból érdemes levonni.</p>
 <pre class="py" data-name="python3 l5_eval.py">k = 1:
   csak vektor            recall@1:  6/14  ( 42.9%)
   csak BM25              recall@1:  8/14  ( 57.1%)
@@ -456,14 +457,14 @@ TIPUSONKÉNTI BONTÁS (hibrid, k=3):
     </ol>
     <h3>8.3 · A nagy kísérlet</h3>
     <p class="key"><b>Ez a labor lényege, csináld meg.</b> Jegyezd fel a fenti számokat. Telepítsd a <code>sentence-transformers</code> csomagot, a <code>kozos.py</code>-ban állítsd a <code>BACKEND</code> értékét <code>"lokalis"</code>-ra, építsd újra az indexet (<code>python3 l2_index.py</code>, kötelező, a régi vektorok érvénytelenek), aztán futtasd újra az <code>l5_eval.py</code>-t, és hasonlítsd össze.</p>
-    <p>Figyeld külön a szemantikus és a ragozás miatt bukott kérdéseket. Ott kell a legnagyobb ugrásnak lennie, mert az embedding pontosan azt tudja, amit a szószámlálás nem. Ha nem ugrik, az is információ: akkor a modell magyar nyelvi képessége a szűk keresztmetszet, és másik modellt kell próbálni. Előre nem tudjuk megmondani, mit fogsz látni: a magyar nyelvű teljesítmény modellenként erősen szór, és ezt őszintébb megmérni, mint megjósolni.</p>
+    <p>Figyeld külön a szemantikus és a ragozás miatt bukott kérdéseket. Ott várható a legnagyobb ugrás, mert egy jó szemantikus embedding-modell olyan hasonlóságokat is felismerhet, amelyeket a puszta szóegyezés nem <a class="ref" href="#ref-4">[4]</a> <a class="ref" href="#ref-5">[5]</a>. Garancia erre sincs. Ha nem ugrik, az is információ: akkor a modell magyar nyelvi képessége a szűk keresztmetszet, és másik modellt kell próbálni. Előre nem tudjuk megmondani, mit fogsz látni: a magyar nyelvű teljesítmény modellenként erősen szór, és ezt őszintébb megmérni, mint megjósolni.</p>
     <details class="deeper"><summary>Mélyebben: amit ezen felül mérni kell éles rendszerben</summary>
-      <p>A recall@k a visszakeresést méri. A generáláshoz két további mérőszám kell, és mindkettőt bíró-modellel szokás mérni:</p>
+      <p>A recall@k a visszakeresést méri <a class="ref" href="#ref-6">[6]</a>. A generáláshoz két további mérőszám kell, és mindkettőt gyakran egy második nyelvi modellel, bíró-modellel mérik <a class="ref" href="#ref-7">[7]</a>:</p>
       <ul>
         <li><b>Megalapozottság:</b> a válasz minden állítása levezethető-e az átadott darabokból? Bontsd a választ állításokra, és mindegyikre kérdezd meg egy modelltől, hogy a forrás alátámasztja-e. Bináris ítélet, egy állítás egy hívás.</li>
         <li><b>Válaszrelevancia:</b> a válasz a feltett kérdésre válaszol-e, vagy mellé.</li>
       </ul>
-      <p>A diagnózis ebből egyszerű: ha a recall jó és a megalapozottság rossz, a prompt vagy a modell a gond; ha a recall rossz, a darabolás, az indexelés vagy a keresés, és a promptot hangolni időpazarlás. A bíró-modellnél bináris vagy háromfokú ítéletet kérj, ne 1–10-es skálát; egy szempont egy hívás; és kalibráld emberrel: értékelj ki 50 esetet kézzel is, és nézd meg az egyezést.</p>
+      <p>A diagnózis ebből egyszerű: ha a recall jó és a megalapozottság rossz, a prompt vagy a modell a gond; ha a recall rossz, a darabolás, az indexelés vagy a keresés, és a promptot hangolni időpazarlás. A bíró-modellnél bináris vagy háromfokú ítéletet kérj, ne 1–10-es skálát; egy szempont egy hívás; és kalibráld emberrel: értékelj ki 50 esetet kézzel is, és nézd meg az egyezést. A bíró-modell jól skálázható, de maga is tévedhet és torzíthat: kimutatták például, hogy ítéletét befolyásolja a válaszok sorrendje és hossza, és hajlamos a saját válaszait előnyben részesíteni <a class="ref" href="#ref-8">[8]</a>. Fontos rendszernél ezért kézzel címkézett tesztkészlet és rendszeres emberi ellenőrzés kell mellé.</p>
       <p>A kiértékelő készlet hosszú távú értéke nem a mai számban van, hanem abban, hogy minden éles hibából új tesztkérdés lesz, ahogy egy jó ügyfélszolgálat is minden visszatérő panaszból útmutatót ír. Tarts zárt részt (a készlet egyharmadát soha ne használd fejlesztésre), verziózd a készletet is, és legyen legalább egy ellentétes irányba feszítő mérőszámpár: a megalapozottság önmagában az óvatos, semmitmondó választ jutalmazza, ezért kell mellé a hasznosság. Ez a Goodhart-törvény konkrét megjelenése (lásd a <a href="/vesztesegfuggveny/#szint-8">Veszteségfüggvény 8. szintjét</a>).</p>
     </details>
     <div class="quiz" data-level="8" data-title="Önellenőrzés"></div>
@@ -491,7 +492,7 @@ KÉRDÉS: Mennyi volt a K-402 ügyféljegyeinek összes megoldási ideje 2025-be
 
 Próbáld ki a hibás ágat is:
    {"hiba": "Nincs 'K-999' kódú kurzus. Ismert kurzusok: K-402, K-405."}</pre>
-    <p>Ezt keresésből nem lehet megválaszolni, akármilyen jó az embedding. A válasz nincs leírva sehol: három ügyféljegyből kell összeadni (6 + 9 + 4 = 19 óra). Ez nem keresési, hanem számítási feladat, és pontosan itt van a RAG határa.</p>
+    <p>Ezt keresésből nem lehet megválaszolni, akármilyen jó az embedding. A válasz nincs leírva sehol: három ügyféljegyből kell összeadni (6 + 9 + 4 = 19 óra). Ez nem keresési, hanem számítási feladat, és pontosan itt van a RAG határa. A megoldás, hogy a modell eszközt hívhat, visszakapja az eredményt, és ebből dönti el a következő lépést. Ez az egyszerű hurok (modell → eszköz → eredmény → modell) már agentikus működés, ehhez nem kell külön keretrendszer <a class="ref" href="#ref-9">[9]</a>.</p>
     <h3>9.1 · Az eszköz: egy közönséges függvény</h3>
 <pre class="py" data-name="l6_eszkoz.py">def ugyfeljegy_statisztika(kurzus=None):
     ...
@@ -582,6 +583,22 @@ Próbáld ki a hibás ágat is:
   </div>
 </section>
 
+<section class="kit-sec" id="irodalom" aria-labelledby="h-ir">
+  <h2 id="h-ir">Irodalom</h2>
+  <p class="ui">A számok a szövegbeli [n] jelölésekre utalnak.</p>
+  <ol class="refs">
+    <li id="ref-1"><span class="rn">[1]</span><p>Lewis, P. és mtsai. (2020). <cite>Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.</cite> NeurIPS. <span class="id"><a href="https://arxiv.org/abs/2005.11401">arXiv:2005.11401</a></span></p></li>
+    <li id="ref-2"><span class="rn">[2]</span><p>Robertson, S., Zaragoza, H. (2009). <cite>The Probabilistic Relevance Framework: BM25 and Beyond.</cite> Foundations and Trends in Information Retrieval. <span class="id"><a href="https://doi.org/10.1561/1500000019">doi:10.1561/1500000019</a></span></p></li>
+    <li id="ref-3"><span class="rn">[3]</span><p>Cormack, G. V., Clarke, C. L. A., Büttcher, S. (2009). <cite>Reciprocal Rank Fusion outperforms Condorcet and individual Rank Learning Methods.</cite> SIGIR, 758–759. <span class="id"><a href="https://doi.org/10.1145/1571941.1572114">doi:10.1145/1571941.1572114</a></span></p></li>
+    <li id="ref-4"><span class="rn">[4]</span><p>Reimers, N., Gurevych, I. (2019). <cite>Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks.</cite> EMNLP. <span class="id"><a href="https://arxiv.org/abs/1908.10084">arXiv:1908.10084</a></span></p></li>
+    <li id="ref-5"><span class="rn">[5]</span><p>Karpukhin, V. és mtsai. (2020). <cite>Dense Passage Retrieval for Open-Domain Question Answering.</cite> EMNLP. <span class="id"><a href="https://arxiv.org/abs/2004.04906">arXiv:2004.04906</a></span></p></li>
+    <li id="ref-6"><span class="rn">[6]</span><p>Manning, C. D., Raghavan, P., Schütze, H. (2008). <cite>Introduction to Information Retrieval.</cite> Cambridge University Press. 8. fejezet: a keresés kiértékelése. <span class="id"><a href="https://nlp.stanford.edu/IR-book/">nlp.stanford.edu/IR-book</a></span></p></li>
+    <li id="ref-7"><span class="rn">[7]</span><p>Es, S., James, J., Espinosa-Anke, L., Schockaert, S. (2023). <cite>Ragas: Automated Evaluation of Retrieval Augmented Generation.</cite> <span class="id"><a href="https://arxiv.org/abs/2309.15217">arXiv:2309.15217</a></span></p></li>
+    <li id="ref-8"><span class="rn">[8]</span><p>Zheng, L. és mtsai. (2023). <cite>Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena.</cite> NeurIPS Datasets and Benchmarks. <span class="id"><a href="https://arxiv.org/abs/2306.05685">arXiv:2306.05685</a></span></p></li>
+    <li id="ref-9"><span class="rn">[9]</span><p>Yao, S. és mtsai. (2023). <cite>ReAct: Synergizing Reasoning and Acting in Language Models.</cite> ICLR. <span class="id"><a href="https://arxiv.org/abs/2210.03629">arXiv:2210.03629</a></span></p></li>
+  </ol>
+</section>
+
 <p class="m-foot-note">A labor dokumentumai egy kitalált oktatási platform kitalált adatai. A kimenetek a beépített embedderrel, a letölthető kóddal mért valódi eredmények; a futási idő gépenként eltér.</p>
   </div>
 </div>
@@ -609,7 +626,7 @@ window.KVIZ = {
  ],
  4: [
   { q: 'Mikor lesz hasonló két szöveg vektora a beépített embedderrel?', o: ['Ha hasonló a jelentésük.', 'Ha sok közös szavuk van.', 'Ha ugyanolyan hosszúak.'], a: 1, x: 'A beépített embedder szószámláló: a jelentést nem érti, a „hiányozni” és a „hiányzás” számára két különböző szó.' },
-  { q: 'Mi a haszna, hogy minden vektort egységhosszúra normalizálunk?', o: ['A koszinusz-hasonlóság egyszerű skalárszorzat lesz.', 'Kevesebb memóriát foglalnak.', 'Így pozitív lesz minden érték.'], a: 0, x: 'Egységhosszú vektoroknál a koszinusz egyenlő a skalárszorzattal, ami a leggyorsabb művelet.' },
+  { q: 'Mi a haszna, hogy minden vektort egységhosszúra normalizálunk?', o: ['A koszinusz-hasonlóság egyszerű skalárszorzat lesz.', 'Kevesebb memóriát foglalnak.', 'Így pozitív lesz minden érték.'], a: 0, x: 'Egységhosszú vektoroknál a koszinusz egyenlő a skalárszorzattal, ami számításilag kedvező.' },
   { q: 'Mit kell tenni, ha a beépített embedderről igazi modellre váltasz?', o: ['Semmit, a régi index továbbra is jó.', 'Újra kell építeni az indexet az l2_index.py-val.', 'Csak a kerdesek.json-t kell átírni.'], a: 1, x: 'A vektorok nem vihetők át modellek között: a régi és az új tér semmilyen viszonyban nincs egymással.' }
  ],
  5: [
@@ -618,7 +635,7 @@ window.KVIZ = {
   { q: 'Mekkora lenne a 256 dimenziós, float32 vektorok mátrixa 1 millió darabnál?', o: ['Kb. 26 kB', 'Kb. 1 GB', 'Kb. 100 GB'], a: 1, x: '1 000 000 × 256 × 4 bájt ≈ 1,0 GB. Ezért kell egy ponton kvantálás és közelítő keresés.' }
  ],
  6: [
-  { q: 'Miért nem adható össze a koszinusz-hasonlóság és a BM25-pontszám?', o: ['Mert más skálán vannak, és az egyik elnyomná a másikat.', 'Mert a BM25 mindig negatív.', 'Mert a numpy nem tud ilyen számokat összeadni.'], a: 0, x: 'A koszinusz 0 és 1 közé esik, a BM25-nek nincs felső korlátja. A rang viszont mindkét listán ugyanazt jelenti.' },
+  { q: 'Miért nem adható össze a koszinusz-hasonlóság és a BM25-pontszám?', o: ['Mert más skálán vannak, és nyers összegüknél könnyen az egyik dönt.', 'Mert a BM25 mindig negatív.', 'Mert a numpy nem tud ilyen számokat összeadni.'], a: 0, x: 'A koszinusz legfeljebb 1 (általában −1 és +1 között), a BM25-nek nincs felső korlátja. A rang viszont mindkét listán ugyanazt jelenti.' },
   { q: 'Miért került a K-405 vizsgafejezete az első helyre a K-402 vizsgájáról szóló kérdésnél?', o: ['Mert a K-405 frissebb dokumentum.', 'Mert szerepel benne a „K-402”, a „vizsga” és a K-402 vizsgakódja is.', 'Mert a vektorkereső véletlenszerű.'], a: 1, x: 'Minden kulcsszó egyezik, csak a jelentés az ellenkezője: a fejezet épp arra figyelmeztet, hogy a K-402 kódja ott nem használható.' },
   { q: 'Mi a leghatékonyabb egyetlen javítás erre a hibára?', o: ['Hosszabb rendszerprompt.', 'Metaadat-szűrés a kérdésből kinyert kurzuskódra.', 'Több darab átadása a modellnek.'], a: 1, x: 'A hiba a keresésben keletkezik, mielőtt a modell bármit látna, ezért prompttal nem javítható. A szűrővel a K-405 darabjai kiesnek.' }
  ],

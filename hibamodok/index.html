@@ -106,7 +106,7 @@
     </div>
   </header>
   <div class="lvl-body">
-    <p class="lead-p">A leggyakoribb félreértés, hogy a hallucináció bug. Nem az — a jelenlegi tanítási és értékelési eljárás egyenes következménye.</p>
+    <p class="lead-p">A leggyakoribb félreértés, hogy a hallucináció egyszerű bug. Nem az: egyik fontos gyökere maga a tanítási és értékelési eljárás.</p>
     <div class="depth">
       <div role="tablist" aria-label="Mélység">
         <button role="tab" id="t-1a" aria-controls="p-1a" aria-selected="true"><b>Intuíció</b><span>mi történik</span></button>
@@ -116,9 +116,9 @@
       <div role="tabpanel" id="p-1a" aria-labelledby="t-1a">
 <p>Képzelj el egy vizsgát, ahol a rossz válaszért nulla pont jár, az üresen hagyásért szintén nulla. Mit csinál minden racionális vizsgázó? Tippel. Nincs mit veszíteni.</p>
 <p>Pontosan ez a helyzet a nyelvi modellekkel. A tanítás és az értékelés túlnyomó része pontosság alapú: vagy eltaláltad, vagy nem. Az „nem tudom" ugyanannyit ér, mint a rossz válasz — vagyis semmit. Így a modell megtanulja, hogy bizonytalanság esetén is érdemes magabiztos választ adni, mert néha bejön.</p>
-<p>A hallucináció tehát nem hiba a rendszerben. A rendszer pontosan azt tanulta meg, amit jutalmaztunk benne.</p>
+<p>A hallucináció tehát nem egyszerűen hiba a rendszerben: a modell részben pontosan azt tanulta meg, amit jutalmaztunk benne. Ez egy fontos ok, de nem az egyetlen. Hallucinációhoz vezethet a hiányzó vagy elavult tudás, a félrevezető kérdés vagy kontextus, a rossz visszakeresés és a mintavételezés is; ezekről a következő szintek szólnak.</p>
 <div class="note warn">
-<b>Amit ebből érdemes elvinni:</b> a „majd egy jobb modell megoldja" várakozás félrevezető. Amíg az értékelési pontrendszer a tippelést jutalmazza, a tippelés megmarad. Ez ösztönzési probléma, nem architektúrális.
+<b>Amit ebből érdemes elvinni:</b> a „majd egy jobb modell megoldja" várakozás félrevezető. Amíg az értékelési pontrendszer a tippelést jutalmazza, a tippelés megmarad. Ez a rész ösztönzési probléma, nem architektúrális.
       </div>
       <div role="tabpanel" id="p-1b" aria-labelledby="t-1b" hidden>
 <p>Két külön forrása van, és a kettő más eszközzel kezelhető.</p>
@@ -440,6 +440,9 @@ if egyetertes &lt; 0.6:
 <li><b>Generálás.</b> Minden megvolt, és a modell mégis elrontotta.</li>
 </ol>
 <p>A legtöbb csapat a negyediket próbálja javítani promptolással, miközben a hiba az elsőben van. Ezért kell szétbontani a mérést.</p>
+<div class="note warn">
+<b>A hibás válasz nem mindig hallucináció.</b> Ha a kereső rossz, de valódi dokumentumot ad át, a modell akár teljesen hűen is összefoglalhatja a rossz forrást. A válasz hibás, a modell mégsem talált ki semmit. Ezt promptolással nem lehet megjavítani, csak a keresésnél. A <a href="/rag-labor/#szint-6">RAG-labor 6. lépésében</a> ezt ki is próbálhatod.
+      </div>
       </div>
       <div role="tabpanel" id="p-5b" aria-labelledby="t-5b" hidden>
 <p>A szétbontás módja: külön méred a visszakeresést és külön a generálást. A visszakeresés mérőszáma a <b>recall@k</b> — a kérdések hány százalékánál van benne a helyes darab az első k találatban.</p>
@@ -513,6 +516,8 @@ if egyetertes &lt; 0.6:
 <p>Egy adatbázisban az SQL-parancs és az adat külön dolog, és paraméterezett lekérdezéssel a határ megvédhető. Egy nyelvi modellben nincs ilyen határ: a rendszerprompt, a felhasználó kérdése és a beolvasott dokumentum ugyanabban a token-folyamban érkezik. A modellnek nincs mechanizmusa arra, hogy az egyiket parancsnak, a másikat adatnak tekintse — csak tanult hajlama van rá.</p>
 
 <p>A <b>közvetett</b> változat a veszélyes. Nem a felhasználó támad, hanem valaki elhelyez egy utasítást egy dokumentumban, amit a rendszer később beolvas. Greshake és társai pont ezt mutatták meg: az LLM-integrált alkalmazások elmossák az adat és az utasítás határát, és a támadó úgy tudja befolyásolni a modellt, hogy stratégiailag elhelyez egy promptot olyan adatban, amit a rendszer futásidőben visszakeres. <a class="ref" href="#ref-6">[6]</a></p>
+
+<p>Három rokon fogalmat érdemes szétválasztani. <b>Közvetlen</b> prompt injectionről akkor beszélünk, ha a felhasználó maga írja be az utasítást, amely eltéríti a rendszert. <b>Közvetett</b>, ha az utasítás egy külső forrásból, például weboldalból vagy fájlból érkezik, amelyet a rendszer beolvas. A <b>jailbreak</b> olyan bemenet, amelynek célja, hogy a modell figyelmen kívül hagyja a biztonsági szabályait. A hétköznapi szóhasználat összemossa őket, és valóban átfednek: egy elterjedt biztonsági besorolás a jailbreaket a prompt injection egyik formájának tekinti <a class="ref" href="#ref-20">[20]</a>. A különbség a támadás forrásában (felhasználó vagy beolvasott adat) és céljában (a feladat eltérítése vagy a biztonsági korlátok megkerülése) van, és a védekezés is ennek megfelelően más.</p>
 
 <div class="note fault">
 <b>Konkrét példa.</b> Egy PDF-be fehér betűvel beírsz egy mondatot. Ember nem látja. A kinyerő rendszer beolvassa, a modell megkapja, és úgy kezeli, mint utasítást. Ha a rendszerednek van eszközhozzáférése — e-mail küldés, adatbázis-írás —, akkor a támadó ezeket az eszközöket tudja mozgatni.
@@ -870,6 +875,7 @@ def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
     <li id="ref-17"><span class="rn">[17]</span><p>Schulhoff, S. és tsai. (2023): <cite>Ignore This Title and HackAPrompt: Exposing Systemic Vulnerabilities of LLMs through a Global Scale Prompt Hacking Competition.</cite> arXiv:2311.16119. <span class="id"><a href="https://arxiv.org/abs/2311.16119">arxiv.org/abs/2311.16119</a></span></p></li>
     <li id="ref-18"><span class="rn">[18]</span><p>Shi, F. és tsai. (2023): <cite>Large Language Models Can Be Easily Distracted by Irrelevant Context.</cite> ICML 2023. <span class="id"><a href="https://arxiv.org/abs/2302.00093">arxiv.org/abs/2302.00093</a></span></p></li>
     <li id="ref-19"><span class="rn">[19]</span><p>Xu, Z., Jain, S., Kankanhalli, M. (2024): <cite>Hallucination is Inevitable: An Innate Limitation of Large Language Models.</cite> arXiv:2401.11817. <span class="id"><a href="https://arxiv.org/abs/2401.11817">arxiv.org/abs/2401.11817</a></span></p></li>
+    <li id="ref-20"><span class="rn">[20]</span><p>OWASP GenAI Security Project (2025): <cite>LLM01:2025 Prompt Injection.</cite> <span class="id"><a href="https://genai.owasp.org/llmrisk/llm01-prompt-injection/">genai.owasp.org/llmrisk/llm01-prompt-injection</a></span></p></li>
   </ol>
 </section>
 
