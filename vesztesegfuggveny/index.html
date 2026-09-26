@@ -1,0 +1,277 @@
+<!doctype html>
+<!--
+  A veszteségfüggvény — oktatóanyag
+  © 2026 Csaplár Dániel · CC BY-NC-SA 4.0
+  https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu
+-->
+<html lang="hu">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A veszteségfüggvény · AI-tananyagok</title>
+<meta name="description" content="Az a szám, amiből egy modell tanul, és ami eldönti, mit tanul meg. Nyolc szint a lakásárbecsléstől a nagy nyelvi modellek finomhangolásáig, három mélységben, szintzáró kvízekkel.">
+<meta name="author" content="Csaplár Dániel">
+<link rel="canonical" href="https://csaplard.github.io/vesztesegfuggveny/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230b0c0e'/><ellipse cx='16' cy='17' rx='11' ry='6' fill='none' stroke='%23eceae4' stroke-width='1.4'/><ellipse cx='16' cy='17' rx='5' ry='2.6' fill='none' stroke='%23eceae4' stroke-width='1.4'/><path d='M6 7 12 12 16 17' stroke='%23e8b44c' stroke-width='2.4' fill='none' stroke-linecap='round'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:slnt,wght,CRSV,SHRP@-12..0,100..900,0..1,0..100&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('ait-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/ait.css">
+<link rel="stylesheet" href="/assets/tananyag.css">
+</head>
+<body data-material="vesztesegfuggveny" data-store="vf_progress_v1" data-levels="8" data-need="2">
+<header class="top fixed">
+  <a class="brand" href="/">AI-tananyagok</a>
+  <nav aria-label="Anyagon belüli navigáció"><a class="wide" href="#szintek">Szintek</a><a href="#glosszarium">Glosszárium</a><a class="wide" href="#irodalom">Irodalom</a></nav>
+  <button class="theme" type="button" data-theme-toggle aria-label="Színtéma váltása"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+</header>
+
+<main class="page-top">
+<div class="lesson-wrap">
+  <a class="crumb" href="/">Vissza az AI-tananyagokhoz</a>
+
+  <section class="m-hero" aria-label="Bevezető">
+    <div>
+      <h1>A veszteség&shy;függvény</h1>
+      <p class="lede">Az a szám, amiből egy modell tanul, és ami eldönti, <em>mit</em> tanul meg.</p>
+      <p class="facts">8 szint · kb. 4 óra · középhaladó. A lakásárbecsléstől a nagy nyelvi modellek finomhangolásáig. Minden szint három mélységben olvasható, és kvízzel zárul: a következő szint 3-ból 2 helyes válasszal nyílik meg.</p>
+      <a class="start" href="#szint-1">Kezdés az 1. szintnél →</a>
+    </div>
+    <figure class="hero-fig">
+      <svg class="hm" id="heroMap" viewBox="0 0 400 400" role="img" aria-label="Szintvonalas veszteségtáj felülről, rajta a gradiens-módszer lépései a völgy aljáig"></svg>
+      <figcaption>Veszteségtáj felülről, szintvonalakkal. Az arany vonal egy tanuló algoritmus útja: minden lépésben lefelé indul, amíg el nem ér a völgy aljára.</figcaption>
+    </figure>
+  </section>
+
+  <section class="overview" id="szintek" aria-labelledby="h-szintek">
+    <div>
+      <h2 id="h-szintek">Mielőtt elindulsz</h2>
+      <p>A fenti kép egy veszteségtáj, mint egy turistatérkép szintvonalai. Ez az anyag azt magyarázza el, mi ez a „magasság”, ki határozza meg, és miért ezen múlik minden, amit egy modell megtanul.</p>
+      <p>A három mélységi réteg közül bármikor válthatsz. Az <b>intuíció</b> képlet nélkül, példákkal magyaráz. A <b>matematika</b> bevezeti a jelöléseket, és minden jelet megmagyaráz, amikor először előkerül. A <b>kutatói szint</b> a szakirodalomhoz köt. A kvízek az intuícióra és a matematikára épülnek. A kódrészletek olvasásra valók, soronként kommentálva.</p>
+      <ol class="lvl-index">
+        <li data-level="1"><a href="#szint-1"><span class="n">1</span><span class="t">Egy szám a tévedésre</span><span class="st"></span></a></li>
+        <li data-level="2"><a href="#szint-2"><span class="n">2</span><span class="t">Sok hibából egy szám</span><span class="st"></span></a></li>
+        <li data-level="3"><a href="#szint-3"><span class="n">3</span><span class="t">A veszteségtáj</span><span class="st"></span></a></li>
+        <li data-level="4"><a href="#szint-4"><span class="n">4</span><span class="t">Lejtőn lefelé</span><span class="st"></span></a></li>
+        <li data-level="5"><a href="#szint-5"><span class="n">5</span><span class="t">Osztályozás és keresztentrópia</span><span class="st"></span></a></li>
+        <li data-level="6"><a href="#szint-6"><span class="n">6</span><span class="t">Honnan jönnek a veszteségek?</span><span class="st"></span></a></li>
+        <li data-level="7"><a href="#szint-7"><span class="n">7</span><span class="t">A mérce testre szabása</span><span class="st"></span></a></li>
+        <li data-level="8"><a href="#szint-8"><span class="n">8</span><span class="t">Amikor a mérce elcsúszik</span><span class="st"></span></a></li>
+      </ol>
+    </div>
+    <div>
+      <div class="layers" data-total="8" data-done="0"><svg viewBox="0 0 140 200" aria-hidden="true"></svg><div><div class="count"><span data-count>0</span><span> / 8</span></div><p>Minden teljesített szint egy réteg. A haladásod csak ebben a böngészőben tárolódik.</p></div></div>
+      <div class="tools"><button class="pill" type="button" data-unlock-all>Minden szint feloldása</button><button class="pill" type="button" data-reset>Haladás törlése</button></div>
+      <p class="tools-note" data-unlocked-note hidden>Minden szint fel van oldva áttekintéshez. A kvízeredményeid megmaradnak.</p>
+    </div>
+  </section>
+
+  <div class="lesson-col">
+
+<!-- ================= 1. SZINT ================= -->
+<section class="level" id="szint-1" data-level="1" aria-labelledby="h-1">
+  <header class="lvl">
+    <div class="numeral" aria-hidden="true">1</div>
+    <div>
+      <p class="lvl-meta">1. szint a 8-ból · kb. 25 perc · három mélységben · szintzáró kvíz</p>
+      <h2 id="h-1">Egy szám, ami megmondja, mennyit tévedtünk</h2>
+      <p class="lvl-goal"><b>Cél:</b>megérteni, mi a veszteség, miért kell egyetlen számnak lennie, és hogy a mércét mi választjuk.</p>
+      <p class="lock" hidden><span class="lock-text"></span></p>
+    </div>
+  </header>
+  <div class="lvl-body">
+    <div class="depth">
+      <div role="tablist" aria-label="Mélység">
+        <button role="tab" id="t-1a" aria-controls="p-1a" aria-selected="true"><b>Intuíció</b><span>példával</span></button>
+        <button role="tab" id="t-1b" aria-controls="p-1b" aria-selected="false" tabindex="-1"><b>Matematika</b><span>képletekkel</span></button>
+        <button role="tab" id="t-1c" aria-controls="p-1c" aria-selected="false" tabindex="-1"><b>Kutatói szint</b><span>forrásokkal</span></button>
+      </div>
+
+      <div role="tabpanel" id="p-1a" aria-labelledby="t-1a">
+        <p>Egy modell megbecsüli egy lakás árát: <b>51,5 millió forint</b>. A lakás végül 50 millióért kelt el. Mennyire jó ez a becslés?</p>
+        <p>Egy embernek elég annyi, hogy „kicsit sokat mondott”. Egy tanuló modellnek viszont <b>egyetlen számra</b> van szüksége, amely annál nagyobb, minél rosszabb a becslés. Csak így tudja eldönteni, hogy egy változtatás javított-e vagy rontott. Ez a szám a <b>veszteség</b>. A szabályt, amellyel az eltérésből kiszámoljuk, <b>veszteségfüggvénynek</b> hívjuk.</p>
+        <h3>Miért nem jó maga az eltérés?</h3>
+        <p>Az eltérés itt +1,5 millió forint. Ha a modell a következő lakásnál 1,5 millióval <em>alá</em>becsül, a két eltérés átlaga 0, mintha mindkét becslés pontos lett volna. Az előjeles eltérés tehát nem mérce, mert a túl- és az alábecslések kioltják egymást. Két szokásos megoldás van: vesszük az eltérés <b>abszolút értékét</b> (az előjelet eldobjuk), vagy a <b>négyzetét</b> (a négyzet sosem negatív).</p>
+        <p>Van egy harmadik, a hétköznapokban megszokott mérce is: a <b>„talált vagy nem talált”</b>. Mondjuk azt, hogy ±2 millión belül a becslés talált (veszteség 0), azon kívül tévedett (veszteség egy fix érték). Ez a mérce nem tesz különbséget az 50,1 és az 51,9 milliós becslés között, pedig az egyik szinte hibátlan, a másik a sáv szélén jár. A négyzetes mérce szerint már a kis eltérés is veszteség, csak kicsi, és az eltérés négyzetével nő.</p>
+
+        <div class="demo" id="d1">
+          <h4>Kísérlet: egy becslés, három mérce</h4>
+          <p class="hint">A lakás valódi ára 50 millió forint. Húzd a csúszkát, és nézd, mekkora veszteséget ad a három mérce. Az eltérést sávegységben mérjük: 1 egység = 2 millió forint, vagyis a ±1 a „talált” sáv széle.</p>
+          <div class="ctrl">
+            <div class="sv"><label for="d1x">Becsült ár (millió Ft)</label><output id="d1xv" for="d1x"></output></div>
+            <input type="range" id="d1x" min="46" max="54" step="0.05" value="51.5">
+            <div class="ends"><span>46</span><span>54</span></div>
+          </div>
+          <div class="readout" id="d1r" aria-live="polite"></div>
+          <svg class="plot" id="d1svg" role="img" aria-label="A három veszteség az eltérés függvényében"></svg>
+          <div class="legend"><span><i style="--c:var(--q)"></i>abszolút: |e|</span><span><i style="--c:var(--gold);--h:3.5px"></i>négyzetes: e²</span><span><i style="--c:var(--ink-2);--st:dashed"></i>talált vagy nem (bent 0, kint 1,5)</span></div>
+        </div>
+
+        <p>Figyeld meg, hol keresztezi egymást a kék és az arany görbe: pontosan a sáv szélén, ±1-nél. A sávon belül a négyzetes veszteség <em>kisebb</em>, mint az abszolút, kívül <em>sokkal nagyobb</em>. A négyzetes mérce tehát elnézi az apró hibákat, a nagyokat viszont keményen bünteti.</p>
+        <p class="key"><b>Kulcsgondolat.</b> A veszteségfüggvény nem a modell része, hanem a mérce, amit mi választunk hozzá. Ugyanaz a modell más mércével mást tanul meg. Az egész anyag erről a mondatról szól.</p>
+      </div>
+
+      <div role="tabpanel" id="p-1b" aria-labelledby="t-1b" hidden>
+        <h3>Jelölések</h3>
+        <p>A gépi tanulásban a helyes (valódi, elvárt) értéket <span class="m">y</span>-nal jelöljük, a modell válaszát <span class="m">ŷ</span>-nal („y kalap”). Az eltérés, más néven hiba vagy <b>reziduum</b>:</p>
+        <p class="eq">e = ŷ − y</p>
+        <p>A példában <span class="m">y</span> = 50,0 millió forint a valódi eladási ár, <span class="m">ŷ</span> = 51,5 a becslés, tehát <span class="m">e</span> = +1,5 millió forint.</p>
+        <h3>A két alapveszteség</h3>
+        <p class="eq">L<sub class="rm">abs</sub>(ŷ, y) = |ŷ − y| &emsp;&emsp; L<sub class="rm">négyz</sub>(ŷ, y) = (ŷ − y)²</p>
+        <p>Az <span class="m">L</span> betű az angol <em>loss</em> (veszteség) rövidítése. A függőleges vonal az abszolút érték: az előjelet dobja el, |−3| = 3 és |3| = 3. A négyzet szintén pozitívvá tesz mindent, de közben át is méretez: (−3)² = 9.</p>
+        <div class="tbl"><table>
+          <caption>Ugyanaz az eltérés két mércével, sávegységben (1 egység = 2 millió Ft)</caption>
+          <thead><tr><th scope="col" class="n">Eltérés</th><th scope="col" class="n">|e|</th><th scope="col" class="n">e²</th><th scope="col">Mit jelent</th></tr></thead>
+          <tbody>
+            <tr><td class="n">0,5</td><td class="n">0,5</td><td class="n">0,25</td><td>kis hiba: a négyzet elnézőbb</td></tr>
+            <tr><td class="n">1</td><td class="n">1</td><td class="n">1</td><td>a két mérce itt egyenlő</td></tr>
+            <tr><td class="n">2</td><td class="n">2</td><td class="n">4</td><td>kétszeres hiba, négyszeres büntetés</td></tr>
+            <tr><td class="n">4</td><td class="n">4</td><td class="n">16</td><td>a nagy hiba uralja a számítást</td></tr>
+          </tbody>
+        </table></div>
+        <p class="note"><b class="lbl">Mértékegység.</b> Ha az eltérés millió forintban van, a négyzetes veszteség (millió forint)²-ben. Ezért szokás a négyzetes veszteségek átlagából a végén gyököt vonni (RMSE, 2. szint): így az eredmény újra millió forintban olvasható. Ebből az is következik, hogy a „kis” és a „nagy” hiba határa a mértékegységtől függ. A kísérletben ezért sávegységben mértünk: így a két görbe éppen a sáv szélén metszi egymást.</p>
+<pre class="py" data-name="veszteseg.py">valos_ar = 50.0        # a lakás tényleges eladási ára [millió Ft]
+becsult_ar = 51.5      # a modell becslése [millió Ft]
+sav = 2.0              # ± ennyin belül „talált” a becslés [millió Ft]
+
+e = becsult_ar - valos_ar          # előjeles eltérés: +1.5 millió Ft
+abs_veszteseg = abs(e)             # |e| = 1.5 millió Ft
+negyzetes_veszteseg = e ** 2       # e² = 2.25 (millió Ft)², figyelem: négyzetes mértékegység!
+
+# talált vagy nem: a sávon belül 0, kívül fix büntetés
+talalat_veszteseg = 0.0 if abs(e) &lt;= sav else 1.0</pre>
+      </div>
+
+      <div role="tabpanel" id="p-1c" aria-labelledby="t-1c" hidden>
+        <h3>Veszteség, költség, célfüggvény</h3>
+        <p>A szakirodalom három szót használ, sokszor lazán. A <b>veszteség</b> (<em>loss</em>) szigorúan véve egyetlen példára vonatkozik. A <b>költség</b> vagy <b>célfüggvény</b> (<em>cost</em>, <em>objective</em>) az, amit ténylegesen optimalizálunk: általában a veszteségek átlaga a tanítóadaton, néha kiegészítve egy büntetőtaggal (7. szint). Az átlagot <b>empirikus kockázatnak</b> hívják:</p>
+        <p class="eq">R̂(θ) = <span class="frac"><span>1</span><span>n</span></span> Σ<sub class="rm">i</sub> L(f<sub>θ</sub>(x<sub>i</sub>), y<sub>i</sub>)</p>
+        <p>Itt <span class="m">θ</span> a modell paraméterei, <span class="m">f<sub>θ</sub></span> maga a modell, <span class="m">x<sub>i</sub></span> az <span class="m">i</span>-edik példa bemenete (például a lakás alapterülete és elhelyezkedése), <span class="m">y<sub>i</sub></span> a hozzá tartozó valódi érték. Amit valójában szeretnénk, az a <b>várható kockázat</b>: a veszteség átlaga az összes jövőbeli, még nem látott adaton. Ezt nem ismerjük, csak mintából becsüljük. A kettő közti rés a generalizáció kérdése, erről a 7. szint szól <a class="ref" href="#ref-6">[6]</a>.</p>
+        <h3>Döntéselméleti gyökerek</h3>
+        <p>A veszteségfüggvény fogalma a statisztikai döntéselméletből jön. Wald megfogalmazásában minden becslés egy döntés, a veszteség pedig a rossz döntés ára <a class="ref" href="#ref-2">[2]</a>. Ez a nézőpont azért fontos, mert világossá teszi, hogy a veszteség <em>értékítélet</em>: azt kódolja, mennyibe kerül nekünk egy adott tévedés. A minőségügyben Taguchi ugyanezt a gondolatot fogalmazta meg: minőségi veszteségfüggvénye, <span class="m">L(y) = k(y − m)²</span>, már a céltól való kis eltérést is veszteségnek tekinti, a <span class="m">k</span> állandó pedig pénzben fejezi ki az eltérést <a class="ref" href="#ref-1">[1]</a>. A gépi tanulás négyzetes vesztesége és ez a minőségi veszteség ugyanaz az ötlet.</p>
+        <h3>Miért nem a „talált vagy nem” mércén tanítunk?</h3>
+        <p>A 0/1 típusú (talált/nem talált) veszteség szinte mindenhol vízszintes: egy kis változtatás a paraméteren nem mozdítja az értékét. A 4. szinten kiderül, hogy a tanulás a veszteség meredekségéből tájékozódik, így ebből a mércéből nem kapna irányt. Ezért a gyakorlatban <b>helyettesítő</b> (<em>surrogate</em>) veszteségen tanítunk, amely sima és meredek, és csak a végén mérünk a számunkra fontos, de rosszul tanítható mércével.</p>
+      </div>
+    </div>
+
+    <div class="quiz" data-level="1"></div>
+  </div>
+</section>
+
+<!-- ================= 2–8. SZINT: átdolgozás alatt ================= -->
+<section class="level" id="szint-2" data-level="2" aria-labelledby="h-2">
+  <header class="lvl"><div class="numeral" aria-hidden="true">2</div><div><p class="lvl-meta">2. szint a 8-ból</p><h2 id="h-2">Sok hibából egy szám: MSE és MAE</h2><p class="lvl-goal"><b>Cél:</b>látni, hogy a veszteség megválasztása eldönti, melyik válasz lesz „a legjobb”, és hogy az átlag, illetve a medián honnan jön.</p><p class="lock" hidden><span class="lock-text"></span></p></div></header>
+  <div class="lvl-body"><p class="note"><b class="lbl">Minta.</b> Ez a szint az 1. szint mintájának jóváhagyása után kerül át az új példákra.</p></div>
+</section>
+<section class="level" id="szint-3" data-level="3" aria-labelledby="h-3"><header class="lvl"><div class="numeral" aria-hidden="true">3</div><div><p class="lvl-meta">3. szint a 8-ból</p><h2 id="h-3">A veszteségtáj: a paraméterek térképe</h2><p class="lock" hidden><span class="lock-text"></span></p></div></header><div class="lvl-body"></div></section>
+<section class="level" id="szint-4" data-level="4" aria-labelledby="h-4"><header class="lvl"><div class="numeral" aria-hidden="true">4</div><div><p class="lvl-meta">4. szint a 8-ból</p><h2 id="h-4">Lejtőn lefelé: a gradiens-módszer</h2><p class="lock" hidden><span class="lock-text"></span></p></div></header><div class="lvl-body"></div></section>
+<section class="level" id="szint-5" data-level="5" aria-labelledby="h-5"><header class="lvl"><div class="numeral" aria-hidden="true">5</div><div><p class="lvl-meta">5. szint a 8-ból</p><h2 id="h-5">Osztályozás: valószínűség és keresztentrópia</h2><p class="lock" hidden><span class="lock-text"></span></p></div></header><div class="lvl-body"></div></section>
+<section class="level" id="szint-6" data-level="6" aria-labelledby="h-6"><header class="lvl"><div class="numeral" aria-hidden="true">6</div><div><p class="lvl-meta">6. szint a 8-ból</p><h2 id="h-6">Honnan jönnek a veszteségek?</h2><p class="lock" hidden><span class="lock-text"></span></p></div></header><div class="lvl-body"></div></section>
+<section class="level" id="szint-7" data-level="7" aria-labelledby="h-7"><header class="lvl"><div class="numeral" aria-hidden="true">7</div><div><p class="lvl-meta">7. szint a 8-ból</p><h2 id="h-7">A mérce testre szabása</h2><p class="lock" hidden><span class="lock-text"></span></p></div></header><div class="lvl-body"></div></section>
+<section class="level" id="szint-8" data-level="8" aria-labelledby="h-8"><header class="lvl"><div class="numeral" aria-hidden="true">8</div><div><p class="lvl-meta">8. szint a 8-ból</p><h2 id="h-8">Amikor a mérce elcsúszik a céltól</h2><p class="lock" hidden><span class="lock-text"></span></p></div></header><div class="lvl-body"></div></section>
+
+<section class="kit-sec" id="glosszarium" aria-labelledby="h-gl">
+  <h2 id="h-gl">Glosszárium</h2>
+  <p class="ui">A minta után az eredeti glosszárium teljes egészében átkerül.</p>
+</section>
+
+<section class="kit-sec" id="irodalom" aria-labelledby="h-ir">
+  <h2 id="h-ir">Irodalom</h2>
+  <ol class="refs">
+    <li id="ref-1"><span class="rn">[1]</span><p>Taguchi, G. (1986). <cite>Introduction to Quality Engineering: Designing Quality into Products and Processes.</cite> Asian Productivity Organization. <span class="id">1. szint</span></p></li>
+    <li id="ref-2"><span class="rn">[2]</span><p>Wald, A. (1950). <cite>Statistical Decision Functions.</cite> Wiley. <span class="id">1. szint</span></p></li>
+    <li id="ref-6"><span class="rn">[6]</span><p>Goodfellow, I., Bengio, Y., Courville, A. (2016). <cite>Deep Learning.</cite> MIT Press. <span class="id"><a href="https://www.deeplearningbook.org/">deeplearningbook.org</a> · 1–3. szint</span></p></li>
+  </ol>
+  <p class="ui dim">A minta csak az 1. szinthez szükséges tételeket mutatja; a teljes, 38 tételes irodalomjegyzék változatlanul átkerül.</p>
+</section>
+
+<p class="m-foot-note">A demók szemléltető, kitalált adatokkal dolgoznak.</p>
+  </div>
+</div>
+</main>
+<footer class="foot wrap"><span>© 2026 Csaplár Dániel · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu" rel="license">CC BY-NC-SA 4.0</a></span><a href="mailto:csaplar.d@gmail.com">Kapcsolat</a></footer>
+
+<script>
+/* Szintzáró kvízek. A helyes válasz sorszáma: a (0-tól). */
+window.KVIZ = {
+ 1: [
+  { q: 'Miért nem használjuk az előjeles eltérést közvetlenül veszteségként?',
+    o: ['Mert túl nagy számokat ad, és ettől lassul a tanulás.',
+        'Mert a túl- és az alábecslések átlagolásnál kioltják egymást.',
+        'Mert forintban van, a tanuláshoz pedig mértékegység nélküli szám kell.'],
+    a: 1, x: 'Egy +1,5 és egy −1,5 millió forintos tévedés átlaga 0, mintha mindkét becslés pontos lett volna. Ezért vesszük az eltérés abszolút értékét vagy a négyzetét. A mértékegység nem akadály: a veszteség lehet forintban is, csak következetesen kell kezelni.' },
+  { q: 'Egy becslés 3 sávegységgel tér el a valódi ártól. Mekkora a négyzetes veszteség sávegységben?',
+    o: ['3', '6', '9'],
+    a: 2, x: '3² = 9. A négyzetes veszteség a nagy hibákat aránytalanul felnagyítja: háromszoros hiba, kilencszeres büntetés. A 6 a kétszerese lenne, nem a négyzete.' },
+  { q: 'Miben tér el a négyzetes veszteség a „talált vagy nem” mércétől?',
+    o: ['Semmiben: a kettő ugyanazt méri, csak más a nevük.',
+        'A sávon belüli kis eltérést is bünteti, az eltérés négyzetével arányosan.',
+        'Csak a sávon kívüli becsléseket bünteti, azokat viszont erősebben.'],
+    a: 1, x: 'A „talált vagy nem” mérce szerint a sávon belül minden becslés egyformán jó, az 50,1 és az 51,9 millió is. A négyzetes veszteség szerint már a kis eltérés is veszteség, csak kicsi, és az eltérés négyzetével nő.' }
+ ]
+};
+</script>
+<script src="/assets/tananyag.js"></script>
+<script src="/assets/ait.js"></script>
+<script>
+(function () {
+"use strict";
+var T = window.Tananyag, hu = T.hu, huS = T.huS;
+function $(id) { return document.getElementById(id); }
+function span(label, val) { return "<div>" + label + "<b>" + val + "</b></div>"; }
+
+/* ---- 1. kísérlet: egy becslés, három mérce ---- */
+(function () {
+  var s = $("d1x"); if (!s) return;
+  var VALOS = 50, SAV = 2, KINT = 1.5, P;
+  function build() {
+    P = T.Plot($("d1svg"), { W: 560, H: 296, pad: { b: 48 }, xmin: -2, xmax: 2, ymin: 0, ymax: 4.2, xticks: [-2, -1, 0, 1, 2], yticks: [0, 1, 2, 3, 4], xlabel: "eltérés sávegységben (1 = 2 millió Ft)", ylabel: "veszteség" });
+    P.band(-1, 1, "c-band");
+    P.curve(function (t) { return Math.abs(t); }, -2, 2, "c-abs");
+    P.curve(function (t) { return t * t; }, -2, 2, "c-sq");
+    P.poly([[-2, KINT], [-1, KINT], [-1, 0], [1, 0], [1, KINT], [2, KINT]], "c-hit", P.gS);
+    P.text(0, 3.85, "„talált” sáv", "lbl-band", "middle", P.gS);
+  }
+  function upd() {
+    var x = +s.value, e = x - VALOS, t = e / SAV, st = Math.abs(t) <= 1 + 1e-9 ? 0 : KINT;
+    $("d1xv").textContent = hu(x, 2);
+    s.style.setProperty("--p", ((x - s.min) / (s.max - s.min) * 100) + "%");
+    s.setAttribute("aria-valuetext", hu(x, 2) + " millió forint");
+    $("d1r").innerHTML = span("eltérés", huS(e, 2) + " M Ft = " + huS(t, 2) + " egység") + span("|e|", hu(Math.abs(t), 2)) + span("e²", hu(t * t, 2)) + span("talált vagy nem", st === 0 ? "0 (talált)" : "1,5 (tévedett)");
+    P.clear(); P.vline(t, "c-now");
+    P.dot(t, Math.abs(t), 5, "f-abs"); P.dot(t, t * t, 5, "f-sq"); P.dot(t, st, 5, "f-hit");
+  }
+  build(); s.addEventListener("input", upd); upd();
+  var w = window.innerWidth < 600;
+  window.addEventListener("resize", function () { if ((window.innerWidth < 600) !== w) { w = !w; build(); upd(); } });
+})();
+
+/* ---- nyitó ábra: szintvonalas veszteségtáj és a gradiens-módszer útja ---- */
+(function () {
+  var svg = $("heroMap"); if (!svg) return;
+  var mk = T.mk, cx = 214, cy = 206, ang = -32, sc = 178, A = 1, B = 6;
+  var g = mk("g", { transform: "rotate(" + ang + " " + cx + " " + cy + ")" }, svg);
+  [0.012, 0.04, 0.085, 0.15, 0.23, 0.33, 0.45, 0.6, 0.78, 1.0].forEach(function (c, i) {
+    mk("ellipse", { cx: cx, cy: cy, rx: (sc * Math.sqrt(c / A)).toFixed(1), ry: (sc * Math.sqrt(c / B)).toFixed(1), class: "cl" + (i % 3 === 2 ? " major" : "") }, g);
+  });
+  var u = 0.82, v = 0.3, eta = 0.142, pts = [[u, v]];
+  for (var i = 0; i < 22; i++) { u = u - eta * 2 * A * u; v = v - eta * 2 * B * v; pts.push([u, v]); }
+  var path = mk("path", { d: pts.map(function (q, i) { return (i ? "L" : "M") + (cx + sc * q[0]).toFixed(1) + " " + (cy + sc * q[1]).toFixed(1); }).join(" "), class: "gd" }, g);
+  pts.forEach(function (q, i) { if (i < 14) mk("circle", { cx: (cx + sc * q[0]).toFixed(1), cy: (cy + sc * q[1]).toFixed(1), r: i === 0 ? 5 : 2.6, class: "gdpt" }, g); });
+  var mn = mk("circle", { cx: cx, cy: cy, r: 6, class: "minpt" }, g);
+  mk("text", { x: 392, y: 392, "text-anchor": "end", class: "ax" }, svg).textContent = "w₁";
+  mk("text", { x: 10, y: 22, class: "ax" }, svg).textContent = "w₂";
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches && path.getTotalLength) {
+    var L = path.getTotalLength(), dots = g.querySelectorAll(".gdpt");
+    path.style.strokeDasharray = L; path.style.strokeDashoffset = L; mn.style.opacity = 0;
+    Array.prototype.forEach.call(dots, function (c) { c.style.opacity = 0; });
+    requestAnimationFrame(function () { requestAnimationFrame(function () {
+      path.style.transition = "stroke-dashoffset 2.4s cubic-bezier(.3,.1,.2,1)"; path.style.strokeDashoffset = 0;
+      Array.prototype.forEach.call(dots, function (c, i) { c.style.transition = "opacity .3s " + (0.1 + i * 0.15) + "s"; c.style.opacity = 1; });
+      mn.style.transition = "opacity .5s 2.3s"; mn.style.opacity = 1;
+    }); });
+  }
+})();
+})();
+</script>
+</body>
+</html>

@@ -234,16 +234,16 @@ function initTabs(root){
    Haladásjelző: 12 szint = 12 réteg (egymásra rakott lapok)
    ------------------------------------------------------------------ */
 function setProgress(el,done){
-  done=Math.max(0,Math.min(12,done));el.setAttribute("data-done",done);
+  var total=+el.getAttribute("data-total")||12;done=Math.max(0,Math.min(total,done));el.setAttribute("data-done",done);
   $$(".slab",el).forEach(function(s,i){s.classList.toggle("done",i<done);s.classList.toggle("now",i===done)});
   var c=$("[data-count]",el);if(c)c.textContent=done;
-  var pb=$('[role="progressbar"]',el);if(pb){pb.setAttribute("aria-valuenow",done);pb.setAttribute("aria-valuetext",done+" szint kész a 12-ből")}
+  var pb=$('[role="progressbar"]',el);if(pb){pb.setAttribute("aria-valuenow",done);pb.setAttribute("aria-valuetext",done+" szint kész, összesen "+total)}
 }
 function initProgress(root){
   $$(".layers",root).forEach(function(el){
     if(el._ait)return;el._ait=1;
     var svg=$("svg",el),out="";
-    for(var i=0;i<12;i++){var y=160-i*12.5;out+='<g class="slab" transform="translate(0 '+y+')"><path class="top" d="M10 10 L70 0 L130 10 L70 20 Z"/><path class="side-l" d="M10 10 L70 20 L70 26 L10 16 Z"/><path class="side-r" d="M70 20 L130 10 L130 16 L70 26 Z"/></g>'}
+    var total=+el.getAttribute("data-total")||12,stepY=Math.min(12.5,150/total);for(var i=0;i<total;i++){var y=160-i*stepY;out+='<g class="slab" transform="translate(0 '+y+')"><path class="top" d="M10 10 L70 0 L130 10 L70 20 Z"/><path class="side-l" d="M10 10 L70 20 L70 26 L10 16 Z"/><path class="side-r" d="M70 20 L130 10 L130 16 L70 26 Z"/></g>'}
     out+='<line class="stream" x1="70" y1="190" x2="70" y2="18"/>';
     svg.innerHTML=out;
     setProgress(el,+el.getAttribute("data-done")||0);

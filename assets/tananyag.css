@@ -1,0 +1,97 @@
+/* AI-tananyagok · szintalapú tananyagoldalak (az ait.css-re épül)
+   © 2026 Csaplár Dániel · CC BY-NC-SA 4.0 */
+
+/* — oldalváz — */
+.page-top{padding-top:72px}
+.lesson-wrap{max-width:var(--page,1280px);margin:0 auto;padding:0 var(--pad)}
+.lesson-col{max-width:760px}
+.crumb{display:inline-flex;align-items:center;gap:10px;margin:28px 0 0;font:500 14px/1.2 var(--font-disp);color:var(--ink-2);text-decoration:none}
+.crumb::before{content:"";width:18px;height:3px;background:var(--gold)}
+.crumb:hover{color:var(--ink)}
+
+/* — nyitó blokk — */
+.m-hero{display:grid;gap:32px;padding:40px 0 56px;border-bottom:1px solid var(--line)}
+@media (min-width:900px){.m-hero{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);align-items:center;padding:64px 0 72px}}
+.m-hero h1{font-size:clamp(40px,6.4vw,80px);line-height:1.02;letter-spacing:-.035em;font-variation-settings:"SHRP" 55;max-width:12ch}
+.m-hero .lede{margin:22px 0 0;font-size:clamp(19px,2vw,23px);line-height:1.5;color:var(--ink-2);max-width:34ch}
+.m-hero .facts{margin:18px 0 0;font:450 15px/1.6 var(--font-disp);color:var(--ink-3);max-width:52ch}
+.m-hero .start{display:inline-block;margin-top:26px;font:560 16px/1 var(--font-disp);text-decoration:none;border-bottom:2px solid var(--gold);padding-bottom:5px}
+.hero-fig{margin:0;justify-self:center;width:min(100%,400px)}
+.hero-fig svg{display:block;width:100%;height:auto}
+.hero-fig figcaption{margin-top:10px;font:450 13px/1.5 var(--font-disp);color:var(--ink-3)}
+.hm .cl{fill:none;stroke:var(--line-2);stroke-width:1}
+.hm .cl.major{stroke:var(--ink-3);stroke-width:1.2}
+.hm .gd{fill:none;stroke:var(--gold);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.hm .gdpt{fill:var(--gold)}
+.hm .minpt{fill:var(--bg);stroke:var(--ink);stroke-width:2}
+.hm .ax{font:450 13px var(--font-disp);fill:var(--ink-3)}
+
+/* — szintek áttekintése — */
+.overview{display:grid;gap:28px;padding:48px 0;border-bottom:1px solid var(--line)}
+@media (min-width:900px){.overview{grid-template-columns:minmax(0,1fr) 320px;gap:56px}}
+.overview h2{font-size:clamp(26px,3vw,34px);margin-bottom:10px}
+.overview p{color:var(--ink-2)}
+.lvl-index{list-style:none;margin:18px 0 0;padding:0;border-top:1px solid var(--line)}
+.lvl-index li{border-bottom:1px solid var(--line)}
+.lvl-index a{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:11px 0;text-decoration:none}
+.lvl-index .n{font:300 22px/1 var(--font-disp);font-variation-settings:"SHRP" 100;color:var(--ink-3)}
+.lvl-index .t{font:500 17px/1.35 var(--font-disp)}
+.lvl-index .st{font:450 13px/1 var(--font-disp);color:var(--ink-3);white-space:nowrap}
+.lvl-index li.is-done .n,.lvl-index li.is-done .st{color:var(--gold)}
+.lvl-index li.is-locked .t{color:var(--ink-3)}
+.lvl-index a:hover .t{text-decoration:underline;text-decoration-color:var(--gold)}
+.tools{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.tools .pill{font-size:14px;padding:9px 16px}
+.tools-note{margin:10px 0 0;font:450 14px/1.5 var(--font-disp);color:var(--ink-3)}
+
+/* — egy szint — */
+.level{padding:var(--s-7,96px) 0 0;scroll-margin-top:64px}
+.level .lvl{margin-bottom:28px}
+.level.locked .lvl-body{display:none}
+.lock[hidden]{display:none}
+.lvl-body>*+*{margin-top:28px}
+.lvl-body h3{font-size:22px;margin:40px 0 12px;letter-spacing:-.02em}
+.lvl-body .depth [role="tabpanel"]>h3:first-child{margin-top:8px}
+.lvl-body p{margin:0 0 1em}
+.ref{font:500 .78em/1 var(--font-disp);vertical-align:super;text-decoration:none;color:var(--gold);margin-left:1px}
+.m{font-family:"STIX Two Math","Cambria Math",var(--font-read);font-style:italic;white-space:nowrap}
+.m .rm{font-style:normal}
+
+/* — kísérlet — */
+.demo{background:var(--bg-2);padding:24px 20px}
+@media (min-width:720px){.demo{padding:30px 32px}}
+.demo h4{font:560 20px/1.25 var(--font-disp);letter-spacing:-.015em;margin:0 0 6px}
+.demo .hint{font:450 15px/1.55 var(--font-disp);color:var(--ink-2);margin:0 0 18px;max-width:60ch}
+.demo .ctrl{display:grid;gap:4px;max-width:520px}
+.demo .ctrl .sv output{font-size:30px}
+.demo .readout{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+.demo .plot{display:block;width:100%;height:auto;margin-top:16px}
+.demo .legend{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:10px;font:450 14px/1.4 var(--font-disp);color:var(--ink-2)}
+.demo .legend i{display:inline-block;width:22px;height:0;border-top:var(--h,2px) var(--st,solid) var(--c);vertical-align:middle;margin-right:8px}
+.c-band{fill:var(--gold-wash);opacity:.55}
+.c-abs{stroke:var(--q);stroke-width:2;fill:none}
+.c-sq{stroke:var(--gold);stroke-width:3.5;fill:none}
+.c-hit{stroke:var(--ink-2);stroke-width:2;fill:none;stroke-dasharray:7 5}
+.c-now{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 4}
+.f-abs{fill:var(--q)}.f-sq{fill:var(--gold)}.f-hit{fill:var(--ink-2)}
+.c-t.lbl-band{fill:var(--gold);font-weight:560}
+
+/* — egyenlet (egyszerű, MathML nélkül is olvasható) — */
+.eq{margin:0;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font:italic 22px/1.5 "STIX Two Math","Cambria Math",var(--font-read);text-align:center;overflow-x:auto}
+@media (max-width:480px){.eq{font-size:18px}}
+.eq .rm{font-style:normal}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;font-size:.9em}
+.frac>span{display:block;padding:0 4px}.frac>span:first-child{border-bottom:1px solid currentColor}
+
+/* — megjegyzés-doboz — */
+.note{margin:0;padding:18px 20px;background:var(--bg-2);font-size:17px;line-height:1.6}
+.note b.lbl{font-family:var(--font-disp);font-weight:600;color:var(--ink);margin-right:4px}
+
+/* — kvíz a szint végén — */
+.quiz[data-level]{margin-top:48px}
+.quiz .quiz-act{display:flex;flex-wrap:wrap;gap:10px}
+.quiz .next{text-decoration:none;border-color:var(--gold)}
+.quiz .q:last-child{border-bottom:0}
+
+/* — anyag vége — */
+.m-foot-note{margin-top:var(--s-7,96px);padding-top:28px;border-top:1px solid var(--line);font:450 15px/1.6 var(--font-disp);color:var(--ink-2)}
