@@ -20,56 +20,63 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geologica:slnt,wght,CRSV,SHRP@-12..0,100..900,0..1,0..100&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&display=swap" rel="stylesheet">
 <script>try{var t=localStorage.getItem('ait-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
-<link rel="stylesheet" href="/assets/ait.css">
+<link rel="stylesheet" href="/assets/nyito/nyito.css">
+<script type="importmap">{"imports":{"three":"/assets/vendor/three-0.169.0/three.module.min.js","three/addons/":"/assets/vendor/three-0.169.0/addons/"}}</script>
+<link rel="modulepreload" href="/assets/vendor/three-0.169.0/three.module.min.js">
 </head>
 <body>
-<header class="top fixed">
-  <a class="brand" href="/">AI-tananyagok</a>
-  <nav aria-label="Fő navigáció"><a class="wide" href="#honnan">Honnan kezdjem?</a><a href="#anyagok">Minden anyag</a><a class="wide" href="/mi-valtozott/">Mi változott?</a></nav>
+<header class="top">
+  <a class="brand" href="/"><svg viewBox="0 0 22 22" aria-hidden="true"><path d="M2 15l9 4.5 9-4.5-9-4.5z" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M2 10.5l9 4.5 9-4.5-9-4.5z" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".6"/><path d="M11 1v18" stroke="var(--gold)" stroke-width="2"/></svg>AI-tananyagok</a>
+  <nav aria-label="Fő navigáció"><a href="#honnan">Honnan kezdjem?</a><a href="#minden">Minden anyag</a><a href="#valtozas">Mi változott?</a></nav>
   <button class="theme" type="button" data-theme-toggle aria-label="Színtéma váltása"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
 </header>
-<main>
-<div class="scene" data-scene>
-  <div class="viz"><canvas role="img" aria-label="Egy transzformer modell térbeli vázlata: alul a szöveg tokenjei, fölötte a beágyazás, rétegenként figyelem és MLP, a tetején a kimenet. Húzással vagy nyilakkal forgatható." tabindex="0"></canvas><span class="drag" aria-hidden="true">húzd a modellt a forgatáshoz</span></div>
-  <div class="content wrap">
-    <section class="hero" data-hero data-cam="home" aria-label="Bevezető">
-      <div class="stage">
-        <h1 class="say"><span class="lead-part">Mesterséges intelligencia,</span><span class="slot"> érthetően.</span></h1>
-      </div>
-      <div class="ribbon" role="radiogroup" aria-label="A modell tippjei a következő szóra"></div>
-      <button class="resample" type="button" data-resample>Új minta a tippekből</button>
-      <p class="intro">Ingyenes, magyar nyelvű tananyagok az alapoktól a kutatói szintig. Hétköznapi példákkal magyarázunk, és a legtöbb anyagban magad is kísérletezhetsz.<small>A tippek valószínűségei szemléltetők.</small></p>
-    </section>
-    <div class="lead-in" id="honnan"><div class="lead-box"><h2>Honnan kezdjem?</h2><p>Görgess tovább: minden lépésnél a modell arra a részére fordul, amelyről az anyag szól.</p></div></div>
-    <ol class="steps">
-      <li class="step" data-cam="s1"><div class="panel"><div class="n">1</div><h3>LLM-tananyag, 1–5. szint</h3><p>Hogyan lesz a szövegből szám, és hogyan jósolja meg a modell a következő szót.</p><div class="m">≈ 5 óra · kezdő</div><a href="/llm-oktatoanyag/">Megnyitás →</a></div></li>
-      <li class="step" data-cam="s2"><div class="panel"><div class="n">2</div><h3>3D Transformer</h3><p>Az egész szerkezet egyben, felülről és metszetben: rövid film és négy ábra.</p><div class="m">≈ 15 perc · kezdő</div><a href="/transformer-3d/">Megnyitás →</a></div></li>
-      <li class="step" data-cam="s3"><div class="panel"><div class="n">3</div><h3>Veszteségfüggvény</h3><p>Mit jelent, hogy a modell téved, és hogyan lesz a tévedés méréséből tanulás.</p><div class="m">≈ 4 óra · középhaladó</div><a href="/vesztesegfuggveny/">Megnyitás →</a></div></li>
-      <li class="step" data-cam="s4"><div class="panel"><div class="n">4</div><h3>LLM-tananyag, 6–12. szint</h3><p>Tanítás, finomhangolás, futtatás, a modell belsejének értelmezése és a mai kutatási kérdések.</p><div class="m">≈ 6 óra · haladó</div><a href="/llm-oktatoanyag/#tanitas">Megnyitás →</a></div></li>
-      <li class="step" data-cam="s5"><div class="panel"><div class="n">5</div><h3>Hibamódok</h3><p>Miért ad magabiztos, mégis hibás választ egy nyelvi modellre épülő rendszer, és mit tehetsz ellene.</p><div class="m">≈ 4 óra · középhaladó</div><a href="/hibamodok/">Megnyitás →</a></div></li>
-      <li class="step" data-cam="s6"><div class="panel"><div class="n">6</div><h3>AI Atlasz</h3><p>Mire, melyik eszközt: connectorok, MCP, agentek, automatizálás, feladatból kiindulva.</p><div class="m">≈ 3 óra · kezdő · érvényes: 2026. szeptember</div><a href="/ai-atlasz/">Megnyitás →</a></div></li>
-      <li class="step" data-cam="s7"><div class="panel"><div class="n">7</div><h3>Python-alapok</h3><p>Rövid gyakorlólapok, hogy a tananyagok kódrészleteit el is tudd olvasni.</p><div class="m">8 hét × 25 perc · kezdő</div><a href="/python-alapok/">Megnyitás →</a></div></li>
-      <li class="step" data-cam="s8"><div class="panel"><div class="n">8</div><h3>RAG-labor</h3><p>Építs rendszert, amely dokumentumokból válaszol, forrásjelöléssel és méréssel.</p><div class="m">≈ 6 óra · haladó</div><a href="/rag-labor/">Megnyitás →</a></div></li>
-    </ol>
-  </div>
-</div>
 
-<section class="index" id="anyagok" aria-labelledby="idx"><div class="wrap"><h2 id="idx">Minden anyag</h2>
-  <div class="grp"><h3>Alapok<span>időtálló elvek</span></h3><ul>
-    <li><h4><a href="/llm-oktatoanyag/">LLM-tananyag</a></h4><p>Hogyan jósolja meg egy nyelvi modell a következő szót: a szavak számokká alakításától a figyelemmechanizmuson át a mai kutatási kérdésekig. 14 böngészőben futó kísérlettel.</p><div class="f">12 szint · 10–12 óra · kezdőtől kutatóig · <span>frissítve 2026. 09. 19.</span> · <span class="lang"><a href="/llm-oktatoanyag/" lang="hu" hreflang="hu">HU</a><a href="/llm-oktatoanyag/en/" lang="en" hreflang="en">EN</a></span></div></li>
-    <li><h4><a href="/vesztesegfuggveny/">Veszteségfüggvény</a></h4><p>Mit jelent, hogy egy modell téved, és hogyan lesz a tévedés méréséből tanulás. Lakásárakon, spamszűrőn és egy pékség kenyerein, kis számpéldákkal.</p><div class="f">8 szint · 4 óra · középhaladó · <span>frissítve 2026. 09. 26.</span></div></li>
-    <li><h4><a href="/hibamodok/">Hibamódok</a></h4><p>Miért ad magabiztos, mégis hibás választ egy nyelvi modellre épülő rendszer? Tíz jellegzetes hiba a hallucinációtól a csendes romlásig: felismerésük, mérésük és kivédésük.</p><div class="f">10 szint · 4 óra · középhaladó · <span>frissítve 2026. 09. 26.</span></div></li>
-    <li><h4><a href="/python-alapok/">Python-alapok</a></h4><p>Rövid, napi gyakorlólapok azoknak, akik a tananyagok kódrészleteit olvasni és kipróbálni szeretnék. Bolti készleten, hőmérséklet-naplón és eladási adatokon, zárófeladattal.</p><div class="f">12 szint + zárófeladat · 8 hét × 25 perc · kezdő · <span>frissítve 2026. 09. 26.</span></div></li>
-  </ul></div>
-  <div class="grp"><h3>Gyakorlat<span>ami ma igaz, ezért dátummal</span></h3><ul>
-    <li><h4><a href="/ai-atlasz/">AI Atlasz</a></h4><p>Interaktív útmutató az AI gyakorlati használatához: connectorok, MCP, API és tool calling, skillek, agentek, automatizálás, feladatból kiindulva. Fogalomtérképpel, folyamatlejátszóval és megoldásválasztóval.</p><div class="f">18 fejezet · 3 óra · kezdő · <span style="color:var(--gold)">érvényes: 2026. szeptember</span></div></li>
-  </ul></div>
-  <div class="grp"><h3>Laborok<span>nem csak olvasni: kísérletezni is</span></h3><ul>
-    <li><h4><a href="/rag-labor/">RAG-labor</a></h4><p>Építs lépésről lépésre egy rendszert, amely egy oktatási platform dokumentumaiból válaszol, forrásjelöléssel és méréssel. Letölthető, futtatható Python-kód, API-kulcs nélkül is.</p><div class="f">10 lépés · 6 óra · haladó · <span>frissítve 2026. 09. 26.</span></div></li>
-    <li><h4><a href="/transformer-3d/">3D Transformer</a></h4><p>Egy kis, négyrétegű transzformer háromdimenziós modellje: egy token útja a következő token kiválasztásáig. Rövid film és négy részletes ábra, valódi számértékekkel.</p><div class="f">28 mp film + 4 ábra · 15 perc · kezdő · <span>frissítve 2026. 09. 26.</span></div></li>
-  </ul></div>
-</div></section>
-<section class="news" id="valtozas" aria-label="Mi változott?"><div class="wrap"><p><span class="dim">Mi változott? · <span data-news-month>havi összefoglaló</span>.</span> <span data-news-title>Havonta 3–5 rövid tétel arról, mi történt az AI gyakorlati világában, egyszerűen elmagyarázva, forrásokkal. Az első hamarosan megjelenik.</span> <a href="/mi-valtozott/">Megnyitás →</a></p></div></section>
+<main>
+<section class="hero" aria-label="Bevezető">
+  <div class="wrap hero-grid">
+    <div class="lede">
+      <div class="stage" id="stage">
+        <svg class="arcs" id="arcs" aria-hidden="true"></svg>
+        <h1 class="say" id="say"><span class="lead-part">Mesterséges intelligencia,</span><span class="slot"> érthetően.</span></h1>
+      </div>
+      <p class="read" id="read" aria-live="polite">Vidd az egeret a cím egy darabjára: megmutatja, mire figyel.</p>
+      <p class="sub">Ingyenes, magyar nyelvű AI-tananyagok az alapoktól a kutatói szintig.</p>
+      <p class="sub2">Értsd meg, mi van a felszín alatt: forgatható modell, kipróbálható laborok és egy összefüggő útvonal, egy helyen.</p>
+      <div class="cta"><a class="btn" href="#honnan">Honnan kezdjem? <span aria-hidden="true">→</span></a><a class="lnk" href="#minden">Minden anyag <span aria-hidden="true">→</span></a></div>
+    </div>
+    <div class="mid" id="model">
+      <button class="tilt" id="tilt" type="button" role="switch" aria-checked="false" hidden><span class="tilt-sw" aria-hidden="true"></span>Mozgásérzékelés be</button>
+      <div class="hint"><span class="hint-t mouse" aria-hidden="true"><svg viewBox="0 0 16 22"><rect x="1" y="1" width="14" height="20" rx="7" fill="none" stroke="currentColor"/><path d="M8 5v4" stroke="currentColor" stroke-linecap="round"/></svg>Húzd a forgatáshoz · Ctrl + görgő: nagyítás</span><span class="hint-t touch">Egy ujjal forgasd, kettővel nagyíts · dupla koppintás: alapnézet</span>
+        <span class="zoom" role="group" aria-label="Modell nagyítása"><button type="button" data-zoom="in" aria-label="Nagyítás">+</button><button type="button" data-zoom="out" aria-label="Kicsinyítés">−</button><button type="button" data-zoom="reset" aria-label="Vissza az alapnézetbe">↺</button></span></div>
+    </div>
+    <div class="route-col" id="honnan">
+      <h2>Honnan kezdjem?</h2>
+      <svg id="route-arc" aria-hidden="true"></svg>
+      <ol id="route">
+        <li data-view="llm" data-say="Az LLM-tananyag végigmegy az egész modellen: a tokenektől a figyelmen át a kimenetig."><a href="/llm-oktatoanyag/"><span class="node" aria-hidden="true"></span><span><span class="n">01</span><span class="ti">LLM-tananyag</span></span><span class="su">Az alapoktól a kutatói szintig</span></a></li>
+        <li data-view="t3d" data-say="A 3D Transformer az egészet egyben mutatja: minden réteget és a köztük futó jeleket."><a href="/transformer-3d/"><span class="node" aria-hidden="true"></span><span><span class="n">02</span><span class="ti">3D Transformer</span></span><span class="su">A szerkezet felülről és metszetben</span></a></li>
+        <li data-view="loss" data-say="A veszteségfüggvény a kimenetnél kezdődik: mennyire tért el a tipp attól, ami jött."><a href="/vesztesegfuggveny/"><span class="node" aria-hidden="true"></span><span><span class="n">03</span><span class="ti">Veszteségfüggvény</span></span><span class="su">Hogyan tanul a modell a tévedéseiből</span></a></li>
+        <li data-view="fail" data-say="A hibamódok a kimenetnél jelennek meg: ott, ahol a magabiztos tipp elszakad a valóságtól."><a href="/hibamodok/"><span class="node" aria-hidden="true"></span><span><span class="n">04</span><span class="ti">Hibamódok</span></span><span class="su">Magabiztos, mégis hibás válaszok</span></a></li>
+        <li data-view="atlas" data-say="Az AI Atlasz a két végponttal foglalkozik: mit adsz be, és mit kapsz vissza."><a href="/ai-atlasz/"><span class="node" aria-hidden="true"></span><span><span class="n">05</span><span class="ti">AI Atlasz</span></span><span class="su">Mire jók ma az AI-eszközök</span></a></li>
+        <li data-view="py" data-say="A Python-alapok a szerkezetet kódként mutatják: ugyanez a modell, leírva."><a href="/python-alapok/"><span class="node" aria-hidden="true"></span><span><span class="n">06</span><span class="ti">Python-alapok</span></span><span class="su">Hogy magad is kipróbáld</span></a></li>
+        <li data-view="rag" data-say="A RAG-laborban a saját dokumentumaid kerülnek a modell elé, a tokenek mellé."><a href="/rag-labor/"><span class="node" aria-hidden="true"></span><span><span class="n">07</span><span class="ti">RAG-labor</span></span><span class="su">Válasz a saját dokumentumaidból</span></a></li>
+      </ol>
+      <p id="route-say" aria-live="polite">Vidd az egeret egy anyagra: a modell arra a részére fordul, amelyről szól.</p>
+    </div>
+  </div>
+</section>
+
+<section class="all" id="minden" aria-labelledby="all-t">
+  <div class="wrap">
+    <div class="all-head"><div><h2 id="all-t">Minden anyag, egy helyen</h2><p>Ugyanazok az alapelvek, más-más mélységben: olvasnivaló, film és kipróbálható labor.</p></div></div>
+    <div style="position:relative">
+      <svg class="flowline" viewBox="0 0 1360 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 70 C120 20 200 110 330 70 S520 20 650 64 S860 110 990 62 S1200 18 1360 60"/></svg>
+      <ul class="grid7"><li class="item"><a href="/llm-oktatoanyag/"><svg viewBox="0 0 160 130" role="img" aria-label="Egymásra rakott rétegek, közepén arany vonal"><defs><filter id="gw" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path class="gl l" d="M31.5 78.0 L80.0 106.0 L80.0 99.0 L31.5 71.0 Z"/><path class="gl r" d="M128.5 78.0 L80.0 106.0 L80.0 99.0 L128.5 71.0 Z"/><path class="gl t" d="M80.0 43.0 L128.5 71.0 L80.0 99.0 L31.5 71.0 Z"/><path class="gl l" d="M31.5 55.6 L80.0 83.6 L80.0 76.6 L31.5 48.6 Z"/><path class="gl r" d="M128.5 55.6 L80.0 83.6 L80.0 76.6 L128.5 48.6 Z"/><path class="gd t" d="M80.0 20.6 L128.5 48.6 L80.0 76.6 L31.5 48.6 Z"/><path class="gl l" d="M31.5 33.2 L80.0 61.2 L80.0 54.2 L31.5 26.2 Z"/><path class="gl r" d="M128.5 33.2 L80.0 61.2 L80.0 54.2 L128.5 26.2 Z"/><path class="gl t" d="M80.0 -1.8 L128.5 26.2 L80.0 54.2 L31.5 26.2 Z"/><path class="au" d="M80.0 86.4 L80.0 5.2"/></svg><span class="num">01</span><h3>LLM-tananyag</h3><p>Hogyan jósol szót egy nyelvi modell.</p><div class="f">12 szint · 10–12 óra · HU / EN</div></a></li><li class="item"><a href="/transformer-3d/"><svg viewBox="0 0 160 130" role="img" aria-label="Átlátszó kocka, benne arany kocka"><path class="wf l" d="M21.8 78.0 L80.0 111.6 L80.0 44.4 L21.8 10.8 Z"/><path class="wf r" d="M138.2 78.0 L80.0 111.6 L80.0 44.4 L138.2 10.8 Z"/><path class="wf t" d="M80.0 -22.8 L138.2 10.8 L80.0 44.4 L21.8 10.8 Z"/><path class="gd l" d="M55.8 58.4 L80.0 72.4 L80.0 44.4 L55.8 30.4 Z"/><path class="gd r" d="M104.2 58.4 L80.0 72.4 L80.0 44.4 L104.2 30.4 Z"/><path class="gd t" d="M80.0 16.4 L104.2 30.4 L80.0 44.4 L55.8 30.4 Z"/></svg><span class="num">02</span><h3>3D Transformer</h3><p>A modell működő szerkezetként.</p><div class="f">28 mp film + 4 ábra · 15 perc</div></a></li><li class="item"><a href="/vesztesegfuggveny/"><svg viewBox="0 0 160 130" role="img" aria-label="Lapon csökkenő arany görbe"><path class="gl l" d="M17.0 78.0 L80.0 114.4 L80.0 108.8 L17.0 72.4 Z"/><path class="gl r" d="M143.0 78.0 L80.0 114.4 L80.0 108.8 L143.0 72.4 Z"/><path class="gl t" d="M80.0 36.0 L143.0 72.4 L80.0 108.8 L17.0 72.4 Z"/><path class="au" d="M52.1 -9.5 L57.7 11.2 L63.3 26.9 L68.8 39.1 L74.4 48.7 L80.0 56.6 L85.6 63.1 L91.2 68.7 L96.7 73.6 L102.3 78.0 L107.9 82.1"/><circle class="dot" cx="52.1" cy="-9.5" r="2.2"/><circle class="dot" cx="63.3" cy="26.9" r="2.2"/><circle class="dot" cx="74.4" cy="48.7" r="2.2"/><circle class="dot" cx="85.6" cy="63.1" r="2.2"/><circle class="dot" cx="96.7" cy="73.6" r="2.2"/><circle class="dot" cx="107.9" cy="82.1" r="2.2"/></svg><span class="num">03</span><h3>Veszteségfüggvény</h3><p>Hogyan lesz a tévedésből tanulás.</p><div class="f">8 szint · 4 óra</div></a></li><li class="item"><a href="/hibamodok/"><svg viewBox="0 0 160 130" role="img" aria-label="Kettétört réteg, borostyán repedéssel"><path class="gl l" d="M17.0 78.0 L44.8 94.1 L44.8 85.7 L17.0 69.6 Z"/><path class="gl r" d="M107.9 57.7 L44.8 94.1 L44.8 85.7 L107.9 49.3 Z"/><path class="gl t" d="M80.0 33.2 L107.9 49.3 L44.8 85.7 L17.0 69.6 Z"/><path class="gl l" d="M54.5 106.7 L80.0 121.4 L80.0 113.0 L54.5 98.3 Z"/><path class="gl r" d="M143.0 85.0 L80.0 121.4 L80.0 113.0 L143.0 76.6 Z"/><path class="wn t" d="M117.6 61.9 L143.0 76.6 L80.0 113.0 L54.5 98.3 Z"/><path class="kl" d="M82.4 40.2 L72.7 47.2 L84.8 61.2 L77.6 64.0"/></svg><span class="num">04</span><h3>Hibamódok</h3><p>Miért téved magabiztosan.</p><div class="f">10 szint · 4 óra</div></a></li><li class="item"><a href="/ai-atlasz/"><svg viewBox="0 0 160 130" role="img" aria-label="Térkép-rács összekötött arany pontokkal"><path class="gl l" d="M7.3 78.0 L80.0 120.0 L80.0 117.9 L7.3 75.9 Z"/><path class="gl r" d="M152.7 78.0 L80.0 120.0 L80.0 117.9 L152.7 75.9 Z"/><path class="gl t" d="M80.0 33.9 L152.7 75.9 L80.0 117.9 L7.3 75.9 Z"/><path class="gr" d="M92.1 40.8 L19.4 82.8"/><path class="gr" d="M67.9 40.8 L140.6 82.8"/><path class="gr" d="M104.2 47.8 L31.5 89.8"/><path class="gr" d="M55.8 47.8 L128.5 89.8"/><path class="gr" d="M116.4 54.8 L43.6 96.8"/><path class="gr" d="M43.6 54.8 L116.4 96.8"/><path class="gr" d="M128.5 61.8 L55.8 103.8"/><path class="gr" d="M31.5 61.8 L104.2 103.8"/><path class="gr" d="M140.6 68.8 L67.9 110.8"/><path class="gr" d="M19.4 68.8 L92.1 110.8"/><path class="au" d="M72.7 30.4 L77.6 48.6 L121.2 57.0"/><path class="au" d="M77.6 48.6 L52.1 71.7"/><path class="pin" d="M72.7 54.8 L72.7 30.4"/><circle class="dot" cx="72.7" cy="30.4" r="2.6"/><path class="pin" d="M77.6 85.6 L77.6 48.6"/><circle class="dot" cx="77.6" cy="48.6" r="2.6"/><path class="pin" d="M121.2 77.2 L121.2 57.0"/><circle class="dot" cx="121.2" cy="57.0" r="2.6"/><path class="pin" d="M52.1 86.3 L52.1 71.7"/><circle class="dot" cx="52.1" cy="71.7" r="2.6"/></svg><span class="num">05</span><h3>AI Atlasz</h3><p>A mai eszközök a gyakorlatban.</p><div class="f">18 fejezet · <span class=fresh>érvényes: 2026. szept.</span></div></a></li><li class="item"><a href="/python-alapok/"><svg viewBox="0 0 160 130" role="img" aria-label="Kódablak színes sorokkal"><path class="gl l" d="M46.1 58.4 L113.9 97.6 L113.9 38.8 L46.1 -0.4 Z"/><path class="gl r" d="M117.6 95.5 L113.9 97.6 L113.9 38.8 L117.6 36.7 Z"/><path class="gl t" d="M49.7 -2.5 L117.6 36.7 L113.9 38.8 L46.1 -0.4 Z"/><path class="cq" d="M53.1 15.1 L91.9 37.5"/><path class="au" d="M53.1 26.3 L79.8 41.7"/><path class="cv" d="M53.1 37.5 L99.2 64.1"/><path class="au" d="M53.1 48.7 L72.5 59.9"/></svg><span class="num">06</span><h3>Python-alapok</h3><p>Kód, hogy magad is kipróbáld.</p><div class="f">12 szint + zárófeladat · 8 hét × 25 perc</div></a></li><li class="item"><a href="/rag-labor/"><svg viewBox="0 0 160 130" role="img" aria-label="Dokumentumok egy rétegkötegbe futnak"><path class="gl l" d="M20.3 56.4 L42.2 69.0 L42.2 35.4 L20.3 22.8 Z"/><path class="gl r" d="M43.6 68.2 L42.2 69.0 L42.2 35.4 L43.6 34.6 Z"/><path class="gl t" d="M21.8 22.0 L43.6 34.6 L42.2 35.4 L20.3 22.8 Z"/><path class="gl l" d="M33.1 51.9 L54.9 64.5 L54.9 30.9 L33.1 18.3 Z"/><path class="gl r" d="M56.4 63.6 L54.9 64.5 L54.9 30.9 L56.4 30.1 Z"/><path class="gl t" d="M34.5 17.5 L56.4 30.1 L54.9 30.9 L33.1 18.3 Z"/><path class="gl l" d="M45.8 47.3 L67.6 59.9 L67.6 26.3 L45.8 13.7 Z"/><path class="gl r" d="M69.1 59.1 L67.6 59.9 L67.6 26.3 L69.1 25.5 Z"/><path class="gl t" d="M47.3 12.9 L69.1 25.5 L67.6 26.3 L45.8 13.7 Z"/><path class="gl l" d="M87.3 90.6 L113.9 106.0 L113.9 99.7 L87.3 84.3 Z"/><path class="gl r" d="M140.6 90.6 L113.9 106.0 L113.9 99.7 L140.6 84.3 Z"/><path class="gd t" d="M113.9 68.9 L140.6 84.3 L113.9 99.7 L87.3 84.3 Z"/><path class="gl l" d="M87.3 78.0 L113.9 93.4 L113.9 87.1 L87.3 71.7 Z"/><path class="gl r" d="M140.6 78.0 L113.9 93.4 L113.9 87.1 L140.6 71.7 Z"/><path class="gl t" d="M113.9 56.3 L140.6 71.7 L113.9 87.1 L87.3 71.7 Z"/><path class="au" d="M58.2 48.6 L80.0 54.2 L98.2 66.1"/></svg><span class="num">07</span><h3>RAG-labor</h3><p>Válasz a saját dokumentumaidból.</p><div class="f">10 lépés · 6 óra</div></a></li></ul>
+    </div>
+  </div>
+</section>
+
+<section class="news" id="valtozas" aria-label="Mi változott?"><div class="wrap"><span class="d">Mi változott? · <span data-news-month>havi összefoglaló</span></span><p><span data-news-title>Havonta 3–5 rövid tétel arról, mi történt az AI gyakorlati világában, egyszerűen elmagyarázva, forrásokkal. Az első hamarosan megjelenik.</span> <a href="/mi-valtozott/">Megnyitás →</a></p></div></section>
 <script>
 /* a legfrissebb közzétett „Mi változott?” bejegyzés címe (a piszkozatok nem látszanak) */
 (function () {
@@ -84,8 +91,8 @@
 })();
 </script>
 </main>
-<footer class="foot wrap"><span>© 2026 Csaplár Dániel · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu" rel="license">CC BY-NC-SA 4.0</a></span><a href="mailto:csaplar.d@gmail.com">Kapcsolat</a></footer>
-<script src="/assets/ait.js"></script>
+<footer class="wrap foot"><span>© 2026 Csaplár Dániel · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu" rel="license">CC BY-NC-SA 4.0</a> · three.js: MIT</span><a href="mailto:csaplar.d@gmail.com">Kapcsolat</a></footer>
+<script type="module" src="/assets/nyito/main.js"></script>
 <!-- ────────────────────────────────────────────────────────────────
      GoatCounter — süti nélküli, IP-tárolás nélküli látogatásszámláló.
      Nem gyűjt személyes adatot; a tanulási haladás és a kvízeredmények

@@ -21,6 +21,9 @@ Közös keret: `assets/ait.css`, `assets/ait.js` (arculat, téma, komponensek),
 kódblokk, grafikon, GoatCounter-esemény). A haladás anyagonként a böngésző
 helyi tárolójában marad.
 
+A nyitóoldal külön stílust és szkriptet kap (`assets/nyito/`), a three.js helyi
+másolatával (`assets/vendor/three-0.169.0/`, MIT). Szabályai: `CLAUDE.md`.
+
 Build és külső függőség nincs: minden oldal statikus HTML.
 
 © 2026 Csaplár Dániel · [CC BY-NC-SA 4.0](LICENSE)
