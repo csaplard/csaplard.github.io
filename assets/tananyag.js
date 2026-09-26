@@ -202,7 +202,8 @@ function initCode() {
     var lines = pre.textContent.replace(/\s+$/, "").split("\n");
     var id = "kod-" + (++codeN), name = pre.getAttribute("data-name") || "példa.py";
     var fig = doc.createElement("figure"); fig.className = "code";
-    fig.innerHTML = '<div class="code-top"><span>' + esc(name) + ' · Python, olvasásra</span><button type="button" data-copy="' + id + '">Másolás</button></div>' +
+    var lang = pre.getAttribute("data-lang") || (/\.py/.test(name) ? "Python" : "");
+    fig.innerHTML = '<div class="code-top"><span>' + esc(name) + (lang ? " · " + esc(lang) : "") + '</span><button type="button" data-copy="' + id + '">Másolás</button></div>' +
       '<pre id="' + id + '"><code>' + lines.map(function (l, i) { return '<span class="ln" data-n="' + (i + 1) + '"><span class="lc">' + (hlLine(l) || " ") + "</span></span>"; }).join("") + "</code></pre>";
     pre.parentNode.replaceChild(fig, pre);
   });

@@ -1,0 +1,604 @@
+<!doctype html>
+<!--
+  AI Atlasz — az AI gyakorlati használatának térképe
+  © 2026 Csaplár Dániel · CC BY-NC-SA 4.0
+  https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu
+-->
+<html lang="hu">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Atlasz · AI-tananyagok</title>
+<meta name="description" content="Az AI gyakorlati használatának térképe: connectorok, MCP, API és tool calling, RAG, skillek, agentek, automatizálás, feladatból kiindulva. Interaktív fogalomtérkép, folyamatlejátszó és megoldásválasztó, 18 fejezet, 23 forrás.">
+<meta name="author" content="Csaplár Dániel">
+<link rel="canonical" href="https://csaplard.github.io/ai-atlasz/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230b0c0e'/><circle cx='16' cy='9' r='3' fill='%23e8b44c'/><circle cx='8' cy='22' r='3' fill='none' stroke='%23eceae4' stroke-width='1.5'/><circle cx='24' cy='22' r='3' fill='none' stroke='%23eceae4' stroke-width='1.5'/><path d='M16 12 9 20M16 12 23 20M11 22h10' stroke='%23eceae4' stroke-width='1.3'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:slnt,wght,CRSV,SHRP@-12..0,100..900,0..1,0..100&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('ait-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/ait.css">
+<link rel="stylesheet" href="/assets/tananyag.css">
+<style>
+/* — az Atlasz saját interaktív elemei — */
+.tool-sec{padding:var(--s-7,96px) 0 0;scroll-margin-top:64px}
+.tool-sec>h2{font-size:clamp(28px,3.4vw,40px);letter-spacing:-.03em;margin-bottom:8px}
+.tool-sec>.sub{color:var(--ink-2);margin:0 0 22px;max-width:60ch}
+.cmap-wrap{display:grid;gap:18px}
+@media (min-width:900px){.cmap-wrap{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);align-items:start}}
+.cmap{position:relative;aspect-ratio:1/1;max-width:560px;width:100%;background:var(--bg-2)}
+.cmap svg{position:absolute;inset:0;width:100%;height:100%}
+.cmap .edge{stroke:var(--line-2);stroke-width:1.2;fill:none}
+.cmap .edge.hot{stroke:var(--gold);stroke-width:3}
+.cmap .node{position:absolute;transform:translate(-50%,-50%);border:1px solid var(--line-2);background:var(--bg);color:var(--ink);padding:7px 10px;font:560 14px/1.15 var(--font-disp);cursor:pointer;text-align:center;min-width:76px}
+.cmap .node small{display:block;margin-top:3px;font:450 10px/1 var(--font-disp);letter-spacing:.06em;color:var(--ink-3)}
+.cmap .node.related{border-color:var(--gold)}
+.cmap .node.active{background:var(--gold);border-color:var(--gold);color:var(--bg)}
+.cmap .node.active small{color:var(--bg)}
+@media (max-width:560px){.cmap .node{padding:5px 6px;font-size:12px;min-width:0}.cmap .node small{display:none}}
+.cdetail{background:var(--bg-2);padding:22px 22px 24px}
+.cdetail .idx{font:450 12px/1 var(--font-disp);letter-spacing:.1em;color:var(--ink-3)}
+.cdetail h3{font-size:28px;margin:8px 0 2px}
+.cdetail .subt{font:450 15px/1.4 var(--font-disp);color:var(--gold);margin-bottom:12px}
+.cdetail .ex{background:var(--bg);padding:12px 14px;margin:12px 0;font-size:16px}
+.cdetail .lim{color:var(--ink-2);font-size:16px}
+.flow{background:var(--bg-2);padding:22px 20px}
+@media (min-width:720px){.flow{padding:28px 30px}}
+.flow select,.chooser select{font:450 15px/1.3 var(--font-disp);color:var(--ink);background:var(--bg);border:1px solid var(--line-2);padding:10px 12px;max-width:100%}
+.flow .req{font-size:19px;margin:16px 0 14px}
+.flow .stages{display:flex;gap:4px;margin:0 0 10px}
+.flow .stages i{flex:1;height:5px;background:var(--bg-3)}
+.flow .stages i.done{background:var(--gold)}
+.flow .count{font:450 13px/1 var(--font-disp);letter-spacing:.08em;color:var(--ink-3)}
+.flow h4{font:560 21px/1.3 var(--font-disp);margin:8px 0 6px}
+.flow .actors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:16px 0}
+@media (min-width:720px){.flow .actors{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.flow .actor{border:1px solid var(--line);padding:10px 12px;font:450 14px/1.35 var(--font-disp);color:var(--ink-3)}
+.flow .actor.on{border-color:var(--gold);color:var(--ink);background:var(--gold-wash)}
+.flow .actor b{display:block;color:var(--gold);font-weight:600;margin-top:2px}
+.flow .payload{margin:0;padding:12px 14px;background:var(--bg);font:400 14px/1.6 ui-monospace,Menlo,monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+.flow .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chooser{display:grid;gap:14px;background:var(--bg-2);padding:22px 20px}
+@media (min-width:720px){.chooser{grid-template-columns:repeat(2,minmax(0,1fr));padding:28px 30px}}
+.chooser label{display:grid;gap:6px;font:560 15px/1.3 var(--font-disp)}
+.cresult{margin-top:18px;padding:22px;border-left:3px solid var(--gold);background:var(--bg-2)}
+.cresult .eyebrow{font:450 12px/1 var(--font-disp);letter-spacing:.1em;color:var(--ink-3)}
+.cresult h3{font-size:26px;margin:8px 0 12px}
+.cresult .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.cresult .chips span{border:1px solid var(--line-2);padding:4px 10px;font:500 13px/1.2 var(--font-disp)}
+.cresult .why{margin:10px 0 0;font-size:16px}
+.cresult .why b{font-family:var(--font-disp)}
+.validity{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;margin-top:18px}
+.chapter{padding-top:28px}
+.chapter+.chapter{margin-top:28px;border-top:1px solid var(--line)}
+.ch-title{font-size:26px!important;margin:0 0 14px!important;scroll-margin-top:72px;display:flex;gap:12px;align-items:baseline}
+.ch-n{font:300 30px/1 var(--font-disp);font-variation-settings:"SHRP" 100;color:var(--gold)}
+.chapter h4{font:560 19px/1.3 var(--font-disp);margin:26px 0 10px}
+.ch-toc{list-style:none;margin:0 0 8px;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;font:450 14px/1.5 var(--font-disp)}
+.ch-toc a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--line-2)}
+.ch-toc a:hover{color:var(--ink)}
+.refs-inline{white-space:nowrap}
+</style>
+</head>
+<body data-material="ai-atlasz" data-store="atlasz_progress_v1" data-levels="4" data-nolock>
+<header class="top fixed">
+  <a class="brand" href="/">AI-tananyagok</a>
+  <nav aria-label="Anyagon belüli navigáció"><a class="wide" href="#terkep">Térkép</a><a href="#szintek">Fejezetek</a><a class="wide" href="#irodalom">Források</a></nav>
+  <button class="theme" type="button" data-theme-toggle aria-label="Színtéma váltása"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+</header>
+
+<main class="page-top">
+<div class="lesson-wrap">
+  <a class="crumb" href="/">Vissza az AI-tananyagokhoz</a>
+
+  <section class="m-hero" aria-label="Bevezető">
+    <div>
+      <h1>AI Atlasz</h1>
+      <p class="lede">Az AI gyakorlati használatának térképe: hogyan lesz egy szöveget előállító modellből a saját adatainkkal és alkalmazásainkkal dolgozó, ellenőrizhető segítő?</p>
+      <p class="facts">18 fejezet 4 részben · kb. 3 óra · kezdő · 23 forrás. Három interaktív eszközzel: fogalomtérkép, egy kérés útja lépésenként, megoldásválasztó.</p>
+      <div class="validity"><span class="valid">Érvényes: 2026. szeptember</span><span class="ui dim">Felülvizsgálandó: 2027. március · <a href="#valtozasnaplo">változásnapló</a></span></div>
+    </div>
+    <figure class="hero-fig">
+      <div class="key"><b>A fő különbség.</b> A connector egy kapcsolatot megvalósító integráció; az MCP a kapcsolódás egyik szabványa; a tool egy művelet; a skill újrahasználható munkamódszer; az agent pedig a következő lépést is kiválasztó rendszer. Ezek együtt is használhatók.</div>
+    </figure>
+  </section>
+
+  <section class="overview" id="bevezeto" aria-labelledby="h-bev">
+    <div>
+      <h2 id="h-bev">Hogyan olvasd</h2>
+      <p>Az AI használatát az alapján érdemes csoportosítani, hogy milyen feladatot végez, milyen adatokhoz és műveletekhez fér hozzá, ki irányítja a lépéseit, és hol fut a rendszer. Ugyanaz a nyelvi modell így lehet beszélgetőpartner, dokumentumkereső, alkalmazásba épített segéd, folyamatlépés vagy több eszközt önállóan használó agent.</p>
+      <p>Kezdd a három interaktív eszközzel, aztán olvasd a négy részt abban a sorrendben, amelyik a célodhoz illik. A fogalmi leírások hivatalos dokumentációra épülnek; a mintafeladatok, döntési szempontok és bevezetési javaslatok saját tervezési példák, nem kész termékek és nem kipróbált integrációk.</p>
+      <p class="warn"><b>Aktualitás.</b> A konkrét szolgáltatások elérhetősége csomagtól, szervezeti beállítástól, régiótól és kliensverziótól függ. Az MCP részleteinél a 2026-07-28-as specifikáció az ellenőrzött referencia; régebbi megvalósítások ettől eltérhetnek.</p>
+      <ol class="lvl-index" id="szintek">
+        <li data-level="1"><a href="#szint-1"><span class="n">1</span><span class="t">Áttekintés</span><span class="st"></span></a></li>
+        <li data-level="2"><a href="#szint-2"><span class="n">2</span><span class="t">Kapcsolódások</span><span class="st"></span></a></li>
+        <li data-level="3"><a href="#szint-3"><span class="n">3</span><span class="t">Összetett feladatok</span><span class="st"></span></a></li>
+        <li data-level="4"><a href="#szint-4"><span class="n">4</span><span class="t">Saját megoldás tervezése</span><span class="st"></span></a></li>
+      </ol>
+    </div>
+    <div>
+      <div class="layers" data-total="4" data-done="0"><svg viewBox="0 0 140 200" aria-hidden="true"></svg><div><div class="count"><span data-count>0</span><span> / 4</span></div><p>Minden teljesített önellenőrzés egy réteg. A haladásod csak ebben a böngészőben tárolódik.</p></div></div>
+      <div class="tools"><button class="pill" type="button" data-reset>Haladás törlése</button></div>
+    </div>
+  </section>
+
+  <section class="tool-sec" id="terkep" aria-labelledby="h-terkep">
+    <h2 id="h-terkep">Fogalomtérkép</h2>
+    <p class="sub">Mit csinál a connector? Hová kerül az MCP? Miben más egy skill és egy agent? Kattints egy elemre: kiemelődnek a kapcsolatai, és megjelenik a magyarázat egy gyakorlati példával. Fogalmi kapcsolatok, nem egyetlen kötelező architektúra.</p>
+    <div class="cmap-wrap">
+      <div class="cmap" id="map"><svg id="edges" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+      <div class="cdetail" id="detail" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="tool-sec" id="folyamat" aria-labelledby="h-folyamat">
+    <h2 id="h-folyamat">Egy kérés, több szereplő</h2>
+    <p class="sub">Lépkedj végig egy kérés útján: mikor dolgozik a modell, és mikor hajt végre műveletet egy program? Szemléltetés kitalált adatokkal, valódi eszközhívás nélkül; a sorrend egy lehetséges megvalósítás.</p>
+    <div class="flow">
+      <label class="ui" for="scenario">Példafeladat</label><br>
+      <select id="scenario">
+        <option value="rag">Válasz belső dokumentumból</option>
+        <option value="write">Ügyféljegy-tervezet mentése</option>
+        <option value="weekly">Automatikus heti jelentés</option>
+        <option value="agent">Eltérő határidők vizsgálata</option>
+      </select>
+      <p class="req" id="request"></p>
+      <div class="stages" id="stages"></div>
+      <div class="count" id="stepcount"></div>
+      <h4 id="steptitle"></h4>
+      <p id="steptext"></p>
+      <div class="actors" id="actors"></div>
+      <pre class="payload" id="payload"></pre>
+      <div class="btns"><button class="pill" type="button" id="prev">← Előző</button><button class="pill" type="button" id="play">Lejátszás</button><button class="pill" type="button" id="next">Következő →</button><button class="pill" type="button" id="reset">Újrakezdés</button></div>
+    </div>
+  </section>
+
+  <section class="tool-sec" id="valaszto" aria-labelledby="h-valaszto">
+    <h2 id="h-valaszto">A feladatból indulj, a technológia követi</h2>
+    <p class="sub">Állítsd be, hogyan szeretnél dolgozni, és megmutatja a célszerű kiinduló megoldást és a szükséges rétegeket. Szabályalapú tervezési segéd, nem termékajánló; a konkrét kompatibilitást és hozzáféréseket külön kell ellenőrizni.</p>
+    <form class="chooser" id="chooser">
+      <label>Miből dolgozzon?<select id="data"><option value="text">A megadott szövegből vagy fájlból</option><option value="docs">Saját dokumentumtárból</option><option value="live">Élő üzleti rendszer adataiból</option></select></label>
+      <label>Hogyan haladjon?<select id="control"><option value="user">Én vezetem, kérésenként</option><option value="fixed">Rendszeresen, előre ismert lépésekkel</option><option value="adaptive">Önállóan válassza a következő lépést</option></select></label>
+      <label>Módosíthat külső rendszerben?<select id="write"><option value="no">Nem, csak válaszol vagy fájlt készít</option><option value="yes">Igen, ellenőrzött mentéssel</option></select></label>
+      <label>Több AI-alkalmazásból is kell ugyanaz az eszköz?<select id="reuse"><option value="no">Nem, egy alkalmazás elég</option><option value="yes">Igen, megosztott képességet szeretnék</option></select></label>
+    </form>
+    <div class="cresult" id="result" aria-live="polite"></div>
+  </section>
+
+  <div class="lesson-col">
+<section class="level" id="szint-1" data-level="1" aria-labelledby="h-1">
+  <header class="lvl"><div class="numeral" aria-hidden="true">1</div><div>
+    <p class="lvl-meta">1. rész a 4-ből · 1–3. fejezet · kb. 35 perc · önellenőrző kvíz</p>
+    <h2 id="h-1">Áttekintés</h2>
+    <p class="lvl-goal"><b>Tartalom:</b>a használat tengelyei, módjai és a gyakran összekevert fogalmak.</p>
+  </div></header>
+  <div class="lvl-body">
+    <ol class="ch-toc"><li><a href="#fejezet-1">1. Az AI használatának négy tengelye</a></li><li><a href="#fejezet-2">2. A fő használati módok</a></li><li><a href="#fejezet-3">3. A gyakran összekevert fogalmak</a></li></ol>
+<article class="chapter"><h3 id="fejezet-1" class="ch-title"><span class="ch-n">1</span>Az AI használatának négy tengelye</h3>
+<p>Az „AI-t használunk” túl tág állítás. Egy rendszer leírásához négy, egymástól független kérdésre válaszolj. Ez a kézikönyv gyakorlati csoportosítása, nem hivatalos iparági osztályozás.</p>
+<div class="table-wrap"><div class="tbl"><table><thead><tr><th scope="col">Tengely</th><th scope="col">Lehetőségek</th><th scope="col">Mit dönt el</th></tr></thead><tbody><tr><td>Feladat</td><td>Megértés, keresés, alkotás, elemzés, cselekvés</td><td>Milyen eredményt várunk</td></tr><tr><td>Hozzáférés</td><td>Bemásolt szöveg, fájl, connector, API, MCP, felületkezelés</td><td>Miből dolgozhat és mit érhet el</td></tr><tr><td>Irányítás</td><td>Ember vezeti, rögzített workflow, agent, több agent</td><td>Ki választja a következő lépést</td></tr><tr><td>Futtatás</td><td>Felhő, saját gép, belső szerver, hibrid</td><td>Hol történik a feldolgozás</td></tr></tbody></table></div></div>
+<p><strong>Példa:</strong> „Minden hétfőn készíts összefoglalót a nyitott hibajegyekről.” A feladat elemzés és szövegalkotás. Az adatkapcsolat lehet connector vagy saját API. Az irányítás rögzített workflow. A futtatás lehet felhős, belső vagy hibrid. Ettől még nincs szükség önálló agentre.</p>
+<p><strong>Másik példa:</strong> „Derítsd ki, miért nőtt meg a késve teljesített rendelések száma.” Itt a szükséges lépések előre kevésbé ismertek. Egy agent több lekérdezést indíthat, összehasonlításokat készíthet és további bizonyítékot kereshet. A tényleges okot azonban csak a rendelkezésre álló adatok és szakmai ellenőrzés alapján lehet megállapítani.</p>
+<h4>A rendszer öt összetevője</h4>
+<p><strong>Modell:</strong> szöveget értelmez, javasol, osztályoz vagy művelethívást állít elő. <strong>Kontextus:</strong> az aktuális feladathoz megkapott információ. <strong>Eszközök:</strong> keresés, számítás, olvasás, írás. <strong>Vezérlés:</strong> a lépések sorrendje, ismétlése és leállítása. <strong>Ellenőrzés:</strong> jogosultságok, eredményvizsgálat, naplózás.</p>
+<p>Egy jobb modell nem javítja ki automatikusan az elavult adatot, a hibás integrációt vagy a túl tág jogosultságot. Fejlesztéskor először azt keresd, melyik összetevő korlátozza a feladat teljesítését.</p></article>
+<article class="chapter"><h3 id="fejezet-2" class="ch-title"><span class="ch-n">2</span>A fő használati módok</h3>
+<div class="table-wrap"><div class="tbl"><table><thead><tr><th scope="col">Használati mód</th><th scope="col">Jellemző feladat</th><th scope="col">Mi kell hozzá</th></tr></thead><tbody><tr><td>Beszélgető asszisztens</td><td>Magyarázat, ötletelés, átfogalmazás</td><td>Modell és jó feladatleírás</td></tr><tr><td>Fájlokkal dolgozó asszisztens</td><td>PDF összevetése, táblázat elemzése</td><td>Fájlolvasás, esetleg kódfuttatás</td></tr><tr><td>Saját tudásban kereső asszisztens</td><td>Belső eljárás megkeresése</td><td>Keresés vagy RAG, hozzáféréskezelés</td></tr><tr><td>Alkalmazásba épített copilot</td><td>CRM-adatlap összefoglalása</td><td>Az alkalmazás kontextusa és funkciói</td></tr><tr><td>Eszközhasználó asszisztens</td><td>Naptár lekérdezése, rekord létrehozása</td><td>Tool calling és integráció</td></tr><tr><td>Automatizált AI-folyamat</td><td>Beérkező levelek osztályozása</td><td>Trigger, workflow, ellenőrzött kimenet</td></tr><tr><td>Feladatmegoldó agent</td><td>Többlépéses kutatás vagy hibakeresés</td><td>Eszközök, futtatókörnyezet, korlátok</td></tr><tr><td>Több agentes rendszer</td><td>Elkülöníthető részfeladatok összehangolása</td><td>Koordináció és közös eredményszerződés</td></tr><tr><td>Valós idejű multimodális rendszer</td><td>Hangos segéd, képi megfigyelés</td><td>Hang vagy kép kezelése, késleltetéskezelés</td></tr><tr><td>Prediktív vagy optimalizáló rendszer</td><td>Előrejelzés, anomáliajelzés, ütemezés</td><td>Célmodell, adatok, mérhető célfüggvény</td></tr></tbody></table></div></div>
+<p>Az utolsó sor azért fontos, mert nem minden AI-feladat nyelvi feladat. Egy idősoros előrejelző, képfeldolgozó modell vagy optimalizáló algoritmus lehet a megoldás számítási része; az LLM pedig elmagyarázhatja az eredményt és kezelheti a felhasználói kérést.</p>
+<p><strong>A „copilot” elsősorban használati szerep vagy termékelnevezés.</strong> Önmagában nem árulja el, hogy a háttérben egyetlen modell, RAG, MCP vagy agent működik. Ugyanez igaz az „AI-asszisztens” megnevezésre.</p>
+<p>Egyetlen termék egyszerre több sorba is tartozhat. Érdemes konkrét műveletekkel vizsgálni: tud-e keresni, valóban megnyitja-e a forrást, tud-e írni, mi indítja el, és mit ellenőriz a végén?</p></article>
+<article class="chapter"><h3 id="fejezet-3" class="ch-title"><span class="ch-n">3</span>A gyakran összekevert fogalmak</h3>
+<div class="table-wrap"><div class="tbl"><table><thead><tr><th scope="col">Fogalom</th><th scope="col">Rövid jelentés</th><th scope="col">Példa</th></tr></thead><tbody><tr><td>API</td><td>Programok közötti felület</td><td>Hibajegy lekérése azonosítóval</td></tr><tr><td>Connector</td><td>Egy szolgáltatáshoz készített integráció</td><td>Kapcsolat egy dokumentumtárhoz</td></tr><tr><td>MCP</td><td>AI-alkalmazások és képességeket kínáló szerverek protokollja</td><td>Eszközlista lekérése és eszköz hívása</td></tr><tr><td>Tool</td><td>Egy meghívható művelet</td><td>search_tickets vagy create_draft</td></tr><tr><td>Function calling</td><td>A modell strukturált művelethívást állít elő</td><td>Függvénynév és argumentumok</td></tr><tr><td>RAG</td><td>Keresett tartalom bevonása a válaszadásba</td><td>Eljárásrészletből készülő válasz</td></tr><tr><td>Skill</td><td>Útmutatókból és esetleges segédállományokból álló képességcsomag</td><td>Jelentéskészítési munkamódszer</td></tr><tr><td>Workflow</td><td>Előre rögzített folyamat és elágazások</td><td>Lekérés, összesítés, ellenőrzés, mentés</td></tr><tr><td>Agent</td><td>Futás közben lépéseket választó rendszer</td><td>Megkeresi, mi hiányzik, és újra lekérdez</td></tr><tr><td>Plugin vagy extension</td><td>Termékspecifikus bővítménycsomag</td><td>Eszközöket és skilleket együtt telepít</td></tr><tr><td>A2A</td><td>Agentek közötti együttműködési protokoll</td><td>Másik agentnek adott részfeladat</td></tr></tbody></table></div></div>
+<p>A connector, az app és a plugin elnevezése szolgáltatónként változik. Nincs minden felületen ugyanaz a jelentésük. Az egyik nagy irodai platform egyedi connectora például API-t csomagol be; az Agent Skills külön specifikáció; az MCP pedig külön protokoll. <span class="refs-inline">[<a class="ref" href="#ref-1">1</a>, <a class="ref" href="#ref-2">2</a>, <a class="ref" href="#ref-7">7</a>]</span></p>
+<p><strong>Egy összetett kérés mögött:</strong> a felhasználó a chatfelületen kér jelentést; a skill megadja annak szerkezetét; az agent kiválasztja a lekérdezéseket; MCP-n keresztül meghív egy toolt; az a vállalati API-t használja; végül egy program elkészíti a fájlt.</p>
+<p>Ebben a példában egyik fogalom sem helyettesíti a másikat. A connector akár MCP-vel is megvalósulhat, az MCP-szerver mögött pedig több API lehet. Egy agent MCP nélkül is használhat eszközöket. <span class="refs-inline">[<a class="ref" href="#ref-2">2</a>, <a class="ref" href="#ref-8">8</a>, <a class="ref" href="#ref-10">10</a>]</span></p></article>
+    <div class="quiz" data-level="1" data-title="Önellenőrzés"></div>
+  </div>
+</section>
+
+<section class="level" id="szint-2" data-level="2" aria-labelledby="h-2">
+  <header class="lvl"><div class="numeral" aria-hidden="true">2</div><div>
+    <p class="lvl-meta">2. rész a 4-ből · 4–8. fejezet · kb. 50 perc · önellenőrző kvíz</p>
+    <h2 id="h-2">Kapcsolódások</h2>
+    <p class="lvl-goal"><b>Tartalom:</b>connectorok, MCP, API és tool calling, RAG.</p>
+  </div></header>
+  <div class="lvl-body">
+    <ol class="ch-toc"><li><a href="#fejezet-4">4. Connectorok a gyakorlatban</a></li><li><a href="#fejezet-5">5. Mit ad az MCP</a></li><li><a href="#fejezet-6">6. MCP technikai használati útmutató</a></li><li><a href="#fejezet-7">7. API és tool calling</a></li><li><a href="#fejezet-8">8. RAG keresés kontextus és memória</a></li></ol>
+<article class="chapter"><h3 id="fejezet-4" class="ch-title"><span class="ch-n">4</span>Connectorok a gyakorlatban</h3>
+<p>A connector leveszi a felhasználó vagy fejlesztő válláról egy adott szolgáltatás elérésének részleteit. Kezelheti a hitelesítést, a keresést, az API-paramétereket és a válaszok átalakítását. A tényleges képességet mindig a konkrét integráció határozza meg. <span class="refs-inline">[<a class="ref" href="#ref-1">1</a>]</span></p>
+<h4>Három eltérő működés</h4>
+<p><strong>Élő lekérdezés:</strong> a kérés pillanatában keres vagy olvas a forrásrendszerben. Friss adatot adhat, de az elérhető végpontok, a válaszidő és a szolgáltatási korlátok meghatározók.</p>
+<p><strong>Szinkronizált vagy indexelt hozzáférés:</strong> előre feldolgozott tartalomban keres. Nagy dokumentumtárnál hasznos, de a legutóbbi szinkronizálás óta történt változás hiányozhat. Az egyik nagy irodai platform dokumentált megközelítése például az, hogy a connector az adatokat a platform saját központi adatrétegébe juttatja. <span class="refs-inline">[<a class="ref" href="#ref-3">3</a>]</span></p>
+<p><strong>Műveletvégző integráció:</strong> létrehoz, szerkeszt, küld vagy töröl. Az olvasási lehetőségből nem következik automatikusan írási jogosultság.</p>
+<h4>Bekötési munkamenet</h4>
+<p>1. Írd le a konkrét igényt: például keresés egy kijelölt mappában és a találatok megnyitása.</p>
+<p>2. Nézd meg, hogy az integráció pontosan ezeket a műveleteket támogatja-e.</p>
+<p>3. A megfelelő felhasználói vagy szolgáltatásfiókkal csatlakozz; csak szükséges hozzáférést adj.</p>
+<p>4. Tesztelj egy biztosan létező dokumentumot, egy friss módosítást és egy nem elérhető fájlt.</p>
+<p>5. Ellenőrizd, hogy teljes dokumentumot, kivonatot vagy csak találati listát kapott-e az AI.</p>
+<p>6. Írásnál először próbarekorddal ellenőrizd a műveletet és a visszaadott azonosítót.</p>
+<p><strong>Mintakérés:</strong> „A kijelölt projektmappában keresd meg a legutóbb módosított három státuszjelentést. Nyisd meg őket, jelöld a dátumokat, és csak ezek alapján foglald össze az eltéréseket.”</p>
+<p><strong>Tipikus hiba:</strong> a felhasználó csatlakoztatott egy tárhelyet, ezért azt feltételezi, hogy az AI minden fájlt már elolvasott. A kapcsolat hozzáférési lehetőség; a feladat közbeni keresés és olvasás ettől külön lépés.</p></article>
+<article class="chapter"><h3 id="fejezet-5" class="ch-title"><span class="ch-n">5</span>Mit ad az MCP</h3>
+<p>A Model Context Protocol szabványosítja, hogyan kínál egy külső program képességeket egy AI-alkalmazás számára. Nem modell, nem adatbázis és nem saját jogosultságot adó varázskapcsolat. <span class="refs-inline">[<a class="ref" href="#ref-2">2</a>]</span></p>
+<div class="table-wrap"><div class="tbl"><table><thead><tr><th scope="col">Szereplő</th><th scope="col">Feladata</th><th scope="col">Példarendszer</th></tr></thead><tbody><tr><td>Host</td><td>Az AI-alkalmazás, amely összefogja a használatot</td><td>Asztali asszisztens vagy fejlesztői környezet</td></tr><tr><td>Client</td><td>A host komponense, amely MCP-n kommunikál</td><td>Kapcsolat egy kiválasztott szerverhez</td></tr><tr><td>Server</td><td>Képességeket kínáló program</td><td>Dokumentumtárhoz írt szolgáltatás</td></tr><tr><td>Háttérrendszer</td><td>A tényleges adat vagy üzleti funkció</td><td>Adatbázis, fájlrendszer, vállalati API</td></tr></tbody></table></div></div>
+<h4>A három alapvető szerveroldali elem</h4>
+<p><strong>Tools:</strong> végrehajtható műveletek. Például keresés a hibajegyekben vagy egy számítás elvégzése. A művelet lehet csak olvasó is; a tool nem feltétlenül módosít. <span class="refs-inline">[<a class="ref" href="#ref-4">4</a>]</span></p>
+<p><strong>Resources:</strong> kontextusként átadható tartalom, például dokumentum vagy adatbázisséma. A kliens dönti el, mit hogyan használ fel. A resource nem feltétlenül egy merevlemezen lévő fájl. <span class="refs-inline">[<a class="ref" href="#ref-5">5</a>]</span></p>
+<p><strong>Prompts:</strong> újrahasználható interakciós sablonok. Segíthetnek egy feladat következetes indításában, de nem azonosak a rendszer egészének szabályaival vagy egy teljes skillcsomaggal. <span class="refs-inline">[<a class="ref" href="#ref-2">2</a>]</span></p>
+<p><strong>Saját példa:</strong> egy ügyfélszolgálati MCP-szerver három toolt kínál: ügyféljegy-keresés, rendelésadatok lekérése, válaszlevél-tervezet mentése. Resource-ként megadja a mezők jelentését. Egy prompt sablon segíti a napi átadás-összefoglaló összeállítását.</p>
+<p>MCP akkor különösen hasznos, ha ugyanazt a képességet több kompatibilis AI-alkalmazásból szeretnéd elérni. Egyetlen alkalmazás egyetlen API-hívásához a közvetlen integráció gyakran egyszerűbb.</p>
+<p><strong>A hordozhatóság határa:</strong> a protokoll támogatása nem jelenti minden funkció teljes támogatását. A kliens által ismert elemeket, a hitelesítést és a verziót külön ellenőrizni kell.</p></article>
+<article class="chapter"><h3 id="fejezet-6" class="ch-title"><span class="ch-n">6</span>MCP technikai használati útmutató</h3>
+<h4>Helyi és távoli szerver</h4>
+<p><strong>Stdio:</strong> a kliens helyi folyamatot indíthat, és annak szabványos bemenetén és kimenetén kommunikál. Hasznos helyi fájlokhoz vagy fejlesztői eszközökhöz. A program telepítése egyben kódfuttatás is a gépen. <strong>Streamable HTTP:</strong> HTTP-alapú kapcsolat, amely távoli vagy helyi szolgáltatásként is működhet. Szervezeti megosztásnál a szerver üzemeltetése és az elérési jogosultság is feladat. <span class="refs-inline">[<a class="ref" href="#ref-6">6</a>]</span></p>
+<h4>Milyen lépések történnek</h4>
+<p>1. A host megkapja az indítandó program vagy a szerver címének beállítását.</p>
+<p>2. A kliens ellenőrzi a kompatibilitást és megismeri a képességeket.</p>
+<p>3. Lekéri az eszközök nevét, leírását és bemeneti sémáját.</p>
+<p>4. A modell kiválaszthat egy műveletet és megadhatja az argumentumokat.</p>
+<p>5. A futtatórendszer ellenőrzi és továbbítja a hívást.</p>
+<p>6. A szerver elvégzi a műveletet, majd visszaadja az eredményt vagy a hibát.</p>
+<p>A műveletek felsorolására a tools/list, meghívására a tools/call szolgál. A konkrét üzenetformátum és metaadatok verziófüggők. <span class="refs-inline">[<a class="ref" href="#ref-4">4</a>]</span></p>
+<h4>Verzió és jogosultság</h4>
+<p>A 2026-07-28 kiadás állapotmentes kéréskezelést vezetett be: a szükséges protokolladatokat a kérések hordozzák. Régebbi, inicializálási munkamenetre építő példákat ezért ne másolj át verzióellenőrzés nélkül. A sampling ebben a kiadásban elavultnak jelölt funkció. Ez nem jelenti azt, hogy az alkalmazás nem tarthat feladatállapotot. <span class="refs-inline">[<a class="ref" href="#ref-21">21</a>]</span></p>
+<p>Távoli elérésnél az OAuth-alapú engedélyezés a felhasználó felhatalmazását kezeli. Az MCP-szerver elérésének engedélye és a mögöttes vállalati rendszer joga külön ellenőrzési pont. A tokeneket ne a modellnek átadott promptban tárold. <span class="refs-inline">[<a class="ref" href="#ref-11">11</a>]</span></p>
+<p><strong>Beüzemelési próba:</strong> listázás → egy ismert adat lekérése → tiltott adat megtagadása → hibás paraméter elutasítása → napló ellenőrzése. Csak ezután adj író műveletet. A „read only” leírás mellé ténylegesen csak olvasásra jogosult háttérfiók kell.</p></article>
+<article class="chapter"><h3 id="fejezet-7" class="ch-title"><span class="ch-n">7</span>API és tool calling</h3>
+<p>Az API önmagában hagyományos programozási felület. Tool calling esetén a modell a rendelkezésére bocsátott műveletek közül strukturált hívást állít elő. Az alkalmazás hajtja végre a saját eszközét, vagy szolgáltatói eszköznél a szolgáltató futtatja azt. A modell szöveges „elküldtem” válasza nem végrehajtási bizonyíték. <span class="refs-inline">[<a class="ref" href="#ref-8">8</a>]</span></p>
+<h4>Egy jól körülhatárolt eszköz</h4>
+<p>Az alábbi JSON egy szemléltető eszközleírás-részlet, nem teljes API-kérés és nem kész MCP-szerver.</p>
+<pre class="py" data-name="példa · JSON">{
+  &quot;name&quot;: &quot;get_ticket&quot;,
+  &quot;description&quot;: &quot;Egy hibajegy olvasása azonosító alapján.&quot;,
+  &quot;inputSchema&quot;: {
+    &quot;type&quot;: &quot;object&quot;,
+    &quot;properties&quot;: {
+      &quot;ticket_id&quot;: {&quot;type&quot;: &quot;string&quot;}
+    },
+    &quot;required&quot;: [&quot;ticket_id&quot;],
+    &quot;additionalProperties&quot;: false
+  }
+}</pre>
+<p>Egy lehetséges argumentum: {&quot;ticket_id&quot;:&quot;H-1042&quot;}. A szerver ellenőrzi, hogy a felhasználó olvashatja-e ezt a jegyet. Az azonosítónak megfelelő rekordot adja vissza, forrással és időbélyeggel. Ha nem létezik, ezt jelzi; nem gyárt helyettesítő adatot.</p>
+<p><strong>Tervezési javaslat:</strong> a search_tickets, get_ticket és create_ticket_draft műveletek könnyebben ellenőrizhetők, mint egy mindent elfogadó run_arbitrary_command. A jó eszközleírás megadja, mikor használható, mit vár bemenetként, és mit jelent az eredménye. <span class="refs-inline">[<a class="ref" href="#ref-18">18</a>]</span></p>
+<h4>Strukturált kimenet</h4>
+<p>Egy automatizáció gyakran mezőket vár: kategória, sürgősség, hiányzó adatok. A sémához kötött kimenet segít géppel feldolgozható választ kapni. Ettől a tartalom még lehet téves: a helyes JSON-ban is szerepelhet hibás rendelésszám. Külön üzleti ellenőrzés szükséges. <span class="refs-inline">[<a class="ref" href="#ref-9">9</a>]</span></p>
+<p>Írásnál célszerű külön tervezési és véglegesítési műveletet használni. A jóváhagyás egy konkrét tartalomra és célrekordra vonatkozzon; az időközben módosult adatot verzióellenőrzés fogja meg.</p></article>
+<article class="chapter"><h3 id="fejezet-8" class="ch-title"><span class="ch-n">8</span>RAG keresés kontextus és memória</h3>
+<p>A retrieval augmented generation olyan minta, amelyben a rendszer előkeresi a kérdéshez releváns tartalmat, és azt átadja a modellnek a válaszhoz. A tartalom lehet vállalati dokumentum vagy más kereshető adat. A RAG nem feltétlenül vektoradatbázis: kulcsszavas, vektoros és hibrid keresés is része lehet. <span class="refs-inline">[<a class="ref" href="#ref-12">12</a>]</span></p>
+<h4>A feldolgozás két oldala</h4>
+<p><strong>Előkészítés:</strong> dokumentumok beolvasása, szükség esetén OCR, darabolás, metaadatok, jogosultságok és keresési index létrehozása. <strong>Válaszadás:</strong> kérdés alapján keresés, találatok kiválasztása, forrásrészletek átadása, válasz és hivatkozás. A keresés minősége közvetlenül befolyásolja a választ. <span class="refs-inline">[<a class="ref" href="#ref-12">12</a>]</span></p>
+<div class="table-wrap"><div class="tbl"><table><thead><tr><th scope="col">Mechanizmus</th><th scope="col">Mire való</th><th scope="col">Mire ne számíts</th></tr></thead><tbody><tr><td>Aktuális kontextus</td><td>A jelen feladathoz átadott információ</td><td>Nem korlátlan és nem feltétlenül tartós</td></tr><tr><td>Beszélgetési memória</td><td>Korábbi információk későbbi előhívása</td><td>Nem hiteles vállalati nyilvántartás</td></tr><tr><td>RAG</td><td>Releváns külső tartalom előkeresése</td><td>Nem garantálja a forrás helyességét</td></tr><tr><td>Fine tuning</td><td>Modellviselkedés vagy feladatteljesítés tanításos módosítása</td><td>Nem folyamatos dokumentumszinkron</td></tr><tr><td>Élő API-lekérdezés</td><td>Aktuális strukturált állapot lekérése</td><td>Nem magyarázza meg magától az okokat</td></tr></tbody></table></div></div>
+<p><strong>Saját példa:</strong> egy eljárásban arra kérdezel rá, milyen melléklet kell egy visszatérítési kérelemhez. Dokumentumkeresés indokolt. Ha a ma nyitott ügyféljegyek számát kéred, célszerű élő adatbázis-lekérdezés. Ha az adatbázis számot ad, azt a program számolja; az LLM értelmezze és mutassa be.</p>
+<h4>Mit tesztelj</h4>
+<p>Van-e válasz a forrásokban? Megtalálja-e a megfelelő verziót? Meg tudja-e különböztetni az ellentmondó dokumentumokat? Visszamutat-e a valóban felhasznált részletre? Megtagadja-e a nem hozzáférhető tartalmat? Tud-e „nem áll rendelkezésre elég adat” választ adni?</p>
+<p><strong>Kérésminta:</strong> „A válaszhoz add meg a dokumentum címét, verzióját és releváns fejezetét. Különítsd el a forrás állítását a saját következtetéstől. Hiány esetén nevezd meg a hiányzó adatot.”</p></article>
+    <div class="quiz" data-level="2" data-title="Önellenőrzés"></div>
+  </div>
+</section>
+
+<section class="level" id="szint-3" data-level="3" aria-labelledby="h-3">
+  <header class="lvl"><div class="numeral" aria-hidden="true">3</div><div>
+    <p class="lvl-meta">3. rész a 4-ből · 9–13. fejezet · kb. 50 perc · önellenőrző kvíz</p>
+    <h2 id="h-3">Összetett feladatok</h2>
+    <p class="lvl-goal"><b>Tartalom:</b>skillek, agentek, automatizációk, felületkezelés, futtatás.</p>
+  </div></header>
+  <div class="lvl-body">
+    <ol class="ch-toc"><li><a href="#fejezet-9">9. Skillek projektek és bővítmények</a></li><li><a href="#fejezet-10">10. Agentek és több agentes rendszerek</a></li><li><a href="#fejezet-11">11. Automatizációk és eseményvezérelt folyamatok</a></li><li><a href="#fejezet-12">12. Kódfuttatás böngésző és multimodalitás</a></li><li><a href="#fejezet-13">13. Felhős helyi és hibrid futtatás</a></li></ol>
+<article class="chapter"><h3 id="fejezet-9" class="ch-title"><span class="ch-n">9</span>Skillek projektek és bővítmények</h3>
+<p>A skill újrahasználható szakmai vagy technikai munkamódszert csomagol. Az Agent Skills formátumban a SKILL.md írja le a képességet; mellé kerülhetnek szkriptek, referenciák és sablonok. A rendszer fokozatosan töltheti be a szükséges tartalmat, így nem kell minden útmutatót minden feladatnál a kontextusba tenni. <span class="refs-inline">[<a class="ref" href="#ref-7">7</a>]</span></p>
+<h4>Mit érdemes skillbe tenni</h4>
+<p><strong>Saját példa:</strong> egy heti jelentés készítésének módja. Legyen benne az alkalmazási helyzet, a kötelező bemenet, a számítások szabálya, a fejezetsorrend, az ellenőrzés és a kimeneti fájl elvárt formája. Az aktuális heti tényadat külön bemenet legyen.</p>
+<p>Egy rövid tartalmi váz:</p>
+<pre class="py" data-name="vázlat">Feladat: heti státuszjelentés készítése.
+Bemenet: dátumtartomány és ellenőrzött rekordlista.
+Lépések: hiányvizsgálat, összesítés, eltérések, tervezet.
+Ellenőrzés: minden összeg egyezzen a rekordokkal.
+Kimenet: szerkeszthető dokumentum forráshivatkozásokkal.</pre>
+<p>Ez szemléltetés, nem a teljes Agent Skills fájlformátum. A telepíthető változatnak a választott rendszer specifikációját kell követnie.</p>
+<h4>Melyik réteg mit ad</h4>
+<p><strong>Prompt vagy sablon:</strong> hogyan fogalmazod meg az egyedi kérést. <strong>Projekt vagy workspace:</strong> egy adott termékben összetartozó fájlok, beszélgetések és utasítások munkatere. <strong>Skill:</strong> egy feladattípus végrehajtási módszere. <strong>Plugin:</strong> terméktől függően több bővítmény összecsomagolása. <strong>Connector vagy MCP:</strong> hozzáférés a szükséges külső képességekhez.</p>
+<p>Ha egy skill azt írja, hogy „olvasd ki az adatokat az ERP-ből”, attól ERP-hozzáférés még nem keletkezik. Ha a szükséges tool hiányzik, a rendszernek ezt fel kell ismernie.</p>
+<p><strong>Mikor éri meg:</strong> ugyanazt a feladatot rendszeresen végzed, sok apró formai vagy szakmai szabály számít, és az eredményt következetesen szeretnéd megkapni. Egyszeri rövid átfogalmazáshoz felesleges külön képességcsomagot fenntartani.</p>
+<p>Verziózd a skillt, és módosításkor néhány korábbi mintafeladaton ellenőrizd, nem romlott-e az eredmény. A mellékelt kódot ugyanúgy vizsgáld meg, mint bármely telepített programot.</p></article>
+<article class="chapter"><h3 id="fejezet-10" class="ch-title"><span class="ch-n">10</span>Agentek és több agentes rendszerek</h3>
+<p>A workflow előre kijelölt utat jár be; az agent futás közben választja meg, milyen lépéssel haladjon tovább. A fogalom használata nem teljesen egységes, ezért a terméknév helyett a tényleges döntési szabadságot érdemes vizsgálni. <span class="refs-inline">[<a class="ref" href="#ref-13">13</a>]</span></p>
+<p><strong>Agentciklus:</strong> a rendszer értékeli az aktuális helyzetet, műveletet választ, megkapja az eredményt, majd eldönti, kell-e további lépés. A ciklust a futtatókörnyezet kezeli; a modell nem önmagában végtelenül dolgozó program.</p>
+<h4>A szükséges korlátok</h4>
+<ul><li><strong>Cél:</strong> pontosan milyen kimenet számít késznek?</li><li><strong>Eszközkör:</strong> mely forrásokat és műveleteket használhatja?</li><li><strong>Keret:</strong> legfeljebb hány lépést, mennyi időt és költséget használhat?</li><li><strong>Megállás:</strong> milyen hiánynál vagy hibánál adja át embernek?</li><li><strong>Ellenőrzés:</strong> mi igazolja az eredményét és a végrehajtott műveleteket?</li></ul>
+<p><strong>Saját példa:</strong> „Vizsgáld meg három dokumentum eltérő határidejét. Keresd meg a legutóbbi jóváhagyott verziót, készíts eltéréslistát, és jelöld a feloldatlan ellentmondásokat.” Itt a lépéssor függhet a közben talált adatoktól.</p>
+<h4>Mikor kell több agent</h4>
+<p>Párhuzamosítható, jól elválasztható részfeladatoknál: például három külön szakterület forrásfeltárása, majd közös összevetés. A koordináció, a köztes eredmények és az ismétlődő keresések további költséget jelentenek. A több szereplő nem jelent automatikusan független ellenőrzést; ugyanazt a hibás forrást is átvehetik. <span class="refs-inline">[<a class="ref" href="#ref-19">19</a>]</span></p>
+<p><strong>A2A:</strong> agentek közötti feladatátadást és együttműködést szolgáló protokoll. Az MCP eszközöket és kontextust tesz elérhetővé; az A2A egy másik agenttel való együttműködésre fókuszál. A kettő kiegészítheti egymást, de több agent építéséhez nem kötelező A2A-t használni. <span class="refs-inline">[<a class="ref" href="#ref-10">10</a>]</span></p>
+<p>Első megoldásként egyetlen, szűk eszközkörrel dolgozó agentet tervezz. Csak akkor bontsd több szereplőre, ha mérhetően javul a feladat teljesítése vagy a futási idő.</p></article>
+<article class="chapter"><h3 id="fejezet-11" class="ch-title"><span class="ch-n">11</span>Automatizációk és eseményvezérelt folyamatok</h3>
+<p>Az automatizáció attól automatizáció, hogy a folyamat emberi újraindítás nélkül is elindul és lefut. Ehhez nem kötelező agent, sőt sokszor AI sem kell minden lépésben.</p>
+<p><strong>Időzített indítás:</strong> meghatározott időpontban vagy periódusonként. <strong>Eseményindítás:</strong> például új rekord vagy beérkező fájl hatására. <strong>Webhook:</strong> egy külső rendszer HTTP-kéréssel jelez egy eseményt. <strong>Polling:</strong> a rendszer időnként lekérdezi, történt-e változás. <span class="refs-inline">[<a class="ref" href="#ref-14">14</a>, <a class="ref" href="#ref-15">15</a>]</span></p>
+<h4>Egy jól körülhatárolt minta</h4>
+<p>Új hibabejelentés érkezik. A program ellenőrzi az alapadatokat. Az AI kategóriát és rövid összefoglalót javasol. Szabályok ellenőrzik a megengedett értékeket. Bizonytalan vagy hiányos eset emberhez kerül. A megfelelő eredményből tervezet jön létre, majd a rendszer naplózza a rekordazonosítót.</p>
+<p>Az LLM itt egyetlen lépés a folyamaton belül. A határidő-számítás, az összegzés, az azonosító-ellenőrzés és a duplikációszűrés programkód lehet.</p>
+<h4>Ami az üzembiztos működéshez kell</h4>
+<p><strong>Idempotencia:</strong> ugyanannak az eseménynek az ismételt feldolgozása ne hozzon létre újabb azonos jegyet. <strong>Retry:</strong> átmeneti hibánál szabályozott újrapróbálkozás. <strong>Timeout:</strong> a művelet ne várjon végtelenül. <strong>Hibacsatorna:</strong> a sikertelen tételek legyenek visszakereshetők. <strong>Állapotmentés:</strong> hosszú feladat folytatható legyen.</p>
+<p>Ha egy írási kérésnél megszakad a kapcsolat, nem biztos, hogy az írás meghiúsult. Újrapróbálás előtt azonosító vagy idempotenciakulcs alapján ellenőrizni kell az eredményt.</p>
+<p>Egy nyílt forráskódú workflow-eszköz dokumentációja például leírja az időzített és a webhookos indítást, valamint az emberi ellenőrzést AI-eszközhívások előtt. Ez megvalósítási lehetőség, nem indok arra, hogy minden lépésbe modellt tegyünk. <span class="refs-inline">[<a class="ref" href="#ref-14">14</a>–<a class="ref" href="#ref-16">16</a>]</span></p>
+<p><strong>Fontos működési különbség:</strong> a chatben leírt „holnaptól figyelem” mondat nem bizonyítja időzített feladat létrejöttét. Ellenőrizhető ütemezés, aktív futtatókörnyezet és látható futási állapot szükséges.</p></article>
+<article class="chapter"><h3 id="fejezet-12" class="ch-title"><span class="ch-n">12</span>Kódfuttatás böngésző és multimodalitás</h3>
+<h4>Kódot használó AI</h4>
+<p>A modell programot írhat, amely táblázatot tisztít, számol, diagramot rajzol vagy fájlt készít. A tényleges számítást a futtatókörnyezet végzi. Ez hasznos, ha az eredmény reprodukálható kód alapján ellenőrizhető. A sandbox korlátozott végrehajtási környezet; nem feltétlenül a felhasználó saját számítógépe. <span class="refs-inline">[<a class="ref" href="#ref-22">22</a>]</span></p>
+<h4>Browser use és computer use</h4>
+<p>Browser use esetén az AI weboldalakkal lép kapcsolatba; computer use esetén teljes asztali környezetben használhat képernyőképet, egeret és billentyűzetet. A végrehajtó program biztosítja ezeket a műveleteket. Ez akkor hasznos, ha a kívánt feladathoz nincs megfelelő API vagy connector. <span class="refs-inline">[<a class="ref" href="#ref-17">17</a>]</span></p>
+<div class="table-wrap"><div class="tbl"><table><thead><tr><th scope="col">Szempont</th><th scope="col">API vagy connector</th><th scope="col">Felületkezelés</th></tr></thead><tbody><tr><td>Művelet célzása</td><td>Azonosító és strukturált mezők</td><td>Oldalelem vagy képernyőpozíció</td></tr><tr><td>Felületváltozás hatása</td><td>Az API stabilitásától függ</td><td>Átrendeződés megzavarhatja</td></tr><tr><td>Eredmény ellenőrzése</td><td>Visszaadott objektum vagy állapot</td><td>Oldalállapot és mentési visszajelzés</td></tr><tr><td>Tipikus használat</td><td>Rendszeres integráció</td><td>Hiányzó integráció pótlása</td></tr></tbody></table></div></div>
+<p><strong>Tervezési javaslat:</strong> ha egy jól definiált API lefedi a műveletet, azon könnyebb azonosítót, hibát és jogosultságot ellenőrizni. Felületkezelésnél minden lényeges lépés után vizsgáld meg a tényleges állapotot.</p>
+<h4>Hang képek és valós idejű használat</h4>
+<p>A multimodalitás a bemenet és a kimenet fajtája: szöveg mellett hang, kép vagy videó. Ettől a rendszer még ugyanúgy használhat connectorokat, toolokat és workflow-t.</p>
+<p><strong>Saját példa:</strong> a felhasználó szóban bediktál egy panaszt, és fényképet csatol egy sérülten érkezett csomagról. A rendszer átiratot és mezőjavaslatokat készít, ellenőrzi a rendelésszámot, majd megmutatja az ügyféljegy-tervezetet. A beszédfelismerés eredményét külön ellenőrizni kell, mert egy elhallott szám a teljes további folyamatot félreviheti.</p>
+<p>Valós idejű rendszerben a megszakítás, a késleltetés és az aktuális állapot kijelzése is termékfunkció: hallgat, feldolgoz, várakozik vagy visszajelzést játszik le.</p></article>
+<article class="chapter"><h3 id="fejezet-13" class="ch-title"><span class="ch-n">13</span>Felhős helyi és hibrid futtatás</h3>
+<p>A „helyi AI” kifejezésnél mindig tisztázni kell, mi fut helyben: a felület, a modell, az MCP-szerver, a keresőindex vagy mindegyik. Egy helyi connector felhőben futó modellhez is továbbíthat tartalmat.</p>
+<div class="table-wrap"><div class="tbl"><table><thead><tr><th scope="col">Elrendezés</th><th scope="col">Jellemző előny</th><th scope="col">Megoldandó kérdés</th></tr></thead><tbody><tr><td>Felhős modell és szolgáltatások</td><td>Kevés saját infrastruktúra</td><td>Adatkezelés, elérhetőség, használati díj</td></tr><tr><td>Modell a saját gépen</td><td>Helyi következtetés lehetősége</td><td>Memória, sebesség, modellminőség</td></tr><tr><td>Belső szerver</td><td>Több felhasználó közös kiszolgálása</td><td>Üzemeltetés, terhelés, frissítés</td></tr><tr><td>Hibrid rendszer</td><td>Feladatonként választott feldolgozás</td><td>Pontos adatút és továbbítási szabály</td></tr></tbody></table></div></div>
+<p>Egy népszerű, helyi modellfuttató eszköz dokumentációja például leírja a helyi működést és a felhős funkciók kikapcsolását. Ettől egy ráépített teljes alkalmazás adatútját még külön kell ellenőrizni: lehet benne külső keresés, embedding-szolgáltatás, naplózás vagy felhős tartalékmodell. <span class="refs-inline">[<a class="ref" href="#ref-20">20</a>]</span></p>
+<h4>Modellfüggetlenség</h4>
+<p>Saját modellkapcsolati réteg egységesítheti a hívások egy részét. Az alkalmazás például ugyanazon belső generate vagy extract művelet mögött különböző szolgáltatókat választhat. Ez tervezési minta, nem garancia az azonos eredményre.</p>
+<p>A modellek kontextuskezelése, eszközhívása, strukturált kimenete és hibaviselkedése eltérhet. A szolgáltatóváltást ugyanazon tesztfeladatokon kell ellenőrizni. Az MCP az eszközkapcsolatokat segít egységesíteni; a modellek összes képességét nem teszi azonossá.</p>
+<h4>A teljes költség</h4>
+<p>Számolj a modellhasználattal, kereséssel, tárhellyel, külső szolgáltatások díjával, futtatással, karbantartással és emberi ellenőrzéssel. Egy olcsó hívásból álló, sokat ismétlődő agentciklus drágább lehet egy célzottabb megoldásnál.</p>
+<p><strong>Hasznos mutató:</strong> teljes költség / elfogadottan teljesített feladatok száma. Mellé mérd az átfutási időt és az emberi javítás igényét. A tokenár önmagában nem mondja meg, melyik rendszer gazdaságosabb.</p>
+<p>Chatelőfizetésből ne következtess automatikusan programozott API-hozzáférésre vagy külön szolgáltatások díjának fedezetére; ezt a konkrét csomagban kell ellenőrizni.</p></article>
+    <div class="quiz" data-level="3" data-title="Önellenőrzés"></div>
+  </div>
+</section>
+
+<section class="level" id="szint-4" data-level="4" aria-labelledby="h-4">
+  <header class="lvl"><div class="numeral" aria-hidden="true">4</div><div>
+    <p class="lvl-meta">4. rész a 4-ből · 14–18. fejezet · kb. 50 perc · önellenőrző kvíz</p>
+    <h2 id="h-4">Saját megoldás tervezése</h2>
+    <p class="lvl-goal"><b>Tartalom:</b>rendszertervek, választás, biztonság, mérés, indulás.</p>
+  </div></header>
+  <div class="lvl-body">
+    <ol class="ch-toc"><li><a href="#fejezet-14">14. Három rendszerterv eltérő igényre</a></li><li><a href="#fejezet-15">15. Konkrét feladatok és választási javaslatok</a></li><li><a href="#fejezet-16">16. Jogosultság adatút és megbízhatóság</a></li><li><a href="#fejezet-17">17. Hogyan mérd és hibakeresd</a></li><li><a href="#fejezet-18">18. Indulási terv és gyors döntési szabályok</a></li></ol>
+<article class="chapter"><h3 id="fejezet-14" class="ch-title"><span class="ch-n">14</span>Három rendszerterv eltérő igényre</h3>
+<p>Az alábbiak saját architektúraminták. A szükséges összetevőket mutatják, nem konkrét telepítési csomagok.</p>
+<h4>A Tudástárban kereső asszisztens</h4>
+<p><strong>Cél:</strong> kérdések megválaszolása jóváhagyott dokumentumokból. A felhasználói azonosítás meghatározza az elérhető forrásokat. A kereső megkeresi a releváns részleteket. A modell ezekből fogalmaz választ, hivatkozással. A rendszer megőrzi, melyik dokumentumverziót használta.</p>
+<p><strong>Minimum:</strong> dokumentumtár, jogosultságot tiszteletben tartó keresés, modell, forrásmegjelenítés. <strong>Induló határ:</strong> csak olvasás. <strong>Sikermérés:</strong> helyes válasz, megfelelő forrás, hiány felismerése. Az MCP választható kapcsolati réteg; önmagában nem építi meg a keresőrendszert.</p>
+<h4>B Jóváhagyható ügyféljegy készítése</h4>
+<p><strong>Cél:</strong> szabad szövegből tervezet. Az AI mezőket javasol. A program megkeresi és ellenőrzi a rendelésszámot, a kötelező mezőket és a megengedett értékeket. A felhasználó látja a célrekordot és a végleges tartalmat. Jóváhagyás után a rendszer ment, majd visszaolvassa az eredményt.</p>
+<p><strong>Minimum:</strong> strukturált kimenet, törzsadat-lekérdezés, tervezetképernyő, író API, naplózás. <strong>Induló határ:</strong> küldés vagy élesítés csak konkrét jóváhagyással. <strong>Sikermérés:</strong> helyes mezők, javítási idő, duplikációmentes mentés.</p>
+<h4>C Önállóan futó heti összesítés</h4>
+<p><strong>Cél:</strong> ismétlődő riport kézi újraindítás nélkül. Az ütemező időablakot számol. A lekérdezés adatot hoz. A program összesít és összehasonlít. A modell szöveges magyarázatot ír. Ellenőrzés után létrejön a jelentés, és rögzül a futás állapota.</p>
+<p><strong>Minimum:</strong> ütemező, tárolt futási állapot, adatkapcsolat, számítás, dokumentumkészítés, hibakezelés. <strong>Induló határ:</strong> belső tervezet, automatikus külső továbbítás nélkül. <strong>Sikermérés:</strong> pontosság, időbeni elkészülés, észlelt adatkimaradás.</p>
+<p><strong>Mi közös bennük:</strong> az AI csak a neki megfelelő részt végzi. A jogosultságot, a dátumkezelést, a pontos számítást és az írás megbízhatóságát a környező szoftver biztosítja.</p></article>
+<article class="chapter"><h3 id="fejezet-15" class="ch-title"><span class="ch-n">15</span>Konkrét feladatok és választási javaslatok</h3>
+<div class="table-wrap"><div class="tbl"><table><thead><tr><th scope="col">Feladat</th><th scope="col">Célszerű kiindulás</th><th scope="col">Miért</th></tr></thead><tbody><tr><td>Egy levél átfogalmazása</td><td>Beszélgetés</td><td>A szükséges adat a kérésben van</td></tr><tr><td>Három szerződés eltérései</td><td>Fájlelemzés és forráshivatkozás</td><td>Meghatározott dokumentumhalmaz</td></tr><tr><td>Belső eljárások keresése</td><td>Connector és keresés vagy RAG</td><td>A tudás külön rendszerben él</td></tr><tr><td>Heti számok összesítése</td><td>Workflow és programozott számítás</td><td>Ismert lépéssor és pontos műveletek</td></tr><tr><td>Hibajegy létrehozása</td><td>Tool calling és ellenőrzött API</td><td>Külső rendszerben állapot változik</td></tr><tr><td>Ismeretlen hiba feltárása</td><td>Korlátozott agent</td><td>A további lépések a találatoktól függnek</td></tr><tr><td>Azonos jelentés sokszor</td><td>Skill és adatkapcsolat</td><td>Ismétlődő eljárás és forma</td></tr><tr><td>Régi webes adminisztráció</td><td>Felületkezelés</td><td>Nincs megfelelő integráció</td></tr><tr><td>Szokatlan forgalom jelzése egy webáruházban</td><td>Idősoros modell és adatfolyam</td><td>Az eltérés értékelése külön számítási feladat</td></tr></tbody></table></div></div>
+<h4>Egy feladat fokozatos fejlesztése</h4>
+<p>Tegyük fel, hogy a napi ügyfélszolgálati átadás előkészítését szeretnéd segíteni. Először néhány anonimizált mintarekordból készíttess tervezetet. Rögzítsd, mely mezők kötelezők, és milyen összesítések számítanak helyesnek.</p>
+<p>Ha a kimenet hasznos, kösd be a forrást olvasási jogosultsággal. Ezután tedd újrahasználhatóvá a jelentés módszerét egy skillben vagy programban. Következő lépésként időzítheted a tervezet elkészítését. Agent csak akkor szükséges, ha a rendszernek az eredmények alapján változó keresési lépéseket kell választania.</p>
+<p><strong>Más területen ugyanez:</strong> egy értékesítési asszisztens lekéri a nyitott ajánlatokat, számítja a lejáratokat, megírja a kapcsolatfelvételi tervezeteket. A küldés külön művelet. Egy kutatási segéd viszont új forrásokat kereshet a talált ellentmondások alapján, ezért nagyobb haszna lehet az agentciklusnak.</p>
+<p>Ne azzal kezdd, hogy „kell egy MCP-s multi-agent rendszer”. A kiinduló mondat inkább: „Ezt a konkrét eredményt szeretném, ezekből az adatokból, ennyi önállósággal.”</p></article>
+<article class="chapter"><h3 id="fejezet-16" class="ch-title"><span class="ch-n">16</span>Jogosultság adatút és megbízhatóság</h3>
+<p>Az eszközhasználó AI hozzáférést kap a külvilághoz. A védelem ezért nem pusztán egy prompt, hanem a rendszer végrehajtási szabályainak része.</p>
+<p><strong>Prompt injection:</strong> egy dokumentum vagy weboldal olyan utasítást tartalmazhat, amely megpróbálja eltéríteni a feladatot. A külső tartalmat adatként kell kezelni, nem jogosultságot adó utasításként. A felületkezelés dokumentációja is kiemeli ezt a kockázatot. <span class="refs-inline">[<a class="ref" href="#ref-17">17</a>]</span></p>
+<p><strong>MCP-specifikus ellenőrzés:</strong> megbízható szerver, helyes tokenkezelés, megfelelő célközönségre kiadott hitelesítő adat, kis jogosultságú futtatás. A protokoll használata önmagában nem tesz biztonságossá egy integrációt. <span class="refs-inline">[<a class="ref" href="#ref-23">23</a>]</span></p>
+<h4>Tervezési ellenőrzőlista</h4>
+<ul><li><strong>Hozzáférés:</strong> a háttérrendszer is ellenőrzi, hogy az adott felhasználó mit olvashat vagy módosíthat.</li><li><strong>Adatút:</strong> látható, mi kerül a modellhez, a keresőindexbe, a naplókba és külső szolgáltatásba.</li><li><strong>Írás:</strong> a változtatás célja és tartalma ellenőrizhető; indokolt helyen jóváhagyás szükséges.</li><li><strong>Titkok:</strong> jelszó és token titokkezelőben vagy megfelelő futtatási konfigurációban van.</li><li><strong>Visszaállítás:</strong> verzió, mentés vagy kompenzáló művelet segít egy hibás változtatás javításában.</li><li><strong>Leállítás:</strong> a folyamatnak van idő-, költség- és lépésszámkorlátja.</li></ul>
+<h4>A jóváhagyás tárgya</h4>
+<p>Az ember azt hagyja jóvá, ami végre fog hajtódni: címzett, célrekord, tartalom, összeg vagy módosítás. A „folytathatom?” önmagában kevés. A jóváhagyott tartalom megváltozása vagy a célrekord frissülése új ellenőrzést indokolhat. Workflow-eszközök ilyen emberi ellenőrzési pontokat is támogatnak eszközhívás előtt. <span class="refs-inline">[<a class="ref" href="#ref-16">16</a>]</span></p>
+<p><strong>Tervezési határ:</strong> egy LLM-alapú levéltervezet és egy pénzt vagy fizikai eszközt közvetlenül mozgató rendszer egészen eltérő követelményű feladat. A minták itt információkezelésre és ellenőrzött adminisztratív műveletekre vonatkoznak. Pénzügyi tranzakciónál vagy eszközvezérlésnél külön validált vezérlési és védelmi rétegeket kell tervezni.</p></article>
+<article class="chapter"><h3 id="fejezet-17" class="ch-title"><span class="ch-n">17</span>Hogyan mérd és hibakeresd</h3>
+<p>Egy látványos bemutató egyetlen sikeres feladatot bizonyít. A használhatóságot reprezentatív eseteken kell mérni. Indulásként készíts például 20–30 mintafeladatot: egyszerű, hiányos, kétértelmű, tiltott és hibás bemeneteket is. Ez gyakorlati kezdőjavaslat, nem általános megfelelőségi küszöb.</p>
+<div class="table-wrap"><div class="tbl"><table><thead><tr><th scope="col">Mit mérj</th><th scope="col">Hogyan</th><th scope="col">Milyen hibát mutat</th></tr></thead><tbody><tr><td>Feladatsiker</td><td>Előre rögzített elfogadási feltételek</td><td>Szép, de használhatatlan válasz</td></tr><tr><td>Forráshelyesség</td><td>Állítás összevetése az idézett résszel</td><td>Félreértett vagy nem létező bizonyíték</td></tr><tr><td>Művelethelyesség</td><td>Célrendszer állapotának vizsgálata</td><td>Rossz vagy elmaradt módosítás</td></tr><tr><td>Hiánykezelés</td><td>Nincs adat vagy nincs jogosultság</td><td>Kitalált pótlás</td></tr><tr><td>Költség és idő</td><td>Futásonként, a sikerrátával együtt</td><td>Túl sok lépés vagy újrapróbálás</td></tr><tr><td>Emberi javítás</td><td>Javított mezők és ráfordított idő</td><td>Túl sok utómunka</td></tr></tbody></table></div></div>
+<h4>Gyakori hibák nyomában</h4>
+<p><strong>Nem látja a fájlt:</strong> ellenőrizd a fiókot, jogosultságot, mappát, indexfrissességet és fájltípust. <strong>Látja, de rosszul válaszol:</strong> nézd meg, valóban megnyitotta-e, és mely részleteket kapta meg.</p>
+<p><strong>Nem hív eszközt:</strong> lehet, hogy az nincs a modellnek elérhetővé téve, félreérthető a leírása, vagy a kérésből nem derül ki, hogy élő adat szükséges. <strong>Rossz argumentumot ad:</strong> tisztázd a sémát, a mértékegységet és az azonosító feloldását.</p>
+<p><strong>Kétszer ír:</strong> vizsgáld a retry és az idempotencia kapcsolatát. <strong>Végtelenül kutat:</strong> hiányzik a kész állapot definíciója vagy a korlát. <strong>Frissítés után romlik:</strong> futtasd újra a korábbi teszthalmazt, és hasonlítsd össze a modell, tool, skill és index verzióját.</p>
+<p>Az eszközök értékelése és leírásuk javítása külön fejlesztési feladat; nem csak a modellválasztás számít. <span class="refs-inline">[<a class="ref" href="#ref-18">18</a>]</span></p>
+<p><strong>Naplózz célszerűen:</strong> feladatazonosító, felhasznált verziók, meghívott művelet, futási idő, állapot és eredményazonosító. A teljes érzékeny tartalom naplózása helyett a hibakereséshez szükséges minimumot őrizd meg.</p></article>
+<article class="chapter"><h3 id="fejezet-18" class="ch-title"><span class="ch-n">18</span>Indulási terv és gyors döntési szabályok</h3>
+<h4>Négy lépésben az első működő megoldásig</h4>
+<p><strong>1. Válassz egy körülhatárolt feladatot.</strong> Legyen ismétlődő, legyen hozzá elérhető adat, és tudd megmondani, mi számít jó eredménynek. Például egy jelentéstervezet, nem „az egész adminisztráció automatizálása”.</p>
+<p><strong>2. Készíts kézzel indított próbát.</strong> Néhány tesztadattal vizsgáld meg a kimenetet. A számítást és az adatkinyerést külön ellenőrizd. Itt még ne a teljes integrációs infrastruktúrát építsd.</p>
+<p><strong>3. Kösd be az adatot és rögzítsd a módszert.</strong> Válassz kész connectort vagy közvetlen API-t. MCP akkor indokolt, ha a képességet kompatibilis AI-kliensek számára egységesen akarod kitenni. Az ismétlődő módszer kerülhet skillbe; a biztos szabály programkódba.</p>
+<p><strong>4. Csak igazolt eredmény után adj önállóságot.</strong> Előbb olvasás, aztán tervezet, majd szabályozott írás. Időzítéshez workflow és üzemeltetés kell. Agentet ott adj hozzá, ahol valóban változó lépéssor szükséges.</p>
+<h4>Gyors döntési szabályok</h4>
+<ul><li>Ha minden információ a kérésben van, kezdd egyszerű modellhívással.</li><li>Ha a saját dokumentumaidból kell válasz, keresés vagy RAG szükséges.</li><li>Ha élő állapot kell, lekérdezhető rendszerkapcsolatot használj.</li><li>Ha külső adat változik, ellenőrzött tool és író jogosultság kell.</li><li>Ha a lépések előre ismertek, workflow-val kezdd.</li><li>Ha a következő lépés a találatoktól függ, agent lehet indokolt.</li><li>Ha ugyanaz a módszer ismétlődik, csomagold újrahasználható eljárásba.</li><li>Ha több rendszerben kell ugyanaz az eszköz, vizsgáld meg az MCP-t.</li></ul>
+<h4>Egy használható feladatleírás</h4>
+<p>„A kijelölt forrásokból készíts heti összefoglaló-tervezetet a megadott dátumtartományra. Csak olvasási műveleteket használj. A darabszámokat program számolja. Jelöld a forrást és a hiányzó adatokat. A feladat akkor kész, ha a jelentés elkészült, a számok egyeznek a rekordokkal, és az eltérések visszakereshetők.”</p>
+<p>Ebből már levezethető a szükséges hozzáférés, eszközkör, munkafolyamat és elfogadási feltétel. A technológia kiválasztása ezután következik.</p></article>
+    <div class="quiz" data-level="4" data-title="Önellenőrzés"></div>
+  </div>
+</section>
+
+
+<section class="kit-sec" id="irodalom" aria-labelledby="h-ir">
+  <h2 id="h-ir">Források és továbbolvasás</h2>
+  <p class="ui">Ellenőrzés dátuma: 2026. szeptember 24. A hivatkozások a fogalmak és dokumentált képességek forrásai; a kézikönyv saját példái szolgáltatófüggetlen tervezési minták.</p>
+  <ol class="refs">
+    <li id="ref-1"><span class="rn">[1]</span><p>Microsoft Learn — Custom connectors overview. A Power Platform egyedi connectorainak API-kapcsolata. <span class="id"><a href="https://learn.microsoft.com/en-us/connectors/custom-connectors/">learn.microsoft.com/en-us/connectors/custom-connectors</a></span></p></li>
+    <li id="ref-2"><span class="rn">[2]</span><p>Model Context Protocol — Architecture overview. Host, client, server és alapvető képességek. <span class="id"><a href="https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture">modelcontextprotocol.io/docs/2026-07-28/learn/architecture</a></span></p></li>
+    <li id="ref-3"><span class="rn">[3]</span><p>Microsoft Learn — Build your first custom Copilot connector. Adatok bevonása Microsoft Graphon keresztül. <span class="id"><a href="https://learn.microsoft.com/en-us/graph/custom-connector-sdk-sample-overview">learn.microsoft.com/en-us/graph/custom-connector-sdk-sample-overview</a></span></p></li>
+    <li id="ref-4"><span class="rn">[4]</span><p>Model Context Protocol — Tools. Eszközleírások, sémák, listázás és hívás. <span class="id"><a href="https://modelcontextprotocol.io/specification/2026-07-28/server/tools">modelcontextprotocol.io/specification/2026-07-28/server/tools</a></span></p></li>
+    <li id="ref-5"><span class="rn">[5]</span><p>Model Context Protocol — Resources. Külső tartalom átadása kontextusként. <span class="id"><a href="https://modelcontextprotocol.io/specification/2026-07-28/server/resources">modelcontextprotocol.io/specification/2026-07-28/server/resources</a></span></p></li>
+    <li id="ref-6"><span class="rn">[6]</span><p>Model Context Protocol — Transports. Stdio és HTTP kommunikáció. <span class="id"><a href="https://modelcontextprotocol.io/specification/2026-07-28/basic/transports">modelcontextprotocol.io/specification/2026-07-28/basic/transports</a></span></p></li>
+    <li id="ref-7"><span class="rn">[7]</span><p>Agent Skills — Specification. SKILL.md, segédállományok és fokozatos betöltés. <span class="id"><a href="https://agentskills.io/specification">agentskills.io/specification</a></span></p></li>
+    <li id="ref-8"><span class="rn">[8]</span><p>Claude Platform — Tool use overview. A modellhívás és az eszközvégrehajtás kapcsolata. <span class="id"><a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">platform.claude.com/docs/en/agents-and-tools/tool-use/overview</a></span></p></li>
+    <li id="ref-9"><span class="rn">[9]</span><p>Claude Platform — Structured outputs. Sémához kötött kimenet és eszközparaméterek. <span class="id"><a href="https://platform.claude.com/docs/en/build-with-claude/structured-outputs">platform.claude.com/docs/en/build-with-claude/structured-outputs</a></span></p></li>
+    <li id="ref-10"><span class="rn">[10]</span><p>A2A Protocol — A2A and MCP. Agentek együttműködése és eszközintegráció. <span class="id"><a href="https://a2a-protocol.org/latest/topics/a2a-and-mcp/">a2a-protocol.org/latest/topics/a2a-and-mcp</a></span></p></li>
+    <li id="ref-11"><span class="rn">[11]</span><p>Model Context Protocol — Authorization. HTTP-alapú engedélyezési keretrendszer. <span class="id"><a href="https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization">modelcontextprotocol.io/specification/2026-07-28/basic/authorization</a></span></p></li>
+    <li id="ref-12"><span class="rn">[12]</span><p>Microsoft Learn — RAG and Generative AI. Keresésre épülő válaszadás és indexelés. <span class="id"><a href="https://learn.microsoft.com/en-us/azure/search/retrieval-augmented-generation-overview">learn.microsoft.com/en-us/azure/search/retrieval-augmented-generation-overview</a></span></p></li>
+    <li id="ref-13"><span class="rn">[13]</span><p>Anthropic — Building effective agents. Workflow és agent megkülönböztetése. <span class="id"><a href="https://www.anthropic.com/engineering/building-effective-agents">www.anthropic.com/engineering/building-effective-agents</a></span></p></li>
+    <li id="ref-14"><span class="rn">[14]</span><p>n8n — Schedule Trigger. Időzített folyamatindítás. <span class="id"><a href="https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.scheduletrigger/">docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.scheduletrigger</a></span></p></li>
+    <li id="ref-15"><span class="rn">[15]</span><p>n8n — Webhook. Külső kéréssel indított munkafolyamat. <span class="id"><a href="https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/">docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook</a></span></p></li>
+    <li id="ref-16"><span class="rn">[16]</span><p>n8n — Human in the loop for AI tool calls. Emberi ellenőrzés eszközhívás előtt. <span class="id"><a href="https://docs.n8n.io/advanced-ai/human-in-the-loop-tools/">docs.n8n.io/advanced-ai/human-in-the-loop-tools</a></span></p></li>
+    <li id="ref-17"><span class="rn">[17]</span><p>Claude Platform — Computer use tool. Felületkezelési működés és korlátok. <span class="id"><a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool">platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool</a></span></p></li>
+    <li id="ref-18"><span class="rn">[18]</span><p>Anthropic — Writing effective tools for AI agents. Eszköztervezés és értékelés. <span class="id"><a href="https://www.anthropic.com/engineering/writing-tools-for-agents">www.anthropic.com/engineering/writing-tools-for-agents</a></span></p></li>
+    <li id="ref-19"><span class="rn">[19]</span><p>Anthropic — How we built our multi agent research system. Több agent összehangolása. <span class="id"><a href="https://www.anthropic.com/engineering/multi-agent-research-system">www.anthropic.com/engineering/multi-agent-research-system</a></span></p></li>
+    <li id="ref-20"><span class="rn">[20]</span><p>Ollama — FAQ. Helyi működés és a felhős funkciók kikapcsolása. <span class="id"><a href="https://docs.ollama.com/faq">docs.ollama.com/faq</a></span></p></li>
+    <li id="ref-21"><span class="rn">[21]</span><p>Model Context Protocol Blog — The 2026-07-28 Specification. Verzióváltozások. <span class="id"><a href="https://blog.modelcontextprotocol.io/posts/2026-07-28/">blog.modelcontextprotocol.io/posts/2026-07-28</a></span></p></li>
+    <li id="ref-22"><span class="rn">[22]</span><p>Claude Platform — Code execution tool. Programfuttatás és létrehozott fájlok. <span class="id"><a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool">platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool</a></span></p></li>
+    <li id="ref-23"><span class="rn">[23]</span><p>Model Context Protocol — Security Best Practices. Integrációs biztonsági szempontok. <span class="id"><a href="https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/security_best_practices">modelcontextprotocol.io/docs/2026-07-28/tutorials/security/security_best_practices</a></span></p></li>
+  </ol>
+</section>
+
+<section class="kit-sec" id="valtozasnaplo" aria-labelledby="h-vn">
+  <h2 id="h-vn">Változásnapló</h2>
+  <div class="validity" style="margin:0 0 16px"><span class="valid">Érvényes: 2026. szeptember</span><span class="ui dim">Felülvizsgálandó: 2027. március</span></div>
+  <ul class="clog">
+    <li><span class="d">2026. 09. 26.</span><span class="kd mod">↻ Módosult</span><p>Új arculat, négy rész önellenőrző kvízzel; a példák általános ügyfélszolgálati és webáruházas helyzetekre cserélve; a folyószövegben szolgáltatónevek helyett általános leírás, a konkrét nevek a forrásjegyzékben.</p></li>
+    <li><span class="d">2026. 09. 24.</span><span class="kd new">+ Új</span><p>Első kiadás: 18 fejezet, 23 ellenőrzött forrás, fogalomtérkép, folyamatlejátszó és megoldásválasztó.</p></li>
+  </ul>
+</section>
+  </div>
+</div>
+</main>
+<footer class="foot wrap"><span>© 2026 Csaplár Dániel · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu" rel="license">CC BY-NC-SA 4.0</a></span><a href="mailto:csaplar.d@gmail.com">Kapcsolat</a></footer>
+
+<script>
+window.KVIZ = {
+1: [
+  { q: 'Melyik NEM tartozik az AI-használat négy tengelye közé ebben a kézikönyvben?', o: ['Feladat', 'Hozzáférés', 'Modellméret'], a: 2, x: 'A négy tengely: feladat, hozzáférés, irányítás és futtatás. A modell mérete fontos lehet, de nem ez írja le, hogyan használunk egy rendszert.' },
+  { q: '„Minden hétfőn készíts összefoglalót a nyitott ügyféljegyekről.” Milyen irányítás illik ide?', o: ['Rögzített workflow', 'Önálló agent', 'Több agentes rendszer'], a: 0, x: 'A lépések előre ismertek, ezért rögzített munkafolyamat elég. Agent akkor kell, ha a következő lépés a találatoktól függ.' },
+  { q: 'Mit árul el egy termék „copilot” elnevezése a működéséről?', o: ['Hogy a háttérben agent működik.', 'Önmagában semmit: használati szerep vagy termékelnevezés.', 'Hogy MCP-t használ.'], a: 1, x: 'A „copilot” és az „AI-asszisztens” elnevezés nem mondja meg, hogy egy modell, RAG, MCP vagy agent van mögötte. Konkrét műveletekkel kell megvizsgálni.' },
+  { q: 'Mi a különbség a tool és a skill között?', o: ['A tool meghívható művelet, a skill újrahasználható munkamódszer.', 'Ugyanannak két neve.', 'A skill mindig gyorsabb, mint a tool.'], a: 0, x: 'A tool egy végrehajtható funkció (például get_ticket); a skill utasításokat, sablonokat és szkripteket csomagol egy visszatérő feladathoz. Egy skill nem hoz létre hiányzó eszközt.' }
+ ],
+ 2: [
+  { q: 'Egy dokumentumtárat csatlakoztattál. Következik-e ebből, hogy az AI már minden fájlt elolvasott?', o: ['Igen, a csatlakozás egyben beolvasás.', 'Nem, a kapcsolat csak hozzáférési lehetőség; a keresés és olvasás külön lépés.', 'Csak akkor, ha a fájlok PDF-ek.'], a: 1, x: 'Ez tipikus félreértés. A feladat közbeni keresés és a fájl tényleges megnyitása a csatlakozástól független lépés.' },
+  { q: 'Mi az MCP?', o: ['Egy nyelvi modell.', 'Egy adatbázis.', 'Protokoll az AI-alkalmazás és a képességeket kínáló szerver között.'], a: 2, x: 'Az MCP szabványosítja, hogyan kínál egy külső program eszközöket, kontextust és promptsablonokat. Nem modell, nem adatbázis, és nem ad saját jogosultságot.' },
+  { q: 'A modell azt írja: „elküldtem a levelet”. Bizonyítja-e ez, hogy a levél elment?', o: ['Igen, a modell nem téved ilyenben.', 'Nem; a végrehajtást a célrendszer állapota vagy a visszaadott azonosító igazolja.', 'Csak ha a válasz JSON-formátumú.'], a: 1, x: 'A modell csak kéri a műveletet; a tényleges végrehajtást az alkalmazás végzi, és annak eredménye bizonyít.' },
+  { q: 'A ma nyitott ügyféljegyek számára vagy kíváncsi. Mi a célszerű megoldás?', o: ['Dokumentumkeresés (RAG)', 'Élő adatbázis-lekérdezés, a számot program számolja', 'Finomhangolt modell'], a: 1, x: 'Aktuális, strukturált állapothoz élő lekérdezés kell. A RAG arra jó, amit dokumentumokban leírtak, például egy eljárás mellékleteire.' }
+ ],
+ 3: [
+  { q: 'Mi különbözteti meg az agentet a workflow-tól?', o: ['Az agent futás közben választja meg a következő lépést.', 'Az agent mindig gyorsabb.', 'A workflow-ban nincs AI.'], a: 0, x: 'A workflow előre kijelölt utat jár be; az agent a visszakapott eredmények alapján dönt. Egy workflow egyik lépése is lehet AI.' },
+  { q: 'Melyik NEM szükséges korlát egy agentnél?', o: ['A kész állapot meghatározása', 'Lépésszám-, idő- és költségkeret', 'Minél több eszköz, hogy mindenhez hozzáférjen'], a: 2, x: 'Épp ellenkezőleg: szűk eszközkörrel érdemes kezdeni. Kell cél, eszközkör, keret, megállási feltétel és ellenőrzés.' },
+  { q: 'Mit jelent az idempotencia egy automatizációban?', o: ['Az ugyanazon esemény ismételt feldolgozása nem hoz létre újabb azonos rekordot.', 'A folyamat mindig gyorsabban fut másodszorra.', 'A folyamatot csak ember indíthatja el.'], a: 0, x: 'Ha egy írási kérésnél megszakad a kapcsolat, az újrapróbálás ne hozzon létre kettős jegyet. Ehhez azonosító vagy idempotenciakulcs kell.' },
+  { q: 'Mikor indokolt felületkezelés (böngésző vagy asztal vezérlése) API helyett?', o: ['Mindig, mert rugalmasabb.', 'Ha nincs megfelelő API vagy connector a feladathoz.', 'Ha a feladat pénzügyi tranzakció.'], a: 1, x: 'Ha egy jól definiált API lefedi a műveletet, azon könnyebb azonosítót, hibát és jogosultságot ellenőrizni. A felületkezelés a hiányzó integrációt pótolja.' }
+ ],
+ 4: [
+  { q: 'Mit hagyjon jóvá az ember egy író művelet előtt?', o: ['Csak egy „folytathatom?” kérdést.', 'Azt, ami végre fog hajtódni: címzett, célrekord, tartalom, összeg.', 'A modell nevét és verzióját.'], a: 1, x: 'A jóváhagyás egy konkrét tartalomra és célrekordra vonatkozzon. Ha ezek időközben változnak, új ellenőrzés indokolt.' },
+  { q: 'Egy látványos bemutató mit bizonyít?', o: ['Hogy a rendszer éles használatra kész.', 'Egyetlen sikeres feladatot; a használhatóságot reprezentatív eseteken kell mérni.', 'Hogy a modell a legjobb a piacon.'], a: 1, x: 'Indulásként 20–30 mintafeladat javasolt: egyszerű, hiányos, kétértelmű, tiltott és hibás bemenetekkel.' },
+  { q: 'A négylépéses indulási tervben mikor adj önállóságot a rendszernek?', o: ['Rögtön az elején, hogy gyorsan haladj.', 'Csak igazolt eredmény után: előbb olvasás, aztán tervezet, majd szabályozott írás.', 'Soha, az AI-nak nem szabad írnia.'], a: 1, x: 'Az önállóság fokozatosan jön. Időzítéshez workflow és üzemeltetés kell, agentet pedig csak ott adj hozzá, ahol valóban változó lépéssor szükséges.' },
+  { q: 'Ha ugyanazt az eszközt több AI-alkalmazásból is el kell érni, mit érdemes megvizsgálni?', o: ['Az MCP-t', 'Egy nagyobb modellt', 'A felületkezelést'], a: 0, x: 'Az MCP akkor különösen hasznos, ha ugyanazt a képességet több kompatibilis AI-alkalmazásból szeretnéd elérni. Egyetlen alkalmazásnál a közvetlen integráció gyakran egyszerűbb.' }
+ ]
+};
+</script>
+<script src="/assets/tananyag.js"></script>
+<script src="/assets/ait.js"></script>
+<script>
+(function () {
+"use strict";
+function $(id) { return document.getElementById(id); }
+function goChapter(n) { var el = $("fejezet-" + n); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }
+
+/* ---- fogalomtérkép ---- */
+var concepts = {
+model: { name: "Modell", sub: "Értelmezés és javaslat", tag: "ÉRTELMEZ", xy: [50, 43], chapter: 1, text: "Értelmezi a feladatot, szöveget vagy strukturált eszközhívást állít elő. A külső műveletet a körülötte működő szoftver hajtja végre.", example: "A „H-1042” jegyhez a get_ticket eszközt választja, és megadja az azonosítót.", limit: "A modell kijelentése önmagában nem bizonyítja, hogy egy mentés valóban megtörtént." },
+agent: { name: "Agent", sub: "A következő lépés kiválasztása", tag: "DÖNT", xy: [50, 12], chapter: 10, text: "A feladat állapota és a visszakapott eredmények alapján dönt a következő műveletről. A ciklust a futtatórendszer kezeli.", example: "Egy ellentmondás láttán megkeres egy újabb dokumentumot, majd összeveti a verziókat.", limit: "Kell kész állapot, lépésszámkorlát és ellenőrizhető eredmény." },
+skill: { name: "Skill", sub: "Újrahasználható munkamódszer", tag: "MÓDSZERT AD", xy: [19, 19], chapter: 9, text: "Utasításokat, referenciákat, sablonokat és esetenként szkripteket csomagol egy visszatérő feladathoz.", example: "Megadja a heti jelentés szerkezetét, az ellenőrzéseket és a fájlformátumot.", limit: "A leírt eljárás nem hoz létre jogosultságot vagy hiányzó eszközt." },
+workflow: { name: "Workflow", sub: "Előre rögzített vezérlés", tag: "VEZÉREL", xy: [81, 19], chapter: 11, text: "Ismert lépéseket és elágazásokat hajt végre. Az AI lehet a folyamat egyetlen részfeladatának megoldója is.", example: "Hétfői indítás → lekérdezés → programozott összesítés → szöveges jelentés.", limit: "A megbízható működéshez újrapróbálás, állapotkezelés és duplikációvédelem kell." },
+rag: { name: "RAG", sub: "Keresésből kapott kontextus", tag: "KONTEXTUST AD", xy: [19, 48], chapter: 8, text: "A rendszer előkeresi a kérdéshez releváns tartalmat, és átadja a modellnek a válaszhoz.", example: "A válasz egy jóváhagyott eljárás megfelelő fejezetére hivatkozik.", limit: "A rossz vagy elavult találatból továbbra is hibás válasz születhet." },
+tool: { name: "Tool", sub: "Meghívható művelet", tag: "VÉGREHAJT", xy: [81, 48], chapter: 7, text: "Egy körülhatárolt, programmal végrehajtható funkció. Lehet olvasás, számítás vagy módosítás.", example: "get_ticket({ticket_id: \"H-1042\"})", limit: "A bemeneti séma helyessége mellett az üzleti jogosultságot is ellenőrizni kell." },
+connector: { name: "Connector", sub: "Kész szolgáltatáskapcsolat", tag: "INTEGRÁL", xy: [19, 80], chapter: 4, text: "Egy adott szolgáltatáshoz készített integráció. Elrejtheti az API-hívások és a hitelesítés részleteit.", example: "Dokumentumtárban keresés, fájl megnyitása vagy egy támogatott rekord módosítása.", limit: "A támogatott műveletek és az olvasási–írási jogosultságok integrációnként eltérnek." },
+mcp: { name: "MCP", sub: "Kapcsolódási protokoll", tag: "SZABVÁNYOSÍT", xy: [50, 76], chapter: 5, text: "Közös protokoll az AI-alkalmazás és a képességeket kínáló szerver között. Eszközöket, kontextust és promptsablonokat tehet elérhetővé.", example: "A kliens megismeri a tools/list eredményét, majd tools/call hívással használ egy eszközt.", limit: "Az MCP nem modell és nem adatbázis. Nem helyettesíti a háttérrendszer jogosultságait." },
+api: { name: "API", sub: "Programozott rendszerfelület", tag: "ELÉRÉST AD", xy: [81, 80], chapter: 7, text: "Programok közötti kommunikációs felület. Connector vagy MCP-szerver mögött is működhet, és közvetlenül is hívható.", example: "Egy webáruház rendszere rendelésszám alapján visszaadja a rendelés adatait.", limit: "Önmagában nem dönti el, hogy az AI mikor és miért hívja meg." }
+};
+var edges = [["skill","agent"],["workflow","agent"],["agent","model"],["model","rag"],["model","tool"],["rag","connector"],["tool","mcp"],["tool","api"],["mcp","connector"],["mcp","api"],["connector","api"]];
+var selected = "mcp";
+function drawMap() {
+  var related = {}; edges.forEach(function (e) { if (e.indexOf(selected) >= 0) { related[e[0]] = 1; related[e[1]] = 1; } });
+  $("edges").innerHTML = edges.map(function (e) { var a = concepts[e[0]].xy, b = concepts[e[1]].xy; return '<path class="edge' + (e.indexOf(selected) >= 0 ? " hot" : "") + '" vector-effect="non-scaling-stroke" d="M' + a[0] + "," + a[1] + " L" + b[0] + "," + b[1] + '"/>'; }).join("");
+  Array.prototype.forEach.call(document.querySelectorAll(".cmap .node"), function (b) {
+    var k = b.getAttribute("data-key");
+    b.classList.toggle("active", k === selected); b.classList.toggle("related", !!related[k] && k !== selected); b.setAttribute("aria-pressed", String(k === selected));
+  });
+  var c = concepts[selected];
+  $("detail").innerHTML = '<div class="idx">RENDSZERELEM / ' + selected.toUpperCase() + '</div><h3>' + c.name + '</h3><div class="subt">' + c.sub + '</div><p>' + c.text + '</p><div class="ex"><b>Gyakorlati példa.</b> ' + c.example + '</div><p class="lim">' + c.limit + '</p><button class="pill" type="button" id="readMore">A ' + c.chapter + '. fejezet →</button>';
+  $("readMore").onclick = function () { goChapter(c.chapter); };
+}
+Object.keys(concepts).forEach(function (key) {
+  var c = concepts[key], b = document.createElement("button");
+  b.type = "button"; b.className = "node"; b.setAttribute("data-key", key); b.style.left = c.xy[0] + "%"; b.style.top = c.xy[1] + "%";
+  b.innerHTML = c.name + "<small>" + c.tag + "</small>";
+  b.onclick = function () { selected = key; drawMap(); };
+  $("map").appendChild(b);
+});
+drawMap();
+
+/* ---- egy kérés útja ---- */
+var scenarios = {
+rag: { request: "„Milyen melléklet kell egy visszatérítési kérelemhez? Mutasd meg a forrását is.”", steps: [
+ ["Feladat és hozzáférés", "A host azonosítja a felhasználót és a megengedett dokumentumkört. A csatlakozás még nem jelenti minden fájl elolvasását.", 0, "feladat: mellékletek keresése\nhozzáférés: jóváhagyott eljárások, csak olvasás"],
+ ["Keresési művelet", "A modell keresést kér. Az alkalmazás a connectoron keresztül meghívja a megfelelő keresőeszközt.", 1, "search_documents({query: \"visszatérítési kérelem kötelező mellékletek\"})"],
+ ["Forrás lekérése", "A kereső találatot ad, majd a rendszer megnyitja a releváns dokumentumrészt. Ez a példa a RAG keresési oldala.", 2, "forrás: Visszatérítési eljárás · v3\nfejezet: 4.2\ntartalom: [a kérdéshez kapcsolódó forrásrészlet]"],
+ ["Válasz a kapott kontextusból", "A modell a megkapott részletből készít választ. A hiányt vagy ellentmondást is jeleznie kell.", 1, "válasz + dokumentumcím + verzió + fejezet\nsaját következtetés elkülönítve"],
+ ["Ellenőrizhető eredmény", "A felhasználó vissza tud lépni az eredeti forráshoz. A hivatkozás nem garantálja a helyes értelmezést: az állításnak egyeznie kell a forrással.", 3, "kimenet: forrással alátámasztott válasz\nkülső módosítás: nincs"]] },
+write: { request: "„Az R-2025-118-as rendelés csomagja sérülten érkezett. Készíts ügyféljegyet jóváhagyásra.”", steps: [
+ ["Mezők kinyerése", "A modell a szövegből rendelésszámot és panaszleírást javasol. A hiányzó tényadatokat nem találhatja ki.", 1, "{\"order_id\":\"R-2025-118\", \"complaint\":\"sérült csomag\"}"],
+ ["Törzsadat ellenőrzése", "Az alkalmazás egy olvasó tool segítségével ellenőrzi, létezik-e a rendelés, és elérhető-e a felhasználónak.", 2, "get_order({id: \"R-2025-118\"})\n→ létező, hozzáférhető rekord"],
+ ["Tervezet elkészítése", "A rendszer összeállítja a kötelező mezőket és a hiánylistát. Eddig nem történt éles mentés.", 0, "állapot: tervezet\nhiány: fénykép a sérülésről\néles ügyféljegy: még nincs"],
+ ["Emberi ellenőrzés", "A felhasználó látja a konkrét célrekordot és tartalmat, pótolja a hiányt, majd jóváhagyja. A bemutató ezt a lépést csak szemlélteti.", 3, "jóváhagyás tárgya: R-2025-118 + végleges ügyféljegy-tartalom"],
+ ["Ellenőrzött mentés", "Az író tool csak az ellenőrzött tartalmat továbbítja. Az idempotenciakulcs megakadályozhatja a kettős létrehozást.", 2, "create_ticket(approved_draft, idempotency_key)\n→ ticket_id: DEMO-1042"],
+ ["Visszaellenőrzés", "A rendszer a célrendszerből ellenőrzi a mentett rekordot. Az eredményt az azonosító és a tényleges állapot igazolja.", 0, "get_ticket(\"DEMO-1042\")\n→ a mentett tartalom egyezik a jóváhagyottal"]] },
+weekly: { request: "„Minden hétfőn készüljön tervezet az előző hét nyitott ügyféljegyeiről.”", steps: [
+ ["Ütemezett indítás", "Az ütemező indítja a folyamatot. A dátumablakot és az időzónát program kezeli; ehhez nem kell agent.", 0, "trigger: hétfő 06:00 · Europe/Budapest\nablak: előző hét"],
+ ["Adatok lekérése", "A connector vagy API meghozza az adott időablak rekordjait. A rendszer ellenőrzi az adatlekérés teljességét.", 2, "list_tickets(time_window, pagination)\n→ ellenőrzött rekordlista"],
+ ["Pontos összesítés", "A darabszámokat és csoportosításokat program számolja. A nyelvi modellnek nem kell fejben összeadnia a rekordokat.", 0, "count_by_status(records)\ncompare_with_previous_week(records)"],
+ ["Szöveges értelmezés", "A modell megkapja a kiszámolt eredményt, és a jelentés módszere szerint megfogalmazza a megállapításokat.", 1, "bemenet: ellenőrzött összesítés\nutasítás: tények és feltételezések elkülönítése"],
+ ["Jelentés és futási állapot", "A rendszer menti a dokumentumot, rögzíti a forrásokat és a futás eredményét. A hiányos adat nem minősül sikernek.", 0, "kimenet: heti jelentéstervezet\nrun_status: completed\nkülső továbbítás: nincs"]] },
+agent: { request: "„A projekt dokumentumaiban eltérnek a határidők. Keresd meg, melyik érvényes.”", steps: [
+ ["Cél és korlátok", "A rendszer meghatározza a kereshető forrásokat, az időkeretet és a kész állapotot. Csak olvasási műveletek engedélyezettek.", 0, "cél: jóváhagyott határidő + bizonyíték\nkorlát: legfeljebb 8 eszközhívás"],
+ ["Első vizsgálat", "Az agent dokumentumokat keres, majd a visszakapott verziók alapján választ következő lépést.", 1, "terv: keresés → dokumentumok olvasása\neszköz: search_documents"],
+ ["Ellentmondás érkezik", "Két forrás eltérő határidőt tartalmaz. Ez új információ, amely megváltoztatja a következő keresés célját.", 2, "terv_v2: október 12.\nmegbeszélés_jegyzet: október 19.\njóváhagyás státusza: ismeretlen"],
+ ["Az agent irányt vált", "Újabb keresést választ: megkeresi a jóváhagyási bejegyzést. Ez különbözteti meg a merev lépéssortól.", 1, "search_approvals(project_id)\nindok: az újabb dátum önmagában nem bizonyít jóváhagyást"],
+ ["Bizonyíték vagy hiány", "A példa szerint nincs elérhető jóváhagyás. Az agentnek nem szabad bizonyított tényként kiválasztania a hihetőbb dátumot.", 2, "eredmény: nincs hozzáférhető jóváhagyási rekord"],
+ ["Lezárás bizonytalansággal", "Az eredmény eltéréslista és konkrét hiánymegjelölés. A feladat hasznos kimenete lehet az is, hogy tisztázza, mit nem lehet eldönteni.", 3, "kimenet: 2 eltérő határidő + források\nnyitott kérdés: melyik változatot hagyták jóvá?"]] }
+};
+var step = 0, timer = null;
+var ACT = ["Alkalmazás, vezérlés", "Modell", "Eszköz, adatforrás", "Felhasználó"];
+function stopPlay() { if (timer) clearInterval(timer); timer = null; $("play").textContent = "Lejátszás"; }
+function renderStep() {
+  var s = scenarios[$("scenario").value], r = s.steps[step];
+  $("request").textContent = s.request;
+  $("stages").innerHTML = s.steps.map(function (_, i) { return '<i class="' + (i <= step ? "done" : "") + '"></i>'; }).join("");
+  $("stepcount").textContent = (step + 1) + " / " + s.steps.length + ". LÉPÉS";
+  $("steptitle").textContent = r[0]; $("steptext").textContent = r[1]; $("payload").textContent = r[3];
+  $("actors").innerHTML = ACT.map(function (n, i) { return '<div class="actor' + (i === r[2] ? " on" : "") + '">' + n + (i === r[2] ? "<b>most dolgozik</b>" : "") + "</div>"; }).join("");
+  $("prev").disabled = step === 0; $("next").disabled = step === s.steps.length - 1;
+  if (step === s.steps.length - 1) stopPlay();
+}
+$("scenario").onchange = function () { stopPlay(); step = 0; renderStep(); };
+$("prev").onclick = function () { stopPlay(); step = Math.max(0, step - 1); renderStep(); };
+$("next").onclick = function () { stopPlay(); step = Math.min(scenarios[$("scenario").value].steps.length - 1, step + 1); renderStep(); };
+$("reset").onclick = function () { stopPlay(); step = 0; renderStep(); };
+$("play").onclick = function () {
+  if (timer) { stopPlay(); return; }
+  if (step === scenarios[$("scenario").value].steps.length - 1) step = 0;
+  renderStep(); $("play").textContent = "Szünet";
+  timer = setInterval(function () { step++; renderStep(); }, 5000);
+};
+document.addEventListener("visibilitychange", function () { if (document.hidden) stopPlay(); });
+renderStep();
+
+/* ---- megoldásválasztó ---- */
+function recommend() {
+  var d = $("data").value, c = $("control").value, w = $("write").value === "yes", r = $("reuse").value === "yes";
+  var title = c === "fixed" ? "Rögzített AI-munkafolyamat" : c === "adaptive" ? "Korlátozott feladatmegoldó agent" : w ? "Eszközhasználó asszisztens" : d === "docs" ? "Tudástárban kereső asszisztens" : d === "live" ? "Élő adatokkal dolgozó asszisztens" : "Beszélgető vagy fájlelemző asszisztens";
+  var stack = ["Modell"], reasons = [];
+  if (d === "docs") { stack.push("Connector / keresés", "RAG"); reasons.push(["Adat", "A releváns dokumentumrészleteket kereséssel kell előhívni. Forrás-, verzió- és jogosultságkezelés szükséges."]); }
+  else if (d === "live") { stack.push("Connector / API"); reasons.push(["Adat", "Aktuális állapotot élő lekérdezéssel szerezz. A találati lista teljességét és a jogosultságot is ellenőrizd."]); }
+  else reasons.push(["Adat", "Kezdéshez elég a megadott tartalom; külön adatkapcsolat csak további forrás vagy művelet igényénél kell."]);
+  if (c === "fixed") { stack.push("Trigger", "Workflow"); reasons.push(["Irányítás", "Az ismert lépéssort program vezérelje. A futásnak legyen állapota és hibakezelése."]); }
+  else if (c === "adaptive") { stack.push("Agentciklus"); reasons.push(["Irányítás", "Az agent a kapott eredményekből választ következő lépést. Határozd meg a kész állapotot és a kereteket."]); }
+  else reasons.push(["Irányítás", "Te vezeted a feladatot. Nincs szükség automatikus háttérfolyamatra."]);
+  if (w) { stack.push("Író tool", "Jóváhagyás"); reasons.push(["Módosítás", "Konkrét tartalmat és célrekordot ellenőrizz mentés előtt. Kell duplikációvédelem és eredményellenőrzés."]); }
+  if (r) { stack.push("MCP vizsgálata"); reasons.push(["Megosztás", "Az MCP alkalmas lehet közös eszközfelületre. A kliensek támogatását, a hitelesítést és a verziót ellenőrizni kell."]); }
+  else reasons.push(["MCP", "Nem kötelező kiinduló elem. Egy kész connector vagy közvetlen API egyszerűbb lehet."]);
+  $("result").innerHTML = '<div class="eyebrow">JAVASOLT KIINDULÁS</div><h3>' + title + '</h3><div class="chips">' + stack.map(function (x) { return "<span>" + x + "</span>"; }).join("") + "</div>" +
+    reasons.map(function (x) { return '<p class="why"><b>' + x[0] + ".</b> " + x[1] + "</p>"; }).join("") +
+    '<p class="why">' + (c === "fixed" ? "Az ismétlődő szakmai módszert skillbe is csomagolhatod; a pontos szabályok és számítások maradjanak programban." : "Kezdj tesztadatokkal, és az elfogadott eredményt mérd. A bonyolultabb architektúra csak akkor indokolt, ha javítja a teljesítést.") + "</p>" +
+    '<button class="pill" type="button" id="designRead" style="margin-top:14px">Rendszertervek: 14. fejezet →</button>';
+  $("designRead").onclick = function () { goChapter(14); };
+}
+$("chooser").onchange = recommend; $("chooser").onsubmit = function (e) { e.preventDefault(); };
+recommend();
+})();
+</script>
+</body>
+</html>
