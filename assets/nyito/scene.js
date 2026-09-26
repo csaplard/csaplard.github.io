@@ -171,7 +171,7 @@ export function mountModel(host, opts = {}) {
   root.add(new THREE.Points(sparkGeo, sparkMat));
   // talajháló
   const grid = new THREE.GridHelper(26, 26, C.light ? 0xc7c9cd : 0x1c1f24, C.light ? 0xd5d7da : 0x15171b);
-  grid.position.y = -0.1; grid.material.transparent = true; grid.material.opacity = 0.5; root.add(grid);
+  grid.position.y = -0.1; grid.material.transparent = true; grid.material.opacity = 0.5; grid.visible = !C.light; root.add(grid); // világos módban a rács zavarja a képet
 
   /* ---------------- kamera, vezérlés ---------------- */
   const controls = new OrbitControls(camera, canvas);
@@ -399,7 +399,7 @@ export function mountModel(host, opts = {}) {
     readColors();
     flow.forEach(f => { f.line.material.blending = C.light ? THREE.NormalBlending : THREE.AdditiveBlending; f.line.material.needsUpdate = true; });
     sparkMat.blending = C.light ? THREE.NormalBlending : THREE.AdditiveBlending; sparkMat.needsUpdate = true;
-    grid.material.color = new THREE.Color(C.light ? 0xd0d2d6 : 0x16181c);
+    grid.material.color = new THREE.Color(C.light ? 0xd0d2d6 : 0x16181c); grid.visible = !C.light;
     tokenFaces.forEach((p, i) => { p.material.map = wordTexture(words[i]); p.material.needsUpdate = true; });
     applyLit(); kick();
   }

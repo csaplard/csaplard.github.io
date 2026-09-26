@@ -74,7 +74,6 @@ h1.say{font:500 clamp(44px,4.5vw,66px)/1.04 var(--serif);letter-spacing:-.025em}
 .t{border-radius:.08em;cursor:default}
 .t.src{background:var(--gold-wash)}
 .t.hot{color:var(--gold)} .slot .t.hot{color:var(--ink)}
-.read{min-height:2.9em;margin:14px 0 0;font:400 14px/1.45 var(--ui);color:var(--ink-3);max-width:40ch}
 .sub{margin:18px 0 0;font-size:21px;line-height:1.5;max-width:28ch}
 .sub2{margin:14px 0 0;font:400 16px/1.6 var(--ui);color:var(--ink-2);max-width:40ch}
 .cta{display:flex;flex-wrap:wrap;gap:12px 26px;align-items:center;margin-top:30px}

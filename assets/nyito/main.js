@@ -28,10 +28,9 @@ function tokens(arr) {
   });
   return out + (open ? "</span>" : "");
 }
-const say = $("#say"), stage = $("#stage"), read = $("#read"), arcs = $("#arcs");
+const say = $("#say"), stage = $("#stage"), arcs = $("#arcs");
 $(".lead-part", say).innerHTML = tokens(TOK.lead);
 $(".slot", say).innerHTML = tokens(TOK.slot);
-const readDefault = read.textContent;
 const all = () => $$(".t", say);
 function startsWord(t) { return !t.previousElementSibling; }
 function weights(i, ts) {
@@ -43,10 +42,10 @@ function weights(i, ts) {
   }
   return s.map(x => x / sum);
 }
-function clear() { arcs.innerHTML = ""; all().forEach(t => t.classList.remove("hot", "src")); read.textContent = readDefault; }
+function clear() { arcs.innerHTML = ""; all().forEach(t => t.classList.remove("hot", "src")); }
 function show(i) {
   const ts = all(); clear(); ts[i].classList.add("src");
-  if (i === 0) { read.textContent = "Az első szórészlet még nem tud visszanézni semmire."; return; }
+  if (i === 0) return;
   const w = weights(i, ts), sr = stage.getBoundingClientRect(), a = ts[i].getBoundingClientRect();
   const ax = a.left + a.width / 2 - sr.left, ay = a.top - sr.top + a.height * 0.16; let best = 0, out = "";
   w.forEach((x, j) => {
@@ -56,7 +55,6 @@ function show(i) {
     out += `<path d="M${ax.toFixed(1)} ${ay.toFixed(1)} C${ax.toFixed(1)} ${my.toFixed(1)} ${bx.toFixed(1)} ${my.toFixed(1)} ${bx.toFixed(1)} ${by.toFixed(1)}" stroke-width="${(0.8 + x * 8).toFixed(2)}" opacity="${(0.3 + x * 0.85).toFixed(2)}"/>`;
   });
   arcs.innerHTML = out; ts[best].classList.add("hot");
-  read.innerHTML = `„${esc(ts[i].textContent)}” leginkább ide figyel: „${esc(ts[best].textContent)}” (szemléltető súly: ${Math.round(w[best] * 100)}%). Előre sosem néz.`;
 }
 all().forEach((t, i) => { t.tabIndex = 0; t.onmouseenter = t.onfocus = () => show(i); t.onmouseleave = t.onblur = clear; t.ontouchstart = () => show(i); });
 addEventListener("resize", clear);

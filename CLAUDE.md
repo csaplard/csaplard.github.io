@@ -27,12 +27,14 @@ A repó statikus HTML; a GitHub Pages közvetlenül ezt szolgálja ki. Helyi kip
 
 - A főcím valódi tokenekből áll (`TOK` a `assets/nyito/main.js`-ben, `[szórészlet, azonosító]` párok). Új címszöveghez futtasd a design-projektben: `npm run tokenize -- "szöveg"`, és az eredményt másold be. Azonosítót soha ne találj ki.
 - Rámutatáskor a szórészlet ívet húz minden korábbi részletre, a vastagság a (szemléltető) súly, és előre sosem néz. Ez a funkció az oldal névjegye.
+- A cím animációjához nem kerül magyarázó szöveg (a felhasználó kérése): csak az ívek és a kiemelés látszik.
 
 ## Vezérlés (így kell működnie)
 
 - **Egér:** húzással forgat. A sima görgő mindig az oldalt görgeti. Nagyítás: Ctrl/⌘ + görgő, vagy a jobb alsó +/−/↺ gombok. Dupla kattintás: alapnézet.
 - **Érintés:** egy ujj forgat, két ujj csippentve nagyít, dupla koppintás: alapnézet. Érintőképernyőn nincsenek gombok. A modell mobilon csak a képernyő kb. 60%-át foglalja, hogy mellette görgetni lehessen.
 - **Billentyű:** a kijelölt modellen a bal/jobb nyíl forgat, a +/− nagyít.
+- **Világos módban nincs talajrács** (`grid.visible = !C.light`), mert zavarja a képet.
 - **Eltolás (pan) nincs,** hogy a modell ne csússzon a szöveg alá. A nagyításnak alsó határa van (`minDistance`) ugyanezért.
 - **Anyagváltás:** a listában egy anyagra mutatva a kamera ugyanabból a távolságból arra a részre fordul, és kiemeli. Egérrel a listáról lemenve visszaáll.
 
