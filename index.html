@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--
   AI-tananyagok — nyitóoldal
   © 2026 Csaplár Dániel · CC BY-NC-SA 4.0
@@ -6,443 +6,73 @@
 -->
 <html lang="hu">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI-tananyagok — ingyenes, magyar nyelvű anyagok az alapoktól a kutatói szintig</title>
-<meta name="description" content="Ingyenes, magyar nyelvű tananyagok a mesterséges intelligenciáról: nagy nyelvi modellek, veszteségfüggvény, hibamódok, Python, RAG és gyakorlati AI-használat. Az alapoktól a kutatói szintig, hétköznapi példákkal.">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI-tananyagok</title>
+<meta name="description" content="Ingyenes, magyar nyelvű mesterségesintelligencia-tananyagok az alapoktól a kutatói szintig: nagy nyelvi modellek, veszteségfüggvény, hibamódok, Python, RAG és gyakorlati AI-használat.">
 <meta name="author" content="Csaplár Dániel">
 <link rel="canonical" href="https://csaplard.github.io/">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230F5C52'/><circle cx='11' cy='16' r='3' fill='%23fff'/><circle cx='21' cy='10' r='3' fill='%23fff'/><circle cx='21' cy='22' r='3' fill='%23fff'/><path d='M11 16 21 10M11 16 21 22' stroke='%23fff' stroke-width='1.6'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230b0c0e'/><path d='M16 5v22' stroke='%23e8b44c' stroke-width='3' stroke-linecap='round'/><rect x='6' y='9' width='7' height='5' fill='none' stroke='%23eceae4' stroke-width='1.5'/><rect x='19' y='18' width='7' height='5' fill='none' stroke='%23eceae4' stroke-width='1.5'/></svg>">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="hu_HU">
 <meta property="og:url" content="https://csaplard.github.io/">
-<meta property="og:title" content="AI-tananyagok — érthetően, magyarul">
-<meta property="og:description" content="Ingyenes, magyar nyelvű AI-tananyagok az alapoktól a kutatói szintig, hétköznapi példákkal.">
-<script>
-  /* A téma a rendszerbeállítást követi, ha a látogató még nem választott. */
-  (function () {
-    var t = null;
-    try { t = localStorage.getItem('tananyag-tema'); } catch (e) {}
-    if (!t && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) t = 'dark';
-    if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-  })();
-</script>
-<style>
-/* Arculati változók — azonosak az LLM-tananyagéval. */
-:root {
-  color-scheme: light;
-  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
-  --font-text: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
-  --bg: #FCFCFA;
-  --surface-1: #FFFFFF;
-  --surface-2: #F2F4F2;
-  --ink-1: #101413;
-  --ink-2: #3D4644;
-  --ink-3: #67706D;
-  --border: #E3E6E3;
-  --border-strong: #C9CFCC;
-  --accent: #0F5C52;
-  --accent-hover: #0B4A42;
-  --accent-soft: #E1EFEB;
-  --on-accent: #FFFFFF;
-  --gold: #A8763E;
-  --gold-ink: #8C6334;
-  --gold-soft: #F6EEE2;
-  --radius: 2px;
-}
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --bg: #0D1211;
-  --surface-1: #141B19;
-  --surface-2: #1A2321;
-  --ink-1: #EDF2F0;
-  --ink-2: #AEB9B6;
-  --ink-3: #818C89;
-  --border: #232D2A;
-  --border-strong: #36423E;
-  --accent: #4FBFA8;
-  --accent-hover: #6FD3BE;
-  --accent-soft: #0F2622;
-  --on-accent: #06201C;
-  --gold: #D6A867;
-  --gold-ink: #D6A867;
-  --gold-soft: #2A2116;
-}
-* { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--ink-1);
-  font-family: var(--font-text);
-  font-size: 16.5px;
-  line-height: 1.7;
-}
-a { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1px; }
-a:hover { color: var(--accent-hover); }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.wrap { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
-
-/* — fejléc — */
-.top {
-  border-bottom: 1px solid var(--border);
-}
-.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; }
-.brand {
-  white-space: nowrap;
-  font-family: var(--font-display); font-size: 21px; font-weight: 600;
-  color: var(--ink-1); text-decoration: none; letter-spacing: -0.01em;
-}
-.brand span { color: var(--accent); }
-.top nav { display: flex; align-items: center; gap: 20px; font-size: 14.5px; }
-.top nav a { color: var(--ink-2); text-decoration: none; white-space: nowrap; }
-.top nav a:hover { color: var(--accent); }
-.theme-btn {
-  font: inherit; font-size: 13.5px; color: var(--ink-2);
-  background: transparent; border: 1px solid var(--border-strong); border-radius: var(--radius);
-  padding: 5px 11px; cursor: pointer; white-space: nowrap;
-}
-.theme-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-/* — bevezető — */
-.intro { padding: 72px 0 56px; border-bottom: 1px solid var(--border); }
-.intro h1 {
-  font-family: var(--font-display); font-weight: 600;
-  font-size: 48px; line-height: 1.08; letter-spacing: -0.015em;
-  margin: 0 0 20px; max-width: 18ch;
-}
-.intro h1 em { font-style: italic; color: var(--accent); font-weight: 500; }
-.intro .lead { font-size: 19px; line-height: 1.6; color: var(--ink-2); max-width: 58ch; margin: 0 0 28px; }
-.facts { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 0; padding: 0; list-style: none; font-size: 14.5px; color: var(--ink-2); }
-.facts li { display: flex; align-items: center; gap: 8px; }
-.facts li::before { content: ""; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; }
-
-/* — szakaszcímek — */
-.sec { padding: 64px 0 8px; }
-.sec-head { display: grid; grid-template-columns: 200px 1fr; gap: 32px; align-items: baseline; margin-bottom: 20px; }
-.sec-num {
-  font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--gold-ink);
-}
-.sec-head h2 { font-family: var(--font-display); font-weight: 600; font-size: 30px; line-height: 1.2; margin: 0 0 6px; }
-.sec-head p { margin: 0; color: var(--ink-2); max-width: 60ch; }
-
-/* — tanulási útvonal — */
-.path { list-style: none; margin: 28px 0 0; padding: 0; counter-reset: step; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 2px solid var(--ink-1); }
-.path li { counter-increment: step; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-.path li:nth-child(4n) { border-right: 0; }
-.path a, .path .step {
-  display: block; height: 100%; padding: 18px 20px 22px; text-decoration: none; color: var(--ink-1);
-}
-.path a:hover { background: var(--accent-soft); }
-.path a:hover .step-title { color: var(--accent); }
-.path .step-n { font-family: var(--font-mono); font-size: 12.5px; color: var(--gold-ink); }
-.path .step-n::before { content: counter(step, decimal-leading-zero); }
-.path .step-title { display: block; font-family: var(--font-display); font-size: 19px; font-weight: 600; line-height: 1.3; margin: 6px 0 4px; }
-.path .step-why { display: block; font-size: 14px; color: var(--ink-2); line-height: 1.55; }
-.path .soon .step-title { color: var(--ink-3); }
-.path-note { margin: 18px 0 0; font-size: 15px; color: var(--ink-2); }
-
-/* — anyaglista — */
-.list { border-top: 2px solid var(--ink-1); margin: 0; padding: 0; list-style: none; }
-.item {
-  display: grid; grid-template-columns: 200px 1fr 300px; gap: 32px;
-  padding: 26px 0 28px; border-bottom: 1px solid var(--border);
-}
-.item-kind { font-size: 13px; color: var(--ink-3); padding-top: 6px; }
-.item h3 { font-family: var(--font-display); font-size: 23px; font-weight: 600; line-height: 1.25; margin: 0 0 8px; }
-.item h3 a { color: var(--ink-1); text-decoration: none; }
-.item h3 a:hover { color: var(--accent); text-decoration: underline; }
-.item h3 a::after { content: " →"; color: var(--accent); font-family: var(--font-text); font-size: 19px; }
-.item p { margin: 0; color: var(--ink-2); max-width: 54ch; }
-.langs { margin-top: 12px; display: flex; gap: 8px; font-size: 13px; }
-.langs a, .langs span {
-  font-family: var(--font-mono); letter-spacing: 0.04em; padding: 2px 8px;
-  border: 1px solid var(--border-strong); border-radius: var(--radius); text-decoration: none; color: var(--ink-2);
-}
-.langs a:hover { border-color: var(--accent); color: var(--accent); }
-.soon-tag {
-  display: inline-block; margin-left: 10px; vertical-align: 3px;
-  font-family: var(--font-text); font-size: 12px; font-weight: 600; letter-spacing: 0.02em;
-  color: var(--gold-ink); background: var(--gold-soft); padding: 2px 8px; border-radius: var(--radius);
-}
-.item.is-soon h3 { color: var(--ink-2); }
-.meta { display: grid; grid-template-columns: auto 1fr; gap: 5px 16px; margin: 0; font-size: 14px; align-self: start; padding-top: 4px; }
-.meta dt { color: var(--ink-3); }
-.meta dd { margin: 0; color: var(--ink-1); }
-.level { display: inline-flex; align-items: center; gap: 8px; }
-.bars { display: inline-flex; gap: 2px; }
-.bars i { width: 5px; height: 12px; background: var(--border-strong); display: block; }
-.bars[data-n="1"] i:nth-child(-n+1),
-.bars[data-n="2"] i:nth-child(-n+2),
-.bars[data-n="3"] i:nth-child(-n+3) { background: var(--accent); }
-
-/* — Mi változott? — */
-.news {
-  margin: 72px 0 0; padding: 28px 32px; background: var(--surface-2);
-  border-left: 3px solid var(--gold);
-  display: grid; grid-template-columns: 1fr auto; gap: 8px 32px; align-items: center;
-}
-.news .label { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-ink); }
-.news h2 { font-family: var(--font-display); font-size: 24px; font-weight: 600; margin: 4px 0 4px; line-height: 1.3; }
-.news p { margin: 0; color: var(--ink-2); font-size: 15px; }
-.news .soon-tag { margin: 0; justify-self: start; }
-
-/* — lábléc — */
-footer { margin-top: 80px; border-top: 1px solid var(--border); padding: 32px 0 48px; font-size: 14px; color: var(--ink-2); }
-footer p { margin: 0 0 10px; max-width: 80ch; }
-
-/* — mobil — */
-@media (max-width: 900px) {
-  .item { grid-template-columns: 1fr; gap: 12px; }
-  .item-kind { padding: 0; order: -1; }
-  .sec-head { grid-template-columns: 1fr; gap: 6px; }
-  .path { grid-template-columns: repeat(2, 1fr); }
-  .path li:nth-child(4n) { border-right: 1px solid var(--border); }
-  .path li:nth-child(2n) { border-right: 0; }
-}
-@media (max-width: 560px) {
-  .wrap { padding: 0 16px; }
-  body { font-size: 16px; }
-  .top nav { gap: 14px; }
-  .top nav .hide-s { display: none; }
-  .theme-btn .t-text { display: none; }
-  .brand { font-size: 19px; }
-  .intro { padding: 44px 0 40px; }
-  .intro h1 { font-size: 34px; }
-  .intro .lead { font-size: 17px; }
-  .sec { padding-top: 48px; }
-  .sec-head h2 { font-size: 25px; }
-  .path { grid-template-columns: 1fr; }
-  .path li { border-right: 0 !important; }
-  .path a, .path .step { padding: 14px 4px 16px; }
-  .item h3 { font-size: 21px; }
-  .news { grid-template-columns: 1fr; padding: 22px 18px; }
-}
-@media print {
-  .theme-btn { display: none; }
-}
-</style>
+<meta property="og:title" content="AI-tananyagok — mesterséges intelligencia, érthetően">
+<meta property="og:description" content="Ingyenes, magyar nyelvű tananyagok az alapoktól a kutatói szintig, hétköznapi példákkal.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:slnt,wght,CRSV,SHRP@-12..0,100..900,0..1,0..100&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('ait-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/ait.css">
 </head>
 <body>
-
-<header class="top">
-  <div class="wrap">
-    <a class="brand" href="/">AI-<span>tananyagok</span></a>
-    <nav aria-label="Fő navigáció">
-      <a class="hide-s" href="#honnan-kezdjem">Honnan kezdjem?</a>
-      <a href="#mi-valtozott">Mi változott?</a>
-      <button class="theme-btn" id="themeToggle" type="button"><span class="t-icon" aria-hidden="true">◐</span><span class="t-text"> Sötét mód</span></button>
-    </nav>
-  </div>
+<header class="top fixed">
+  <a class="brand" href="/">AI-tananyagok</a>
+  <nav aria-label="Fő navigáció"><a class="wide" href="#honnan">Honnan kezdjem?</a><a href="#anyagok">Minden anyag</a><a class="wide" href="#valtozas">Mi változott?</a></nav>
+  <button class="theme" type="button" data-theme-toggle aria-label="Színtéma váltása"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
 </header>
-
 <main>
-<section class="intro">
-  <div class="wrap">
-    <h1>Mesterséges intelligencia, <em>érthetően.</em></h1>
-    <p class="lead">Ingyenes, magyar nyelvű tananyagok az alapoktól a kutatói szintig. Minden anyag hétköznapi példákkal magyaráz – házárak, időjárás, spamszűrő –, és ahol lehet, ki is próbálhatod, amit olvasol.</p>
-    <ul class="facts">
-      <li>ingyenes, regisztráció nélkül</li>
-      <li>szintek, szintzáró kvízzel</li>
-      <li>a haladásod csak a saját böngésződben tárolódik</li>
-    </ul>
-  </div>
-</section>
-
-<section class="sec" id="honnan-kezdjem" aria-labelledby="h-path">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-num">Útvonal</div>
-      <div>
-        <h2 id="h-path">Honnan kezdjem?</h2>
-        <p>Ha most ismerkedsz a témával, ebben a sorrendben érdemes haladni. Minden lépés önállóan is olvasható.</p>
+<div class="scene" data-scene>
+  <div class="viz"><canvas role="img" aria-label="Egy transzformer modell térbeli vázlata: alul a szöveg tokenjei, fölötte a beágyazás, rétegenként figyelem és MLP, a tetején a kimenet. Húzással vagy nyilakkal forgatható." tabindex="0"></canvas><span class="drag" aria-hidden="true">húzd a modellt a forgatáshoz</span></div>
+  <div class="content wrap">
+    <section class="hero" data-hero data-cam="home" aria-label="Bevezető">
+      <div class="stage">
+        <h1 class="say"><span class="lead-part">Mesterséges intelligencia,</span><span class="slot"> érthetően.</span></h1>
       </div>
-    </div>
-    <ol class="path">
-      <li><a href="/llm-oktatoanyag/"><span class="step-n"></span><span class="step-title">LLM-tananyag, 1–5. szint</span><span class="step-why">Mi a nyelvi modell, hogyan lesz a szövegből szám, mi történik egy transzformerben.</span></a></li>
-      <li><div class="step soon"><span class="step-n"></span><span class="step-title">3D Transformer</span><span class="step-why">Egy token útja a modellen át, fél percben. Jó összefoglaló az 5. szint után.</span></div></li>
-      <li><div class="step soon"><span class="step-n"></span><span class="step-title">Veszteségfüggvény</span><span class="step-why">Az a szám, amiből a modell tanul – és ami eldönti, mit tanul meg.</span></div></li>
-      <li><a href="/llm-oktatoanyag/#tanitas"><span class="step-n"></span><span class="step-title">LLM-tananyag, 6–12. szint</span><span class="step-why">Tanítás, finomhangolás, futtatás, értelmezhetőség, korlátok.</span></a></li>
-      <li><div class="step soon"><span class="step-n"></span><span class="step-title">Hibamódok</span><span class="step-why">Miért téved egy működő rendszer is, és hogyan veszed észre.</span></div></li>
-      <li><div class="step soon"><span class="step-n"></span><span class="step-title">AI Atlasz</span><span class="step-why">Mire, melyik eszközt: connectorok, MCP, agentek, automatizálás.</span></div></li>
-      <li><div class="step soon"><span class="step-n"></span><span class="step-title">Python-alapok</span><span class="step-why">Annyi programozás, amennyi a saját kísérletekhez kell.</span></div></li>
-      <li><div class="step soon"><span class="step-n"></span><span class="step-title">RAG-labor</span><span class="step-why">Egy dokumentumkereső asszisztens megépítése nulláról, méréssel.</span></div></li>
+      <div class="ribbon" role="radiogroup" aria-label="A modell tippjei a következő szóra"></div>
+      <button class="resample" type="button" data-resample>Új minta a tippekből</button>
+      <p class="read" aria-live="polite">Vidd az egeret a cím egy darabjára: megmutatja, mire figyel.</p>
+      <p class="intro">Ingyenes, magyar nyelvű tananyagok az alapoktól a kutatói szintig. Hétköznapi példákkal, és ahol lehet, kipróbálható.<small>A tippek valószínűségei és a figyelemsúlyok szemléltetők; a cím szétvágása egy valódi tokenizáló eredménye.</small></p>
+    </section>
+    <div class="lead-in" id="honnan"><div class="lead-box"><h2>Honnan kezdjem?</h2><p>Görgess tovább: minden lépésnél a modell arra a részére fordul, amelyről az anyag szól.</p></div></div>
+    <ol class="steps">
+      <li class="step" data-cam="s1"><div class="panel"><div class="n">1</div><h3>LLM-tananyag, 1–5. szint</h3><p>Hogyan lesz a szövegből szám, és hogyan jósolja meg a modell a következő szót.</p><div class="m">≈ 5 óra · kezdő</div><a href="/llm-oktatoanyag/">Megnyitás →</a></div></li>
+      <li class="step soon" data-cam="s2"><div class="panel"><div class="n">2</div><h3>3D Transformer</h3><p>Az egész szerkezet egyben, felülről és metszetben: rövid film és négy ábra.</p><div class="m">hamarosan · ≈ 15 perc · kezdő</div></div></li>
+      <li class="step soon" data-cam="s3"><div class="panel"><div class="n">3</div><h3>Veszteségfüggvény</h3><p>Mit jelent, hogy a modell téved, és hogyan lesz a tévedés méréséből tanulás.</p><div class="m">hamarosan · ≈ 4 óra · középhaladó</div></div></li>
+      <li class="step" data-cam="s4"><div class="panel"><div class="n">4</div><h3>LLM-tananyag, 6–12. szint</h3><p>Tanítás, finomhangolás, futtatás, a modell belsejének értelmezése és a mai kutatási kérdések.</p><div class="m">≈ 6 óra · haladó</div><a href="/llm-oktatoanyag/#tanitas">Megnyitás →</a></div></li>
+      <li class="step soon" data-cam="s5"><div class="panel"><div class="n">5</div><h3>Hibamódok</h3><p>Miért ad magabiztos, mégis hibás választ egy nyelvi modellre épülő rendszer, és mit tehetsz ellene.</p><div class="m">hamarosan · ≈ 3 óra · középhaladó</div></div></li>
+      <li class="step soon" data-cam="s6"><div class="panel"><div class="n">6</div><h3>AI Atlasz</h3><p>Mire, melyik eszközt: connectorok, MCP, agentek, automatizálás, feladatból kiindulva.</p><div class="m">hamarosan · ≈ 3 óra · kezdő</div></div></li>
+      <li class="step soon" data-cam="s7"><div class="panel"><div class="n">7</div><h3>Python-alapok</h3><p>Rövid gyakorlólapok, hogy a tananyagok kódrészleteit el is tudd olvasni.</p><div class="m">hamarosan · 8 hét × 25 perc · kezdő</div></div></li>
+      <li class="step soon" data-cam="s8"><div class="panel"><div class="n">8</div><h3>RAG-labor</h3><p>Építs rendszert, amely dokumentumokból válaszol, forrásjelöléssel és méréssel.</p><div class="m">hamarosan · ≈ 6 óra · haladó</div></div></li>
     </ol>
-    <p class="path-note">Csak használni szeretnéd az AI-eszközöket, és nem érdekel a belső működés? Kezdd az <strong>AI Atlasszal</strong>, aztán olvasd el a <strong>Hibamódokat</strong>.</p>
   </div>
-</section>
+</div>
 
-<section class="sec" id="alapok" aria-labelledby="h-alapok">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-num">01 · Alapok</div>
-      <div>
-        <h2 id="h-alapok">Időtálló alapok</h2>
-        <p>Ami akkor is érvényes marad, amikor a mai eszközök már elavultak: hogyan működnek a modellek, hogyan tanulnak, és miért hibáznak.</p>
-      </div>
-    </div>
-    <ul class="list">
-      <li class="item">
-        <div class="item-kind">Átfogó tananyag</div>
-        <div>
-          <h3><a href="/llm-oktatoanyag/">Hogyan működnek a nagy nyelvi modellek?</a></h3>
-          <p>A tokenizációtól a transzformeren és a tanításon át az értelmezhetőségig. Minden témát háromszor mesél el: intuícióval, matematikával és kutatói mélységben. 14 böngészőben futó kísérlettel.</p>
-          <div class="langs" aria-label="Nyelvek"><a href="/llm-oktatoanyag/" hreflang="hu" lang="hu">HU</a><a href="/llm-oktatoanyag/en/" hreflang="en" lang="en">EN</a></div>
-        </div>
-        <dl class="meta">
-          <dt>Szintek</dt><dd>12, szintzáró kvízzel</dd>
-          <dt>Időigény</dt><dd>kb. 10–12 óra</dd>
-          <dt>Nehézség</dt><dd><span class="level"><span class="bars" data-n="1" aria-hidden="true"><i></i><i></i><i></i></span>kezdőtől kutatóig</span></dd>
-          <dt>Frissítve</dt><dd>2026. szeptember 19.</dd>
-        </dl>
-      </li>
-      <li class="item is-soon">
-        <div class="item-kind">Tematikus anyag</div>
-        <div>
-          <h3>A veszteségfüggvény<span class="soon-tag">Hamarosan</span></h3>
-          <p>Az a szám, amiből a modell tanul. MSE és MAE, gradiens-módszer, keresztentrópia – és mi történik, ha a mérce elcsúszik a céltól.</p>
-        </div>
-        <dl class="meta">
-          <dt>Szintek</dt><dd>8, szintzáró kvízzel</dd>
-          <dt>Időigény</dt><dd>kb. 4 óra</dd>
-          <dt>Nehézség</dt><dd><span class="level"><span class="bars" data-n="2" aria-hidden="true"><i></i><i></i><i></i></span>középhaladó</span></dd>
-          <dt>Frissítve</dt><dd>–</dd>
-        </dl>
-      </li>
-      <li class="item is-soon">
-        <div class="item-kind">Tematikus anyag</div>
-        <div>
-          <h3>Miért romlik el egy LLM-rendszer?<span class="soon-tag">Hamarosan</span></h3>
-          <p>Hallucináció, nem-determinizmus, kontextusromlás, prompt injection, csendes romlás – honnan jönnek, hogyan veszed észre, mit tehetsz ellenük.</p>
-        </div>
-        <dl class="meta">
-          <dt>Fejezetek</dt><dd>11</dd>
-          <dt>Időigény</dt><dd>kb. 3 óra</dd>
-          <dt>Nehézség</dt><dd><span class="level"><span class="bars" data-n="2" aria-hidden="true"><i></i><i></i><i></i></span>középhaladó</span></dd>
-          <dt>Frissítve</dt><dd>–</dd>
-        </dl>
-      </li>
-      <li class="item is-soon">
-        <div class="item-kind">Gyakorlófüzet</div>
-        <div>
-          <h3>Python-alapok<span class="soon-tag">Hamarosan</span></h3>
-          <p>Változóktól a Gitig, rövid, napi gyakorlólapokon. A végén egy saját, működő adatelemző eszköz.</p>
-        </div>
-        <dl class="meta">
-          <dt>Gyakorlólapok</dt><dd>13</dd>
-          <dt>Időigény</dt><dd>8 hét, napi 25 perc</dd>
-          <dt>Nehézség</dt><dd><span class="level"><span class="bars" data-n="1" aria-hidden="true"><i></i><i></i><i></i></span>kezdő</span></dd>
-          <dt>Frissítve</dt><dd>–</dd>
-        </dl>
-      </li>
-    </ul>
-  </div>
-</section>
-
-<section class="sec" id="gyakorlat" aria-labelledby="h-gyak">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-num">02 · Gyakorlat</div>
-      <div>
-        <h2 id="h-gyak">Aktuális gyakorlat</h2>
-        <p>Az eszközök gyorsan változnak, ezért ezeken az anyagokon mindig látszik, mikor ellenőriztük őket utoljára.</p>
-      </div>
-    </div>
-    <ul class="list">
-      <li class="item is-soon">
-        <div class="item-kind">Interaktív útmutató</div>
-        <div>
-          <h3>AI Atlasz<span class="soon-tag">Hamarosan</span></h3>
-          <p>Az AI gyakorlati használatának térképe: connectorok, MCP, API és tool calling, skillek, agentek, automatizálás – feladatból kiindulva, választási javaslatokkal.</p>
-        </div>
-        <dl class="meta">
-          <dt>Fejezetek</dt><dd>18</dd>
-          <dt>Időigény</dt><dd>kb. 3 óra</dd>
-          <dt>Nehézség</dt><dd><span class="level"><span class="bars" data-n="1" aria-hidden="true"><i></i><i></i><i></i></span>kezdő</span></dd>
-          <dt>Frissítve</dt><dd>–</dd>
-        </dl>
-      </li>
-    </ul>
-  </div>
-</section>
-
-<section class="sec" id="laborok" aria-labelledby="h-lab">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-num">03 · Laborok</div>
-      <div>
-        <h2 id="h-lab">Kipróbálható laborok</h2>
-        <p>Nem csak olvasni: futtatható kód és látható működés.</p>
-      </div>
-    </div>
-    <ul class="list">
-      <li class="item is-soon">
-        <div class="item-kind">Kódlabor</div>
-        <div>
-          <h3>RAG-labor: építsünk egyet<span class="soon-tag">Hamarosan</span></h3>
-          <p>Dokumentumkereső asszisztens nulláról, működő Python-kóddal: darabolás, embedding, keresés, válasz, mérés, eszközhívás. API-kulcs nélkül is fut.</p>
-        </div>
-        <dl class="meta">
-          <dt>Lépések</dt><dd>11</dd>
-          <dt>Időigény</dt><dd>kb. 6 óra</dd>
-          <dt>Nehézség</dt><dd><span class="level"><span class="bars" data-n="3" aria-hidden="true"><i></i><i></i><i></i></span>haladó</span></dd>
-          <dt>Frissítve</dt><dd>–</dd>
-        </dl>
-      </li>
-      <li class="item is-soon">
-        <div class="item-kind">Vizuális labor</div>
-        <div>
-          <h3>3D Transformer: egy token útja<span class="soon-tag">Hamarosan</span></h3>
-          <p>Egy kis, négyrétegű transzformer háromdimenziós modellje: attention, KV-tár, MLP és a következő token kiválasztása, kamerával végigkövetve.</p>
-        </div>
-        <dl class="meta">
-          <dt>Tartalom</dt><dd>30 mp-es film, 4 ábra</dd>
-          <dt>Időigény</dt><dd>kb. 15 perc</dd>
-          <dt>Nehézség</dt><dd><span class="level"><span class="bars" data-n="1" aria-hidden="true"><i></i><i></i><i></i></span>kezdő</span></dd>
-          <dt>Frissítve</dt><dd>–</dd>
-        </dl>
-      </li>
-    </ul>
-
-    <aside class="news" id="mi-valtozott" aria-labelledby="h-news">
-      <div>
-        <div class="label">Mi változott? · havi összefoglaló</div>
-        <h2 id="h-news">Mi történt az AI gyakorlati világában, egyszerűen elmagyarázva</h2>
-        <p>Havonta 3–5 rövid tétel, forrásokkal.</p>
-      </div>
-      <span class="soon-tag">Hamarosan</span>
-    </aside>
-  </div>
-</section>
+<section class="index" id="anyagok" aria-labelledby="idx"><div class="wrap"><h2 id="idx">Minden anyag</h2>
+  <div class="grp"><h3>Alapok<span>időtálló elvek</span></h3><ul>
+    <li><h4><a href="/llm-oktatoanyag/">LLM-tananyag</a></h4><p>Hogyan jósolja meg egy nyelvi modell a következő szót: a szavak számokká alakításától a figyelemmechanizmuson át a mai kutatási kérdésekig. 14 böngészőben futó kísérlettel.</p><div class="f">12 szint · 10–12 óra · kezdőtől kutatóig · <span>frissítve 2026. 09. 19.</span> · <span class="lang"><a href="/llm-oktatoanyag/" lang="hu" hreflang="hu">HU</a><a href="/llm-oktatoanyag/en/" lang="en" hreflang="en">EN</a></span></div></li>
+    <li class="soon"><h4>Veszteségfüggvény</h4><p>Mit jelent, hogy egy modell téved, és hogyan lesz a tévedés méréséből tanulás. Lépésenként, kis számpéldákkal.</p><div class="f">8 szint · 4 óra · középhaladó · <span>hamarosan</span></div></li>
+    <li class="soon"><h4>Hibamódok</h4><p>Miért ad magabiztos, mégis hibás választ egy nyelvi modellre épülő rendszer? Jellegzetes hibák, felismerésük és kivédésük.</p><div class="f">11 fejezet · 3 óra · középhaladó · <span>hamarosan</span></div></li>
+    <li class="soon"><h4>Python-alapok</h4><p>Rövid, napi gyakorlólapok azoknak, akik a tananyagok kódrészleteit olvasni és kipróbálni szeretnék.</p><div class="f">13 gyakorlólap · 8 hét × 25 perc · kezdő · <span>hamarosan</span></div></li>
+  </ul></div>
+  <div class="grp"><h3>Gyakorlat<span>ami ma igaz, ezért dátummal</span></h3><ul>
+    <li class="soon"><h4>AI Atlasz</h4><p>Interaktív útmutató az AI gyakorlati használatához: connectorok, MCP, API és tool calling, skillek, agentek, automatizálás, feladatból kiindulva, választási javaslatokkal.</p><div class="f">18 fejezet · 3 óra · kezdő · <span>hamarosan</span></div></li>
+  </ul></div>
+  <div class="grp"><h3>Laborok<span>olvasás helyett kipróbálás</span></h3><ul>
+    <li class="soon"><h4>RAG-labor</h4><p>Építs lépésről lépésre egy rendszert, amely dokumentumokból válaszol, forrásjelöléssel és méréssel. API-kulcs nélkül is fut.</p><div class="f">11 lépés · 6 óra · haladó · <span>hamarosan</span></div></li>
+    <li class="soon"><h4>3D Transformer</h4><p>Egy kis transzformer modell működő szerkezetként, felülről és metszetben: rövid film és négy részletes ábra.</p><div class="f">30 mp film + 4 ábra · 15 perc · kezdő · <span>hamarosan</span></div></li>
+  </ul></div>
+</div></section>
+<section class="news" id="valtozas" aria-label="Mi változott?"><div class="wrap"><p><span class="dim">Mi változott? · hamarosan.</span> Havonta 3–5 rövid tétel arról, mi történt az AI gyakorlati világában, egyszerűen elmagyarázva, forrásokkal.</p></div></section>
 </main>
-
-<footer>
-  <div class="wrap">
-    <p><strong>© 2026 Csaplár Dániel.</strong> Minden anyag a <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu" rel="license noopener noreferrer">Creative Commons Nevezd meg! – Ne add el! – Így add tovább! 4.0 Nemzetközi (CC&nbsp;BY-NC-SA&nbsp;4.0)</a> licenc alatt érhető el.</p>
-    <p>Kapcsolat: <a href="mailto:csaplar.d@gmail.com">csaplar.d@gmail.com</a></p>
-  </div>
-</footer>
-
-<script>
-(function () {
-  var root = document.documentElement;
-  var btn = document.getElementById('themeToggle');
-  function label() {
-    var dark = root.getAttribute('data-theme') === 'dark';
-    btn.querySelector('.t-icon').textContent = dark ? '◑' : '◐';
-    btn.querySelector('.t-text').textContent = dark ? ' Világos mód' : ' Sötét mód';
-    btn.setAttribute('aria-label', dark ? 'Váltás világos módra' : 'Váltás sötét módra');
-  }
-  label();
-  btn.addEventListener('click', function () {
-    var dark = root.getAttribute('data-theme') !== 'dark';
-    if (dark) root.setAttribute('data-theme', 'dark'); else root.removeAttribute('data-theme');
-    try { localStorage.setItem('tananyag-tema', dark ? 'dark' : 'light'); } catch (e) {}
-    label();
-  });
-})();
-</script>
+<footer class="foot wrap"><span>© 2026 Csaplár Dániel · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu" rel="license">CC BY-NC-SA 4.0</a></span><a href="mailto:csaplar.d@gmail.com">Kapcsolat</a></footer>
+<script src="/assets/ait.js"></script>
 </body>
 </html>
