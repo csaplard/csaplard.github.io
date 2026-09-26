@@ -1,6 +1,6 @@
 # AI-tananyagok
 
-Ingyenes, magyar nyelvű AI-tananyagok az alapoktól a kutatói szintig:
+Ingyenes, magyar nyelvű AI-tananyagok a hétköznapi példáktól a kutatási szakirodalomig:
 https://csaplard.github.io/
 
 | Útvonal | Anyag |
@@ -14,6 +14,7 @@ https://csaplard.github.io/
 | `/ai-atlasz/` | AI Atlasz — 18 fejezet, interaktív eszközök |
 | `/transformer-3d/` | 3D Transformer — film és ábrák |
 | `/mi-valtozott/` | havi összefoglaló (útmutató: `mi-valtozott/OLVASSEL.md`) |
+| `/az-oldalrol/` | szerző, módszertan, AI-használat, hibajelzés, verzió (v1.0) |
 | `/stilus/` | belső komponenskészlet (noindex) |
 
 Közös keret: `assets/ait.css`, `assets/ait.js` (arculat, téma, komponensek),

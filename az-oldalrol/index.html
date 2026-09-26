@@ -1,0 +1,97 @@
+<!doctype html>
+<!--
+  Az oldalról — szerző, módszertan, AI-használat, hibajelzés, verzió
+  © 2026 Csaplár Dániel · CC BY-NC-SA 4.0
+  https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu
+-->
+<html lang="hu">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Az oldalról · AI-tananyagok</title>
+<meta name="description" content="Ki írja az AI-tananyagokat, hogyan készülnek, mire használunk AI-eszközöket, és hogyan jelezhetsz hibát.">
+<meta name="author" content="Csaplár Dániel">
+<link rel="canonical" href="https://csaplard.github.io/az-oldalrol/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230b0c0e'/><path d='M16 5v22' stroke='%23e8b44c' stroke-width='3' stroke-linecap='round'/><rect x='6' y='9' width='7' height='5' fill='none' stroke='%23eceae4' stroke-width='1.5'/><rect x='19' y='18' width='7' height='5' fill='none' stroke='%23eceae4' stroke-width='1.5'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:slnt,wght,CRSV,SHRP@-12..0,100..900,0..1,0..100&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('ait-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/ait.css">
+<link rel="stylesheet" href="/assets/tananyag.css">
+<style>
+.about p,.about li{max-width:64ch}
+.about ul{padding-left:1.2em}
+.about li{margin:0 0 .6em}
+.about .ver{font:500 15px/1.5 var(--font-disp);color:var(--gold)}
+</style>
+</head>
+<body>
+<header class="top fixed">
+  <a class="brand" href="/">AI-tananyagok</a>
+  <nav aria-label="Navigáció"><a href="/#minden">Minden anyag</a><a class="wide" href="#modszertan">Módszertan</a><a class="wide" href="#hibajelzes">Hibajelzés</a></nav>
+  <button class="theme" type="button" data-theme-toggle aria-label="Színtéma váltása"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+</header>
+
+<main class="page-top">
+<div class="lesson-wrap">
+  <a class="crumb" href="/">Vissza az AI-tananyagokhoz</a>
+  <section class="m-hero" aria-label="Bevezető">
+    <div>
+      <h1>Az oldalról</h1>
+      <p class="lede">Ingyenes, magyar nyelvű tananyagok a mesterséges intelligenciáról, a hétköznapi példáktól a kutatási szakirodalomig. Itt olvashatod, ki írja őket, hogyan készülnek, és hogyan jelezhetsz, ha hibát találsz.</p>
+      <p class="facts ver">v1.0 · 2026. szeptember 26.</p>
+    </div>
+  </section>
+
+  <div class="lesson-col about">
+    <section class="kit-sec" id="szerzo" aria-labelledby="h-szerzo">
+      <h2 id="h-szerzo">Ki írja</h2>
+      <p>Az anyagokat Csaplár Dániel írja és szerkeszti. Az oldal ingyenes, nincs rajta hirdetés, és semmit nem kell hozzá regisztrálni.</p>
+    </section>
+
+    <section class="kit-sec" id="modszertan" aria-labelledby="h-modszertan">
+      <h2 id="h-modszertan">Hogyan készülnek az anyagok</h2>
+      <ul>
+        <li><b>Elsődleges források előbb.</b> Szakcikk, specifikáció és hivatalos dokumentáció az alap; blogbejegyzés legfeljebb kiegészítésként kerül be. A forrásjegyzék minden anyag végén megtalálható, a komolyabb állítások mellett szögletes zárójeles szám mutat a forrásra.</li>
+        <li><b>A kód fut, a számok stimmelnek.</b> A kódpéldákat lefuttatjuk, a számpéldákat újraszámoljuk. Ahol az oldal kimenetet vagy mért értéket közöl, az valódi futásból származik.</li>
+        <li><b>Kimondjuk, mi milyen szám.</b> Ami szemléltető, azt az oldal szemléltetőnek nevezi. Ami a saját mintaadatainkon mért eredmény, azt nem adjuk ki általános érvényűnek. Ami szakirodalomból származik, ott a forrás.</li>
+        <li><b>Az időérzékeny tartalomnak dátuma van.</b> Ahol egy anyag a mai eszközökről vagy gyakorlatról szól, ott „érvényes” dátum és felülvizsgálati időpont áll. Az időtálló elvek ilyen jelölést nem kapnak.</li>
+        <li><b>Hétköznapi, kitalált példák.</b> A példákban kitalált adatok és hétköznapi helyzetek szerepelnek: bolt, pékség, lakásár, ügyfélszolgálat. Cég- és márkanév a példákban nincs, csak a forrásjegyzékben.</li>
+      </ul>
+    </section>
+
+    <section class="kit-sec" id="ai" aria-labelledby="h-ai">
+      <h2 id="h-ai">AI-eszközök a készítésben</h2>
+      <p>Az anyagok AI-eszközök segítségével készülnek: ezek segítenek a források felkutatásában, a kód megírásában, a számítások ellenőrzésében és a szöveg szerkesztésében. A közzétett állításokat, példákat és számokat a szerző ellenőrzi, és a tartalomért ő felel.</p>
+    </section>
+
+    <section class="kit-sec" id="hibajelzes" aria-labelledby="h-hibajelzes">
+      <h2 id="h-hibajelzes">Hibát találtál?</h2>
+      <p>Ha egy állítás pontatlan, egy adat elavult, vagy egy kód nem fut, írd meg: <a href="mailto:csaplar.d@gmail.com?subject=Hibajelz%C3%A9s">csaplar.d@gmail.com</a>. Segít, ha leírod, melyik anyagban és melyik részben láttad. Minden oldal alján ugyanez a link, és ott az anyag neve már benne van a levél tárgyában.</p>
+    </section>
+
+    <section class="kit-sec" id="verzio" aria-labelledby="h-verzio">
+      <h2 id="h-verzio">Verzió</h2>
+      <p>A verziószám az egész oldalra vonatkozik. Javításnál a második szám nő (v1.1), nagyobb átalakításnál az első (v2.0). Az egyes anyagoknál külön „frissítve” dátum is áll.</p>
+      <ul>
+        <li><b>v1.0 · 2026. szeptember 26.</b> Az első teljes kiadás: hét anyag, közös arculat, nyitóoldal forgatható 3D modellel, forrásjegyzékek és szakmai pontosítások.</li>
+      </ul>
+    </section>
+
+    <section class="kit-sec" id="adatok" aria-labelledby="h-adatok">
+      <h2 id="h-adatok">Adatok és licenc</h2>
+      <p>A tanulási haladás és a kvízeredmények csak a böngésződben tárolódnak. A látogatásszámláló nem használ sütit, és nem tárol IP-címet; egy szint első teljesítésekor csak egy névtelen esemény megy el.</p>
+      <p>A tartalom <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu" rel="license">CC BY-NC-SA 4.0</a> licencű: nem kereskedelmi célra, a forrás megjelölésével és azonos feltételekkel szabadon felhasználható. A nyitóoldal 3D modellje a three.js könyvtárat használja (MIT-licenc).</p>
+    </section>
+  </div>
+</div>
+</main>
+<footer class="foot wrap"><span>© 2026 Csaplár Dániel · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu" rel="license">CC BY-NC-SA 4.0</a> · v1.0</span><span><a href="mailto:csaplar.d@gmail.com?subject=Hibajelz%C3%A9s%3A%20Az%20oldalr%C3%B3l">Hibát találtál?</a> · <a href="mailto:csaplar.d@gmail.com">Kapcsolat</a></span></footer>
+<script src="/assets/ait.js"></script>
+<!-- ────────────────────────────────────────────────────────────────
+     GoatCounter — süti nélküli, IP-tárolás nélküli látogatásszámláló.
+     A statisztika: https://csaplard.goatcounter.com/
+     ──────────────────────────────────────────────────────────────── -->
+<script data-goatcounter="https://csaplard.goatcounter.com/count"
+        async src="https://gc.zgo.at/count.js"></script>
+</body>
+</html>

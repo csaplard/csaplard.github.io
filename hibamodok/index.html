@@ -33,7 +33,8 @@
     <div>
       <h1>Miért romlik el egy LLM-rendszer?</h1>
       <p class="lede">A rendszer nem áll le, nem dob hibaüzenetet, és mégis rossz választ ad. Ez a nyelvi modellekre épülő rendszerek alapértelmezett hibamódja.</p>
-      <p class="facts">10 szint · kb. 4 óra · középhaladó · 19 forrás. Minden szint három mélységben olvasható, és kvízzel zárul: a következő szint 3-ból 2 helyes válasszal nyílik meg.</p>
+      <p class="facts">10 szint · kb. 4 óra · középhaladó · 20 forrás. Minden szint három mélységben olvasható, és kvízzel zárul: a következő szint 3-ból 2 helyes válasszal nyílik meg.</p>
+      <div class="validity"><span class="valid">Érvényes: 2026. szeptember</span><span class="ui dim">Felülvizsgálandó: 2027. március</span></div>
       <a class="start" href="#bevezetes">Kezdés a bevezetővel →</a>
     </div>
     <figure class="hero-fig">
@@ -91,7 +92,7 @@
 
 <p class="note"><b>Hasonlat.</b> Ez nem egy eltört váza, hanem egy lassan elhangolódó hangszer. Nincs törés, amit megmutathatnál, csak a hangzás csúszik el észrevétlenül. A hangolókészülék, amellyel ezt észreveszed, ugyanolyan fontos, mint maga a hangszer.</p>
 
-<p>Az anyag felépítése: tíz hibamód, mindegyik egy szint, három mélységben, a végén rövid kvízzel. Az <b>intuíció</b> réteg azt mondja el, mi történik. A <b>gyakorlati</b> réteg azt, hogyan néz ki kódban és számokban. A <b>kutatói</b> réteg azt, hol tart a szakirodalom, és mi az, amit még senki nem tud. Nem kell mindhármat végigolvasni — de érdemes tudni, hogy a harmadik ott van.</p>
+<p>Az anyag felépítése: tíz hibamód, mindegyik egy szint, három mélységben, a végén rövid kvízzel. Az <b>egyszerű</b> réteg azt mondja el, mi történik. A <b>gyakorlati</b> réteg azt, hogyan néz ki kódban és számokban. A <b>kutatói</b> réteg azt, hol tart a szakirodalom, és mi az, amit még senki nem tud. Nem kell mindhármat végigolvasni — de érdemes tudni, hogy a harmadik ott van.</p>
   </div>
 </section>
 
@@ -109,7 +110,7 @@
     <p class="lead-p">A leggyakoribb félreértés, hogy a hallucináció egyszerű bug. Nem az: egyik fontos gyökere maga a tanítási és értékelési eljárás.</p>
     <div class="depth">
       <div role="tablist" aria-label="Mélység">
-        <button role="tab" id="t-1a" aria-controls="p-1a" aria-selected="true"><b>Intuíció</b><span>mi történik</span></button>
+        <button role="tab" id="t-1a" aria-controls="p-1a" aria-selected="true"><b>Egyszerűen</b><span>mi történik</span></button>
         <button role="tab" id="t-1b" aria-controls="p-1b" aria-selected="false" tabindex="-1"><b>Gyakorlat</b><span>kóddal, számokkal</span></button>
         <button role="tab" id="t-1c" aria-controls="p-1c" aria-selected="false" tabindex="-1"><b>Kutatói szint</b><span>forrásokkal</span></button>
       </div>
@@ -188,7 +189,7 @@ def absztencios_rata(model, tesztsor):
     <p class="lead-p">A „hallucinál" szó legalább négy különböző hibát takar, és mindegyik ellen más a védekezés. Ez a szint szótár.</p>
     <div class="depth">
       <div role="tablist" aria-label="Mélység">
-        <button role="tab" id="t-2a" aria-controls="p-2a" aria-selected="true"><b>Intuíció</b><span>mi történik</span></button>
+        <button role="tab" id="t-2a" aria-controls="p-2a" aria-selected="true"><b>Egyszerűen</b><span>mi történik</span></button>
         <button role="tab" id="t-2b" aria-controls="p-2b" aria-selected="false" tabindex="-1"><b>Gyakorlat</b><span>kóddal, számokkal</span></button>
         <button role="tab" id="t-2c" aria-controls="p-2c" aria-selected="false" tabindex="-1"><b>Kutatói szint</b><span>forrásokkal</span></button>
       </div>
@@ -256,7 +257,7 @@ def husegi_pontszam(model, valasz, forrasok):
     <p class="lead-p">Ugyanaz a bemenet nem ugyanazt a kimenetet adja. Ez nem beállítási hiba, hanem a rendszer természete — és mindent átír, amit a tesztelésről tudsz.</p>
     <div class="depth">
       <div role="tablist" aria-label="Mélység">
-        <button role="tab" id="t-3a" aria-controls="p-3a" aria-selected="true"><b>Intuíció</b><span>mi történik</span></button>
+        <button role="tab" id="t-3a" aria-controls="p-3a" aria-selected="true"><b>Egyszerűen</b><span>mi történik</span></button>
         <button role="tab" id="t-3b" aria-controls="p-3b" aria-selected="false" tabindex="-1"><b>Gyakorlat</b><span>kóddal, számokkal</span></button>
         <button role="tab" id="t-3c" aria-controls="p-3c" aria-selected="false" tabindex="-1"><b>Kutatói szint</b><span>forrásokkal</span></button>
       </div>
@@ -340,7 +341,7 @@ if egyetertes &lt; 0.6:
     <p class="lead-p">A hosszú ablak nem azt jelenti, hogy a modell mindent egyformán használ. A pozíció számít, és ez a legtöbb ember számára meglepetés.</p>
     <div class="depth">
       <div role="tablist" aria-label="Mélység">
-        <button role="tab" id="t-4a" aria-controls="p-4a" aria-selected="true"><b>Intuíció</b><span>mi történik</span></button>
+        <button role="tab" id="t-4a" aria-controls="p-4a" aria-selected="true"><b>Egyszerűen</b><span>mi történik</span></button>
         <button role="tab" id="t-4b" aria-controls="p-4b" aria-selected="false" tabindex="-1"><b>Gyakorlat</b><span>kóddal, számokkal</span></button>
         <button role="tab" id="t-4c" aria-controls="p-4c" aria-selected="false" tabindex="-1"><b>Kutatói szint</b><span>forrásokkal</span></button>
       </div>
@@ -427,7 +428,7 @@ if egyetertes &lt; 0.6:
     <p class="lead-p">A RAG-rendszerek hibáinak többsége nem a generálásban van, hanem előtte. Ha a helyes darab nincs a kontextusban, a modell nem tud mit tenni.</p>
     <div class="depth">
       <div role="tablist" aria-label="Mélység">
-        <button role="tab" id="t-5a" aria-controls="p-5a" aria-selected="true"><b>Intuíció</b><span>mi történik</span></button>
+        <button role="tab" id="t-5a" aria-controls="p-5a" aria-selected="true"><b>Egyszerűen</b><span>mi történik</span></button>
         <button role="tab" id="t-5b" aria-controls="p-5b" aria-selected="false" tabindex="-1"><b>Gyakorlat</b><span>kóddal, számokkal</span></button>
         <button role="tab" id="t-5c" aria-controls="p-5c" aria-selected="false" tabindex="-1"><b>Kutatói szint</b><span>forrásokkal</span></button>
       </div>
@@ -508,7 +509,7 @@ if egyetertes &lt; 0.6:
     <p class="lead-p">Az LLM-ek összemossák az adatot és az utasítást. Ez nem javítható hiba, hanem architektúrális tulajdonság — és emiatt a legsúlyosabb biztonsági kérdés a területen.</p>
     <div class="depth">
       <div role="tablist" aria-label="Mélység">
-        <button role="tab" id="t-6a" aria-controls="p-6a" aria-selected="true"><b>Intuíció</b><span>mi történik</span></button>
+        <button role="tab" id="t-6a" aria-controls="p-6a" aria-selected="true"><b>Egyszerűen</b><span>mi történik</span></button>
         <button role="tab" id="t-6b" aria-controls="p-6b" aria-selected="false" tabindex="-1"><b>Gyakorlat</b><span>kóddal, számokkal</span></button>
         <button role="tab" id="t-6c" aria-controls="p-6c" aria-selected="false" tabindex="-1"><b>Kutatói szint</b><span>forrásokkal</span></button>
       </div>
@@ -583,7 +584,7 @@ def eszkoz_hivas(nev, argumentumok, forras_bizalom):
     <p class="lead-p">Ez a legegyszerűbb és leggyakrabban figyelmen kívül hagyott matematika a területen. Ha érted, sok ágens-tervezési vitát el tudsz dönteni.</p>
     <div class="depth">
       <div role="tablist" aria-label="Mélység">
-        <button role="tab" id="t-7a" aria-controls="p-7a" aria-selected="true"><b>Intuíció</b><span>mi történik</span></button>
+        <button role="tab" id="t-7a" aria-controls="p-7a" aria-selected="true"><b>Egyszerűen</b><span>mi történik</span></button>
         <button role="tab" id="t-7b" aria-controls="p-7b" aria-selected="false" tabindex="-1"><b>Gyakorlat</b><span>kóddal, számokkal</span></button>
         <button role="tab" id="t-7c" aria-controls="p-7c" aria-selected="false" tabindex="-1"><b>Kutatói szint</b><span>forrásokkal</span></button>
       </div>
@@ -666,7 +667,7 @@ def eszkoz_hivas(nev, argumentumok, forras_bizalom):
     <p class="lead-p">A rendszer, ami tegnap működött, ma nem ugyanaz a rendszer — pedig egy sort sem írtál át benne.</p>
     <div class="depth">
       <div role="tablist" aria-label="Mélység">
-        <button role="tab" id="t-8a" aria-controls="p-8a" aria-selected="true"><b>Intuíció</b><span>mi történik</span></button>
+        <button role="tab" id="t-8a" aria-controls="p-8a" aria-selected="true"><b>Egyszerűen</b><span>mi történik</span></button>
         <button role="tab" id="t-8b" aria-controls="p-8b" aria-selected="false" tabindex="-1"><b>Gyakorlat</b><span>kóddal, számokkal</span></button>
         <button role="tab" id="t-8c" aria-controls="p-8c" aria-selected="false" tabindex="-1"><b>Kutatói szint</b><span>forrásokkal</span></button>
       </div>
@@ -740,7 +741,7 @@ def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
     <p class="lead-p">Ez az a szint, ami a legtöbbet éri, és amiből a legkevesebben tudnak valamit. Ha egy dolgot viszel el az anyagból, ez legyen az.</p>
     <div class="depth">
       <div role="tablist" aria-label="Mélység">
-        <button role="tab" id="t-9a" aria-controls="p-9a" aria-selected="true"><b>Intuíció</b><span>mi történik</span></button>
+        <button role="tab" id="t-9a" aria-controls="p-9a" aria-selected="true"><b>Egyszerűen</b><span>mi történik</span></button>
         <button role="tab" id="t-9b" aria-controls="p-9b" aria-selected="false" tabindex="-1"><b>Gyakorlat</b><span>kóddal, számokkal</span></button>
         <button role="tab" id="t-9c" aria-controls="p-9c" aria-selected="false" tabindex="-1"><b>Kutatói szint</b><span>forrásokkal</span></button>
       </div>
@@ -884,7 +885,7 @@ def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
 </div>
 <div class="lesson-wrap"><p class="feedback">Tanításban vagy a munkahelyeden használod? Örülnék, ha megírnád: <a href="mailto:csaplar.d@gmail.com">csaplar.d@gmail.com</a></p></div>
 </main>
-<footer class="foot wrap"><span>© 2026 Csaplár Dániel · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu" rel="license">CC BY-NC-SA 4.0</a></span><a href="mailto:csaplar.d@gmail.com">Kapcsolat</a></footer>
+<footer class="foot wrap"><span>© 2026 Csaplár Dániel · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu" rel="license">CC BY-NC-SA 4.0</a> · v1.0</span><span><a href="/az-oldalrol/">Az oldalról</a> · <a href="mailto:csaplar.d@gmail.com?subject=Hibajelz%C3%A9s%3A%20Hibam%C3%B3dok">Hibát találtál?</a> · <a href="mailto:csaplar.d@gmail.com">Kapcsolat</a></span></footer>
 
 <script>
 /* Szintzáró kvízek. A helyes válasz sorszáma: a (0-tól). A megjelenítéskor a sorrend véletlen. */
