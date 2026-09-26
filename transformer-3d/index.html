@@ -1,0 +1,184 @@
+<!doctype html>
+<!--
+  3D Transformer: egy token útja
+  © 2026 Csaplár Dániel · CC BY-NC-SA 4.0
+  https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu
+-->
+<html lang="hu">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3D Transformer · AI-tananyagok</title>
+<meta name="description" content="Egy kis, négyrétegű transzformer háromdimenziós modellje: egy token útja az embeddingtől az attentionön és az MLP-n át a következő token kiválasztásáig. 28 másodperces film és négy részletes ábra.">
+<meta name="author" content="Csaplár Dániel">
+<link rel="canonical" href="https://csaplard.github.io/transformer-3d/">
+<meta property="og:image" content="https://csaplard.github.io/transformer-3d/poszter.webp">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230b0c0e'/><path d='M6 22 16 27 26 22 16 17Z' fill='none' stroke='%23eceae4' stroke-width='1.3'/><path d='M6 15 16 20 26 15 16 10Z' fill='none' stroke='%23eceae4' stroke-width='1.3'/><path d='M16 4v24' stroke='%23e8b44c' stroke-width='2.4'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:slnt,wght,CRSV,SHRP@-12..0,100..900,0..1,0..100&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('ait-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/ait.css">
+<link rel="stylesheet" href="/assets/tananyag.css">
+<style>
+.film{margin:0}
+.film video{display:block;width:100%;height:auto;background:#000}
+.timeline{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:2px}
+@media (min-width:720px){.timeline{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.timeline button{width:100%;text-align:left;border:0;background:var(--bg-2);color:var(--ink);padding:12px 14px;cursor:pointer;font:450 14px/1.4 var(--font-disp);display:grid;gap:4px;min-height:100%}
+.timeline button:hover{background:var(--bg-3)}
+.timeline button.on{background:var(--gold-wash);box-shadow:inset 3px 0 0 var(--gold)}
+.timeline .tc{font:450 12px/1 ui-monospace,Menlo,monospace;color:var(--gold)}
+.timeline b{font-weight:560}
+.timeline span.d{color:var(--ink-2)}
+.figs{display:grid;gap:28px;margin-top:8px}
+.figs figure{margin:0}
+.figs img{display:block;width:100%;height:auto;background:var(--bg-2)}
+.figs figcaption{margin-top:10px;font:450 15px/1.55 var(--font-disp);color:var(--ink-2);max-width:70ch}
+.figs figcaption b{color:var(--ink)}
+.spec{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;margin:0;font:450 15px/1.5 var(--font-disp)}
+.spec dt{color:var(--ink-3)}
+.spec dd{margin:0}
+.probs .bar{grid-template-columns:70px minmax(0,1fr) 72px}
+</style>
+</head>
+<body data-material="transformer-3d" data-store="t3d_progress_v1" data-levels="1" data-nolock>
+<header class="top fixed">
+  <a class="brand" href="/">AI-tananyagok</a>
+  <nav aria-label="Anyagon belüli navigáció"><a class="wide" href="#film">Film</a><a href="#abrak">Ábrák</a><a class="wide" href="#modell">A modell</a></nav>
+  <button class="theme" type="button" data-theme-toggle aria-label="Színtéma váltása"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+</header>
+
+<main class="page-top">
+<div class="lesson-wrap">
+  <a class="crumb" href="/">Vissza az AI-tananyagokhoz</a>
+
+  <section class="m-hero" aria-label="Bevezető">
+    <div>
+      <h1>3D Transformer: egy token útja</h1>
+      <p class="lede">Egy kis, négyrétegű transzformer háromdimenziós modellje. A kamera egyetlen tokent követ az embeddingtől az attentionön és az MLP-n át a következő token kiválasztásáig.</p>
+      <p class="facts">28 mp-es film és 4 ábra · kb. 15 perc · kezdő. Legjobb az <a href="/llm-oktatoanyag/">LLM-tananyag</a> 4–5. szintje után, összefoglalóként.</p>
+      <a class="start" href="#film">A film megtekintése →</a>
+    </div>
+    <figure class="hero-fig"><img src="attekintes-kicsi.webp" width="800" height="480" alt="A transzformer teljes modellje felülről, metszetben: balra a tokenek belépése, középen négy egymás utáni réteg, jobbra a kimenet" style="display:block;width:100%;height:auto"><figcaption>A teljes modell metszetben. A szerkezet végig egy irányba halad: balról jobbra, rétegről rétegre.</figcaption></figure>
+  </section>
+
+  <div class="lesson-col">
+
+<section class="intro-sec" id="film" aria-labelledby="h-film">
+  <h2 id="h-film">A film</h2>
+  <div class="lvl-body">
+    <figure class="film">
+      <video id="video" controls preload="metadata" playsinline poster="poszter.webp" aria-describedby="film-leiras">
+        <source src="egy-token-utja.mp4" type="video/mp4">
+        A böngésződ nem tudja lejátszani a videót. <a href="egy-token-utja.mp4">Letöltés (MP4, 5,6 MB)</a>
+      </video>
+    </figure>
+    <p id="film-leiras" class="ui dim">Magyar feliratos, hang nélküli, 28 másodperces film. A lépésekre kattintva a film az adott részhez ugrik.</p>
+    <ol class="timeline" id="timeline">
+      <li><button type="button" data-t="0"><span class="tc">0:00</span><b>Token → embedding</b><span class="d">A SAT tokenből 24 koordinátás reprezentáció lesz.</span></button></li>
+      <li><button type="button" data-t="4.5"><span class="tc">0:04</span><b>Q · K · V és RoPE</b><span class="d">A pozíció a Query és a Key koordinátapárjait forgatja; a Value ezt kihagyja.</span></button></li>
+      <li><button type="button" data-t="8.75"><span class="tc">0:08</span><b>KV-tár → attention</b><span class="d">Korábbi K/V állapotok, kauzális maszk, softmax, súlyozott Value-összeg.</span></button></li>
+      <li><button type="button" data-t="12"><span class="tc">0:12</span><b>Hozzáadás a fő állapothoz</b><span class="d">A négy fej eredménye W_O után hozzáadódik a residual streamhez.</span></button></li>
+      <li><button type="button" data-t="13"><span class="tc">0:13</span><b>SwiGLU MLP</b><span class="d">Dimenzióbővítés, nemlineáris kapuzás, szorzás, visszavetítés.</span></button></li>
+      <li><button type="button" data-t="16"><span class="tc">0:16</span><b>Rétegek egymás után</b><span class="d">Még három réteg, mindegyik saját súlyokkal és saját KV-tárral.</span></button></li>
+      <li><button type="button" data-t="23.5"><span class="tc">0:23</span><b>Logitok → valószínűségek</b><span class="d">Végső normalizálás, szótárprojekció, softmax.</span></button></li>
+      <li><button type="button" data-t="26"><span class="tc">0:26</span><b>Következő token</b><span class="d">Mohó (greedy) kiválasztás: „A”, 90,65%-kal.</span></button></li>
+    </ol>
+    <p class="warn"><b>Fontos: ez nem egy betanított modell.</b> A súlyok egy rögzített véletlenmagból (42) származnak, és nincsenek betanítva. Minden látható érték valódi számítás eredménye és reprodukálható, de a kiválasztott „A” token és a 90,65% nem nyelvi jóslat: egy betanítatlan szemléltető modell kimenete. A THE, CAT, SAT feliratok egyszerű tokenazonosítók, nem egy valódi tokenizáló eredményei.</p>
+  </div>
+</section>
+
+<section class="intro-sec" id="abrak" aria-labelledby="h-abrak">
+  <h2 id="h-abrak">Négy ábra közelről</h2>
+  <div class="lvl-body figs">
+    <figure>
+      <a href="attekintes.webp"><img src="attekintes.webp" width="1600" height="960" loading="lazy" alt="A négyrétegű transzformer teljes modellje ferde felülnézetből"></a>
+      <figcaption><b>1. ábra. A teljes szerkezet.</b> Az arany gerinc a residual stream: az információ fő útvonala. Minden rétegben két oldalág (attention és MLP) olvas belőle, és a frissítését hozzáadja; a gerinc végig egyenes marad. Kék a Query, borostyán a Key, zöld a Value útja. Kapcsolódó anyag: <a href="/llm-oktatoanyag/#architektura">LLM-tananyag, 4. szint</a>.</figcaption>
+    </figure>
+    <figure>
+      <a href="rope-reszlet.webp"><img src="rope-reszlet.webp" width="1600" height="1067" loading="lazy" alt="Közeli kép a Query- és Key-ágak forgó gyűrűiről egy attention-fejben"></a>
+      <figcaption><b>2. ábra. RoPE, közelről.</b> Minden fej Query- és Key-ágán három gyűrű forog: ezek a hat koordináta három kétdimenziós síkját jelképezik. A forgatás szöge a token pozíciójától függ (a p = 2 pozícióhoz 2; 0,0928; 0,0043 radián tartozik), így két token skalárszorzata a relatív távolságukat is tükrözi. A Value-ág nem forog.</figcaption>
+    </figure>
+    <figure>
+      <a href="attention-reszlet.webp"><img src="attention-reszlet.webp" width="1600" height="1067" loading="lazy" alt="Közeli kép a pontozásról, a KV-tárról és a súlyozott Value-összegzésről"></a>
+      <figcaption><b>3. ábra. Attention és KV-tár.</b> A pontozás a forgatott Query és a tárolt Key skalárszorzata. A kiemelkedő elemek magassága a softmax-súllyal arányos, a jövőbeli pozíció lezárva (kauzális maszk). A harmadik token első rétegében például az 1. fej súlyai 0,109 / 0,537 / 0,354, a 4. fejé 0,113 / 0,029 / 0,858: tényleges számítási értékek. A KV-tárban a korábbi tokenek Key- és Value-vektorai maradnak meg, így nem kell őket újraszámolni.</figcaption>
+    </figure>
+    <figure>
+      <a href="felulnezet.webp"><img src="felulnezet.webp" width="1600" height="733" loading="lazy" alt="A modell felülnézeti elrendezése: rétegek balról jobbra, alul az attention, felül az MLP"></a>
+      <figcaption><b>4. ábra. Felülnézet.</b> A rétegek balról jobbra követik egymást; a gerinc egyik oldalán az attention, a másikon az MLP dolgozik. Az elrendezés csak szemléltetés: a számítás nem térben, hanem mátrixműveletekben történik.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="intro-sec" id="modell" aria-labelledby="h-modell">
+  <h2 id="h-modell">Pontosan milyen modell ez?</h2>
+  <div class="lvl-body">
+    <p>Egy <b>pre-norm, csak dekóderes, kauzális</b> transzformer, teljes többfejű attentionnel. A RoPE pozíciókódolás, az RMSNorm normalizálás és a SwiGLU MLP egy következetes, a mai nyílt modellekre jellemző felépítést ad, de ez nem egy konkrét modell másolata. <a class="ref" href="#ref-1">[1]</a> <a class="ref" href="#ref-2">[2]</a> <a class="ref" href="#ref-3">[3]</a> <a class="ref" href="#ref-4">[4]</a></p>
+    <dl class="spec">
+      <dt>Rétegek</dt><dd>4</dd>
+      <dt>Reprezentáció (d_model)</dt><dd>24 koordináta</dd>
+      <dt>Attention-fejek</dt><dd>rétegenként 4, fejenként 6 dimenzió</dd>
+      <dt>MLP belső mérete</dt><dd>64</dd>
+      <dt>Szótár</dt><dd>8 token: THE, CAT, SAT, ON, MAT, A, „.”, &lt;eos&gt;</dd>
+      <dt>Bemenet</dt><dd>THE CAT SAT (a kamera a harmadik tokent követi)</dd>
+      <dt>Súlyok</dt><dd>rögzített véletlenmag (42), betanítatlan</dd>
+      <dt>Kiválasztás</dt><dd>mohó (argmax), T = 1</dd>
+    </dl>
+    <h3>A kimenet: valószínűségek a következő tokenre</h3>
+    <div class="bars probs" role="img" aria-label="A következő token valószínűségei: A 90,65 százalék, eos 4,12, ON 1,88, MAT 1,56, pont 0,66, SAT 0,46, CAT 0,34, THE 0,33 százalék">
+      <div class="bar best"><span class="w">A</span><span class="tr"><i style="width:90.65%"></i></span><span class="pc">90,65 %</span></div>
+      <div class="bar"><span class="w">&lt;eos&gt;</span><span class="tr"><i style="width:4.12%"></i></span><span class="pc">4,12 %</span></div>
+      <div class="bar"><span class="w">ON</span><span class="tr"><i style="width:1.88%"></i></span><span class="pc">1,88 %</span></div>
+      <div class="bar"><span class="w">MAT</span><span class="tr"><i style="width:1.56%"></i></span><span class="pc">1,56 %</span></div>
+      <div class="bar"><span class="w">.</span><span class="tr"><i style="width:0.66%"></i></span><span class="pc">0,66 %</span></div>
+      <div class="bar"><span class="w">SAT</span><span class="tr"><i style="width:0.46%"></i></span><span class="pc">0,46 %</span></div>
+      <div class="bar"><span class="w">CAT</span><span class="tr"><i style="width:0.34%"></i></span><span class="pc">0,34 %</span></div>
+      <div class="bar"><span class="w">THE</span><span class="tr"><i style="width:0.33%"></i></span><span class="pc">0,33 %</span></div>
+    </div>
+    <p class="ui dim">A számítást ellenőrzések kísérik: a kauzális maszk mögötti jövőbeli valószínűség pontosan 0; a KV-tárral és anélkül számolt eredmény eltérése 0; a RoPE normamegőrzési és relatívpozíció-hibája 4,4 · 10⁻¹⁶ (gépi pontosság).</p>
+    <p class="note"><b>Hogyan kapcsolódik a tananyaghoz?</b> A tokenizálásról az <a href="/llm-oktatoanyag/#tokenizacio">LLM-tananyag 2. szintje</a>, az embeddingről a 3., az attentionről és a residual streamről a 4., az MLP-ről, a normalizálásról és a pozíciókódolásról az <a href="/llm-oktatoanyag/#architektura2">5. szint</a>, a KV-tárról és a mintavételről a 9. szint szól.</p>
+    <div class="quiz" data-level="1" data-title="Önellenőrzés"></div>
+  </div>
+</section>
+
+<section class="kit-sec" id="irodalom" aria-labelledby="h-ir">
+  <h2 id="h-ir">Források</h2>
+  <ol class="refs">
+    <li id="ref-1"><span class="rn">[1]</span><p>Vaswani, A. és mtsai. (2017). <cite>Attention Is All You Need.</cite> NeurIPS. <span class="id"><a href="https://arxiv.org/abs/1706.03762">arXiv:1706.03762</a></span></p></li>
+    <li id="ref-2"><span class="rn">[2]</span><p>Touvron, H. és mtsai. (2023). <cite>LLaMA: Open and Efficient Foundation Language Models.</cite> <span class="id"><a href="https://arxiv.org/abs/2302.13971">arXiv:2302.13971</a></span></p></li>
+    <li id="ref-3"><span class="rn">[3]</span><p>Su, J. és mtsai. (2021). <cite>RoFormer: Enhanced Transformer with Rotary Position Embedding.</cite> <span class="id"><a href="https://arxiv.org/abs/2104.09864">arXiv:2104.09864</a></span></p></li>
+    <li id="ref-4"><span class="rn">[4]</span><p>Shazeer, N. (2020). <cite>GLU Variants Improve Transformer.</cite> <span class="id"><a href="https://arxiv.org/abs/2002.05202">arXiv:2002.05202</a></span></p></li>
+  </ol>
+</section>
+
+<p class="m-foot-note">A 3D modell, a film és az ábrák Blenderben készültek; a számértékek a mellékelt numerikus nyomkövetésből származnak.</p>
+  </div>
+</div>
+</main>
+<footer class="foot wrap"><span>© 2026 Csaplár Dániel · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu" rel="license">CC BY-NC-SA 4.0</a></span><a href="mailto:csaplar.d@gmail.com">Kapcsolat</a></footer>
+
+<script>
+window.KVIZ = {
+ 1: [
+  { q: 'Miért nem nyelvi jóslat, hogy a modell 90,65%-kal az „A” tokent választja?', o: ['Mert a súlyok betanítatlanok, véletlenmagból származnak.', 'Mert a szótár túl nagy.', 'Mert a film le van lassítva.'], a: 0, x: 'A számítás valódi és reprodukálható, de betanítatlan súlyokkal a kimenetnek nincs nyelvi érvényessége.' },
+  { q: 'Mit csinál a RoPE a filmben?', o: ['A Value-vektorokat forgatja.', 'A Query és a Key koordinátapárjait forgatja a token pozíciója szerint.', 'Összeadja a fejek kimenetét.'], a: 1, x: 'A forgatás szöge a pozíciótól függ, így a Query és a Key skalárszorzata a relatív távolságot is tükrözi. A Value-ág nem forog.' },
+  { q: 'Mi a KV-tár szerepe?', o: ['A korábbi tokenek Key- és Value-vektorait őrzi, hogy ne kelljen újraszámolni őket.', 'A betanított tudást tárolja.', 'A következő tokent választja ki.'], a: 0, x: 'A KV-tár gyorsítja az autoregresszív számítást; nem tudásarchívum, és nem helyettesíti a tanult súlyokat.' }
+ ]
+};
+</script>
+<script src="/assets/tananyag.js"></script>
+<script src="/assets/ait.js"></script>
+<script>
+(function () {
+  var v = document.getElementById("video"), btns = document.querySelectorAll("#timeline button");
+  Array.prototype.forEach.call(btns, function (b) {
+    b.addEventListener("click", function () { v.currentTime = +b.getAttribute("data-t"); v.play().catch(function () {}); });
+  });
+  v.addEventListener("timeupdate", function () {
+    var t = v.currentTime, cur = 0;
+    Array.prototype.forEach.call(btns, function (b, i) { if (t >= +b.getAttribute("data-t")) cur = i; });
+    Array.prototype.forEach.call(btns, function (b, i) { b.classList.toggle("on", i === cur); });
+  });
+})();
+</script>
+</body>
+</html>
