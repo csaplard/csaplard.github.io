@@ -1,0 +1,92 @@
+[
+  {
+    "kerdes": "Milyen vizsgával zárul a K-402 tanfolyam?",
+    "kell_forras": "K-402_kurzusleiras.md",
+    "kell_fejezet": "2. Vizsga",
+    "tipus": "tipikus"
+  },
+  {
+    "kerdes": "Mi kell a K-402 tanfolyamhoz, milyen gép és szoftver?",
+    "kell_forras": "K-402_kurzusleiras.md",
+    "kell_fejezet": "3. Előkészület",
+    "tipus": "tipikus"
+  },
+  {
+    "kerdes": "Hány pontot kell elérni a szintfelmérőn?",
+    "kell_forras": "K-402_kurzusleiras.md",
+    "kell_fejezet": "3. Előkészület",
+    "tipus": "tipikus"
+  },
+  {
+    "kerdes": "Hány alkalmat lehet hiányozni a K-402 tanfolyamon?",
+    "kell_forras": "K-402_kurzusleiras.md",
+    "kell_fejezet": "5. Teljesítési feltételek",
+    "tipus": "tipikus"
+  },
+  {
+    "kerdes": "VK-405-1E",
+    "kell_forras": "K-405_kurzusleiras.md",
+    "kell_fejezet": "2. Vizsga",
+    "tipus": "azonosito"
+  },
+  {
+    "kerdes": "Milyen gyakran és mennyi időre lehet egyéni konzultációt kérni?",
+    "kell_forras": "K-402_kurzusleiras.md",
+    "kell_fejezet": "4. Konzultáció",
+    "tipus": "tipikus"
+  },
+  {
+    "kerdes": "Nem tudok belépni, mi lehet a baj?",
+    "kell_forras": "ugyfelszolgalati_utmutato.md",
+    "kell_fejezet": "3. Jellemző hibajelenségek",
+    "tipus": "szemantikus"
+  },
+  {
+    "kerdes": "Szaggat a videó és nem stimmel a hang — mi ez?",
+    "kell_forras": "ugyfelszolgalati_utmutato.md",
+    "kell_fejezet": "3. Jellemző hibajelenségek",
+    "tipus": "szemantikus"
+  },
+  {
+    "kerdes": "Mikor kell egy bejelentést azonnal továbbadni?",
+    "kell_forras": "ugyfelszolgalati_utmutato.md",
+    "kell_fejezet": "4. Eszkalációs sürgősség",
+    "tipus": "szemantikus"
+  },
+  {
+    "kerdes": "Mit kell tenni, mielőtt kiadjuk valakinek a hallgatói adatait?",
+    "kell_forras": "adatvedelmi_szabalyzat.md",
+    "kell_fejezet": "1. Azonosítás",
+    "tipus": "szemantikus"
+  },
+  {
+    "kerdes": "Ki hagyhat jóvá egy 300 ezer forintos visszatérítést?",
+    "kell_forras": "visszateritesi_szabalyzat.md",
+    "kell_fejezet": "2. Értékhatárok",
+    "tipus": "tipikus"
+  },
+  {
+    "kerdes": "Milyen gyakran van részbeszámoló a K-405 tanfolyamon?",
+    "kell_forras": "K-405_kurzusleiras.md",
+    "kell_fejezet": "3. Képzési ütem",
+    "tipus": "tipikus"
+  },
+  {
+    "kerdes": "Melyik K-402-es ügyféljegy megoldása tartott a legtovább 2025-ben?",
+    "kell_forras": "ugyfeljegy_kivonat_2025.md",
+    "kell_fejezet": "UJ-2025-0211",
+    "tipus": "aggregalo"
+  },
+  {
+    "kerdes": "Milyen színű a K-402 tanúsítványa?",
+    "kell_forras": null,
+    "kell_fejezet": null,
+    "tipus": "nincs_adat"
+  },
+  {
+    "kerdes": "Mennyi a K-402 tanfolyam részvételi díja?",
+    "kell_forras": "K-402_kurzusleiras.md",
+    "kell_fejezet": "1. Általános adatok",
+    "tipus": "tipikus"
+  }
+]

@@ -42,7 +42,8 @@ try {
 } catch (e) {}
 function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
 function isDone(n) { return state.passed.indexOf(n) >= 0; }
-function isOpen(n) { return n === 1 || state.unlocked || isDone(n - 1); }
+var NOLOCK = body.hasAttribute("data-nolock"); /* laboroknál a kvíz önellenőrzés, nem kapu */
+function isOpen(n) { return NOLOCK || n === 1 || state.unlocked || isDone(n - 1); }
 
 function applyLocks() {
   for (var n = 1; n <= TOTAL; n++) {

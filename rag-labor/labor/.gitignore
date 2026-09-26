@@ -1,0 +1,6 @@
+dokumentumok/
+darabok.json
+index.sqlite
+vektorok.npy
+ugyfeljegyek.sqlite
+__pycache__/
