@@ -95,3 +95,41 @@
 
 /* — anyag vége — */
 .m-foot-note{margin-top:var(--s-7,96px);padding-top:28px;border-top:1px solid var(--line);font:450 15px/1.6 var(--font-disp);color:var(--ink-2)}
+
+/* — több ábra egymás mellett, gombsor, üzenet — */
+.plots{display:grid;gap:18px;margin-top:16px}
+@media (min-width:720px){.plots{grid-template-columns:1fr 1fr}}
+.plots .plot{margin-top:0}
+.plotcap{margin:6px 0 0;font:450 13.5px/1.45 var(--font-disp);color:var(--ink-3)}
+.demo .row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-top:14px;font:450 15px/1.4 var(--font-disp)}
+.demo .row .pill{font-size:14px;padding:8px 14px}
+.demo .check{display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.demo .check input{width:18px;height:18px;accent-color:var(--gold)}
+.demo .radio-row{display:flex;flex-wrap:wrap;gap:8px 18px;margin:0 0 16px;font:450 15px/1.4 var(--font-disp)}
+.demo .radio-row label{display:inline-flex;align-items:center;gap:7px;cursor:pointer}
+.demo .radio-row input{accent-color:var(--gold);width:17px;height:17px}
+.demo .ctrl+.ctrl{margin-top:12px}
+.msg{margin:14px 0 0;font:500 15px/1.5 var(--font-disp);color:var(--ink-2);min-height:1.5em}
+.msg.good{color:var(--v)}.msg.bad{color:var(--alert)}
+.demo .tbl table{font-size:14px}
+.demo .tbl th,.demo .tbl td{padding:6px 12px 6px 0}
+.demo .bars{margin-top:18px}
+.demo .bar{grid-template-columns:104px minmax(0,1fr) 64px}
+.demo .bar .w{font:450 15px/1.2 var(--font-disp)}
+.demo .bar.correct .w{color:var(--gold);font-weight:600}
+.demo .bar.correct .tr i{background:var(--gold)}
+/* ábrák vonalai és pontjai */
+.c-gold{stroke:var(--gold);stroke-width:3;fill:none}
+.c-q2{stroke:var(--q);stroke-width:2.2;fill:none}
+.c-v2{stroke:var(--v);stroke-width:2.2;fill:none}
+.c-ink{stroke:var(--ink-2);stroke-width:1.5;fill:none}
+.c-err{stroke:var(--alert);stroke-width:1.6;fill:none}
+.c-dash{stroke-dasharray:5 4}
+.a-err{fill:var(--alert-wash)}
+.f-ink{fill:var(--ink)}.f-gold{fill:var(--gold)}.f-q{fill:var(--q)}.f-v{fill:var(--v)}.f-alert{fill:var(--alert)}
+.c-t.t-alert{fill:var(--alert)}.c-t.t-gold{fill:var(--gold)}.c-t.t-q{fill:var(--q)}
+/* összefoglaló táblázat, glosszárium */
+.summary .tbl td{white-space:normal;min-width:120px}
+.gloss.full{display:grid;gap:22px}
+.gloss.full dt b{font-size:21px}
+.gloss.full dd{margin-top:4px;color:var(--ink-2);max-width:64ch}

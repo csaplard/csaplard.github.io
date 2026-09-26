@@ -83,10 +83,16 @@ function renderQuiz(box) {
   box._ait = 1; /* az ait.js saját kvízkezelője ne kapcsolódjon rá */
   var h = '<h3>Szintzáró kvíz</h3><p class="ui">' + qs.length + " kérdés · a továbblépéshez " + NEED +
     " helyes válasz kell" + (isDone(n) ? " · ezt a szintet már teljesítetted" : "") + '</p><ol class="qs">';
+  /* a válaszok sorrendje minden kitöltésnél véletlen; a value az eredeti sorszám */
+  var orders = qs.map(function (q) {
+    var o = q.o.map(function (_, j) { return j; });
+    for (var k = o.length - 1; k > 0; k--) { var r = Math.floor(Math.random() * (k + 1)), t = o[k]; o[k] = o[r]; o[r] = t; }
+    return o;
+  });
   qs.forEach(function (q, i) {
     h += '<li class="q"><fieldset><legend>' + q.q + '</legend><div class="opts">';
-    q.o.forEach(function (opt, j) {
-      h += '<label class="opt"><input type="radio" name="q' + n + "_" + i + '" value="' + j + '"><span>' + opt + '</span><span class="mark"></span></label>';
+    orders[i].forEach(function (j) {
+      h += '<label class="opt"><input type="radio" name="q' + n + "_" + i + '" value="' + j + '"><span>' + q.o[j] + '</span><span class="mark"></span></label>';
     });
     h += '</div></fieldset><p class="fb" hidden></p></li>';
   });
@@ -115,8 +121,10 @@ function renderQuiz(box) {
     }
   }
   $$(".q", box).forEach(function (li, i) {
-    var q = qs[i], opts = $$(".opt", li);
-    $$('input[type="radio"]', li).forEach(function (inp, j) {
+    var q = qs[i], opts = [];
+    $$(".opt", li).forEach(function (lab) { opts[+$("input", lab).value] = lab; });
+    $$('input[type="radio"]', li).forEach(function (inp) {
+      var j = +inp.value;
       inp.addEventListener("change", function () {
         if (answers[i] >= 0) return;
         answers[i] = j; li.setAttribute("data-answered", j === q.a ? "r" : "w");
@@ -173,10 +181,17 @@ function initCode() {
    ------------------------------------------------------------------ */
 var NS = "http://www.w3.org/2000/svg", clipN = 0;
 function mk(tag, attrs, parent) { var e = doc.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+function niceTicks(min, max, n) {
+  n = n || 4; var span = max - min; if (span <= 0) return [min];
+  var raw = span / n, p = Math.pow(10, Math.floor(Math.log10(raw))), m = raw / p;
+  var step = (m < 1.5 ? 1 : m < 3 ? 2 : m < 7 ? 5 : 10) * p, out = [];
+  for (var v = Math.ceil(min / step) * step; v <= max + step * 1e-9; v += step) out.push(Number(v.toFixed(10)));
+  return out;
+}
 function decFor(ticks) { var d = 0; ticks.forEach(function (v) { var k = 0; while (k < 4 && Math.abs(v - Number(v.toFixed(k))) > 1e-9) k++; d = Math.max(d, k); }); return d; }
 function Plot(svg, o) {
   var narrow = (window.innerWidth || 800) < 600;
-  var W = narrow ? 360 : (o.W || 560), H = narrow ? Math.max(230, Math.round((o.H || 300) * 0.92)) : (o.H || 300);
+  var W = narrow ? 360 : (o.W || 560), H = (narrow && (o.H || 300) >= 200) ? Math.max(230, Math.round((o.H || 300) * 0.92)) : (o.H || 300);
   var p = Object.assign({ l: 48, r: 14, t: 14, b: 44 }, o.pad || {});
   svg.setAttribute("viewBox", "0 0 " + W + " " + H); svg.innerHTML = "";
   var S = { W: W, H: H, p: p, o: o };
@@ -201,6 +216,8 @@ function Plot(svg, o) {
   function cl(y) { return Math.max(o.ymin - yr, Math.min(o.ymax + yr, y)); }
   S.curve = function (f, x0, x1, cls, g, N) { N = N || 260; var d = ""; for (var i = 0; i <= N; i++) { var x = x0 + (x1 - x0) * i / N, y = f(x); if (!isFinite(y)) continue; d += (d ? "L" : "M") + S.sx(x).toFixed(2) + " " + S.sy(cl(y)).toFixed(2); } return mk("path", { d: d, class: cls }, g || S.gS); };
   S.poly = function (pts, cls, g) { var d = ""; pts.forEach(function (q, i) { d += (i ? "L" : "M") + S.sx(q[0]).toFixed(2) + " " + S.sy(cl(q[1])).toFixed(2); }); return mk("path", { d: d, class: cls }, g || S.gD); };
+  S.seg = function (x1, y1, x2, y2, cls, g) { return mk("line", { x1: S.sx(x1), y1: S.sy(cl(y1)), x2: S.sx(x2), y2: S.sy(cl(y2)), class: cls }, g || S.gD); };
+  S.area = function (f, x0, x1, cls, g, N) { N = N || 160; var d = "M" + S.sx(x0).toFixed(2) + " " + S.sy(Math.max(o.ymin, 0)).toFixed(2); for (var i = 0; i <= N; i++) { var x = x0 + (x1 - x0) * i / N; d += "L" + S.sx(x).toFixed(2) + " " + S.sy(cl(f(x))).toFixed(2); } d += "L" + S.sx(x1).toFixed(2) + " " + S.sy(Math.max(o.ymin, 0)).toFixed(2) + "Z"; return mk("path", { d: d, class: cls }, g || S.gD); };
   S.dot = function (x, y, r, cls, g) { return mk("circle", { cx: S.sx(x), cy: S.sy(cl(y)), r: r, class: cls }, g || S.gD); };
   S.vline = function (x, cls, g) { return mk("line", { x1: S.sx(x), x2: S.sx(x), y1: p.t, y2: H - p.b, class: cls }, g || S.gD); };
   S.band = function (x0, x1, cls, g) { return mk("rect", { x: S.sx(x0), y: p.t, width: Math.max(0, S.sx(x1) - S.sx(x0)), height: H - p.t - p.b, class: cls }, g || S.gS); };
@@ -225,7 +242,7 @@ function initControls() {
   });
 }
 
-window.Tananyag = { hu: hu, huS: huS, Plot: Plot, mk: mk, state: function () { return state; } };
+window.Tananyag = { hu: hu, huS: huS, Plot: Plot, mk: mk, niceTicks: niceTicks, state: function () { return state; } };
 initCode();
 $$(".quiz[data-level]").forEach(renderQuiz);
 initControls();
