@@ -3,9 +3,24 @@
 Ingyenes, magyar nyelvű AI-tananyagok az alapoktól a kutatói szintig:
 https://csaplard.github.io/
 
-Ez a repó a központi nyitóoldalt és az új anyagokat tartalmazza. Az
-LLM-tananyag a saját repójában él: https://csaplard.github.io/llm-oktatoanyag/
+| Útvonal | Anyag |
+|---|---|
+| `/` | nyitóoldal (központ) |
+| `/llm-oktatoanyag/`, `/en/` | LLM-tananyag — külön repóban: `csaplard/llm-oktatoanyag` |
+| `/vesztesegfuggveny/` | A veszteségfüggvény — 8 szint |
+| `/hibamodok/` | Miért romlik el egy LLM-rendszer? — 10 szint |
+| `/python-alapok/` | Python-alapok — 12 gyakorlólap + zárófeladat |
+| `/rag-labor/` | RAG-labor — 10 lépés, letölthető kód (`labor/`, `labor.zip`) |
+| `/ai-atlasz/` | AI Atlasz — 18 fejezet, interaktív eszközök |
+| `/transformer-3d/` | 3D Transformer — film és ábrák |
+| `/mi-valtozott/` | havi összefoglaló (útmutató: `mi-valtozott/OLVASSEL.md`) |
+| `/stilus/` | belső komponenskészlet (noindex) |
 
-Minden oldal önálló HTML-fájl, build és külső függőség nélkül.
+Közös keret: `assets/ait.css`, `assets/ait.js` (arculat, téma, komponensek),
+`assets/tananyag.css`, `assets/tananyag.js` (szintek, haladásmentés, kvíz,
+kódblokk, grafikon, GoatCounter-esemény). A haladás anyagonként a böngésző
+helyi tárolójában marad.
+
+Build és külső függőség nincs: minden oldal statikus HTML.
 
 © 2026 Csaplár Dániel · [CC BY-NC-SA 4.0](LICENSE)
