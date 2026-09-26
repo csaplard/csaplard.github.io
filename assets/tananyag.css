@@ -133,3 +133,25 @@
 .gloss.full{display:grid;gap:22px}
 .gloss.full dt b{font-size:21px}
 .gloss.full dd{margin-top:4px;color:var(--ink-2);max-width:64ch}
+
+/* — szöveges tananyagok (hibamódok és társai) — */
+.lead-p{font-size:clamp(19px,2vw,21px);line-height:1.55;color:var(--ink-2);margin:0 0 8px}
+.intro-sec{padding:var(--s-7,96px) 0 0;scroll-margin-top:64px}
+.intro-sec>h2{font-size:clamp(28px,3.4vw,40px);letter-spacing:-.03em;margin-bottom:22px}
+.lvl-body .tbl th,.lvl-body .tbl td,.intro-sec .tbl td{white-space:normal;min-width:96px;vertical-align:top}
+.lvl-body ul,.lvl-body ol{padding-left:1.3em;max-width:var(--measure,64ch)}
+.lvl-body li{margin:.35em 0}
+.lvl-body .warn,.lvl-body .note{max-width:none}
+.fig{margin:0}
+.fig svg{display:block;width:100%;height:auto;color:var(--ink)}
+.fig figcaption{margin-top:8px;font:450 13.5px/1.5 var(--font-disp);color:var(--ink-3)}
+#dtemp .bar,#dchain .bar{grid-template-columns:136px minmax(0,1fr) 64px}
+#dtemp .bar.best .tr i,#dchain .bar.best .tr i{background:var(--gold)}
+#dchain .bar.low .tr i{background:var(--alert)}
+.hm-chain .axis line{stroke:var(--line-2)}
+.hm-chain .cb{fill:var(--gold);opacity:.35}
+.hm-chain .cb.last{opacity:1}
+.hm-chain .ax{font:450 13px var(--font-disp);fill:var(--ink-3)}
+.hm-chain .ax.val{fill:var(--ink);font-weight:560}
+code{font:400 .86em ui-monospace,Menlo,monospace;background:var(--bg-2);padding:.1em .35em}
+.fig svg text{font-family:var(--font-disp)}
