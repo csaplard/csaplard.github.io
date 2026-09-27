@@ -20,9 +20,12 @@ python3 l5_eval.py              # MÉRÉS — ez a legfontosabb
 python3 l6_eszkoz.py            # eszközhívás, agenthurok
 ```
 
-Semmit nem kell telepíteni a numpyon kívül (`pip install numpy`), és nem
-kell API-kulcs. Az alapértelmezett mód egy szándékosan buta, beépített
-embedding — hogy lásd a mechanizmust, mielőtt igazi modellre váltasz.
+A keresési és mérési lépésekhez semmit nem kell telepíteni a numpyon kívül
+(`pip install numpy`), és nem kell API-kulcs. Ebben a módban az `l4_valasz.py`
+válasz helyett a modellnek szánt teljes promptot írja ki, az `l6_eszkoz.py`
+pedig kézi példán mutatja be az eszközhívást. Nyelvi válaszhoz `api` mód kell
+(a szolgáltatónál díjjal járhat). Az alapértelmezett mód egy szándékosan buta,
+beépített embedding — hogy lásd a mechanizmust, mielőtt igazi modellre váltasz.
 
 ## A három üzemmód
 
@@ -34,14 +37,21 @@ BACKEND = "beepitett"   # -> "lokalis" -> "api"
 
 | mód | mit csinál | mi kell hozzá |
 |---|---|---|
-| `beepitett` | hash-alapú játék-embedding, nincs modellhívás | semmi |
-| `lokalis` | igazi többnyelvű embedding a gépeden | `pip install sentence-transformers` |
+| `beepitett` | hash-alapú játék-embedding, nincs modellhívás (a promptot írja ki) | numpy |
+| `lokalis` | igazi többnyelvű embedding a gépeden; válaszgeneráló modellt nem futtat | `pip install sentence-transformers` (első futáskor letölti a modellt) |
 | `api` | lokális embedding + valódi generálás | `pip install anthropic`, `ANTHROPIC_API_KEY` |
 
 **A labor fő kísérlete:** futtasd le az `l5_eval.py`-t `beepitett` módban,
 jegyezd fel a számokat, majd válts `lokalis`-ra, építsd újra az indexet
 (`python3 l2_index.py`), és mérj újra. A különbség fogja megmutatni, mit
 ad valójában egy embedding-modell.
+
+## Saját dokumentumokkal
+
+A kód ennek a hat dokumentumnak a szerkezetére készült (Markdown-fejezetek,
+metaadat-fejléc, kurzuskódok, ügyféljegy-formátum). Saját anyagnál a
+beolvasást, a darabolást, a metaadatokat és a `kerdesek.json`-t is hozzá kell
+igazítani.
 
 ## Fájlok
 

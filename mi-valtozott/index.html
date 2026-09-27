@@ -15,7 +15,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230b0c0e'/><rect x='7' y='8' width='18' height='17' fill='none' stroke='%23eceae4' stroke-width='1.5'/><path d='M7 13h18' stroke='%23eceae4' stroke-width='1.5'/><circle cx='20' cy='19' r='2.4' fill='%23e8b44c'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geologica:slnt,wght,CRSV,SHRP@-12..0,100..900,0..1,0..100&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&display=swap" rel="stylesheet">
-<script>try{var t=localStorage.getItem('ait-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<script>var t=null;try{t=localStorage.getItem('ait-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark')</script>
 <link rel="stylesheet" href="/assets/ait.css">
 <link rel="stylesheet" href="/assets/tananyag.css">
 <style>
@@ -41,7 +41,7 @@
 <body>
 <header class="top fixed">
   <a class="brand" href="/">AI-tananyagok</a>
-  <nav aria-label="Navigáció"><a href="/#anyagok">Minden anyag</a><a class="wide" href="#archivum">Archívum</a></nav>
+  <nav aria-label="Navigáció"><a href="/#minden">Minden anyag</a><a class="wide" href="#archivum">Archívum</a></nav>
   <button class="theme" type="button" data-theme-toggle aria-label="Színtéma váltása"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
 </header>
 

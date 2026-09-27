@@ -14,7 +14,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230b0c0e'/><ellipse cx='16' cy='17' rx='11' ry='6' fill='none' stroke='%23eceae4' stroke-width='1.4'/><ellipse cx='16' cy='17' rx='5' ry='2.6' fill='none' stroke='%23eceae4' stroke-width='1.4'/><path d='M6 7 12 12 16 17' stroke='%23e8b44c' stroke-width='2.4' fill='none' stroke-linecap='round'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geologica:slnt,wght,CRSV,SHRP@-12..0,100..900,0..1,0..100&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&display=swap" rel="stylesheet">
-<script>try{var t=localStorage.getItem('ait-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<script>var t=null;try{t=localStorage.getItem('ait-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark')</script>
 <link rel="stylesheet" href="/assets/ait.css">
 <link rel="stylesheet" href="/assets/tananyag.css">
 </head>
@@ -32,7 +32,7 @@
   <section class="m-hero" aria-label="Bevezető">
     <div>
       <h1>A veszteség&shy;függvény</h1>
-      <p class="lede">Az a szám, amiből egy modell tanul, és ami eldönti, <em>mit</em> tanul meg.</p>
+      <p class="lede">Hogyan mérjük a modell hibáját, és hogyan irányítja ez a mérce a tanulást? A veszteség az a szám, amelyből a modell tanul, és amely nagyban meghatározza, <em>mit</em> tanul meg.</p>
       <p class="facts">8 szint · kb. 4 óra · középhaladó. A lakásárbecsléstől a nagy nyelvi modellek finomhangolásáig. Minden szint három mélységben olvasható, és kvízzel zárul: a következő szint 3-ból 2 helyes válasszal nyílik meg.</p>
       <a class="start" href="#szint-1">Kezdés az 1. szintnél →</a>
     </div>
@@ -149,7 +149,7 @@ talalat_veszteseg = 0.0 if abs(e) &lt;= sav else 1.0</pre>
         <h3>Döntéselméleti gyökerek</h3>
         <p>A veszteségfüggvény fogalma a statisztikai döntéselméletből jön. Wald megfogalmazásában minden becslés egy döntés, a veszteség pedig a rossz döntés ára <a class="ref" href="#ref-2">[2]</a>. Ez a nézőpont azért fontos, mert világossá teszi, hogy a veszteség <em>értékítélet</em>: azt kódolja, mennyibe kerül nekünk egy adott tévedés. A minőségügyben Taguchi ugyanezt a gondolatot fogalmazta meg: minőségi veszteségfüggvénye, <span class="m">L(y) = k(y − m)²</span>, már a céltól való kis eltérést is veszteségnek tekinti, a <span class="m">k</span> állandó pedig pénzben fejezi ki az eltérést <a class="ref" href="#ref-1">[1]</a>. A gépi tanulás négyzetes vesztesége és ez a minőségi veszteség ugyanaz az ötlet.</p>
         <h3>Miért nem a „talált vagy nem” mércén tanítunk?</h3>
-        <p>A 0/1 típusú (talált/nem talált) veszteség szinte mindenhol vízszintes: egy kis változtatás a paraméteren nem mozdítja az értékét. A 4. szinten kiderül, hogy a tanulás a veszteség meredekségéből tájékozódik, így ebből a mércéből nem kapna irányt. Ezért a gyakorlatban <b>helyettesítő</b> (<em>surrogate</em>) veszteségen tanítunk, amely sima és meredek, és csak a végén mérünk a számunkra fontos, de rosszul tanítható mércével.</p>
+        <p>A 0/1 típusú (talált/nem talált) veszteség szinte mindenhol vízszintes: egy kis változtatás a paraméteren nem mozdítja az értékét. A 4. szinten kiderül, hogy a tanulás a veszteség meredekségéből tájékozódik, így ebből a mércéből nem kapna irányt. Ezért a gyakorlatban <b>helyettesítő</b> (<em>surrogate</em>) veszteségen tanítunk, amely használható irányt mutat, és csak a végén mérünk a számunkra fontos, de rosszul tanítható mércével.</p>
       </div>
     </div>
 
@@ -214,10 +214,10 @@ talalat_veszteseg = 0.0 if abs(e) &lt;= sav else 1.0</pre>
         <h3>Miért pont az átlag minimalizálja az MSE-t?</h3>
         <p>Egy szép átrendezéssel, deriválás nélkül is látható. Jelölje <span class="m">ȳ</span> az átlagot, <span class="m">s²</span> pedig az árak szórásnégyzetét (az átlagtól vett eltérések négyzetének átlaga). Ekkor minden <span class="m">c</span>-re igaz:</p>
         <p class="eq">MSE(c) = (ȳ − c)² + s²</p>
-        <p>Az első tag azt méri, milyen messze van a becslés az átlagtól. Ez a becsléstől függ, és nulla, ha <span class="m">c = ȳ</span>. A második tag, <span class="m">s²</span>, egyáltalán nem függ <span class="m">c</span>-től: ez az árak saját szóródása. Ebből két dolog következik. Az MSE minimuma az átlagnál van, és a legkisebb elérhető érték maga a szórásnégyzet (a hét árnál kb. 2,78 (millió Ft)²). Egyetlen állandó becslés sem lehet ennél jobb: ezt a részt az árak ingadozása okozza, nem a becslés. Ezt a gépi tanulásban <b>irreducibilis hibának</b> hívják.</p>
+        <p>Az első tag azt méri, milyen messze van a becslés az átlagtól. Ez a becsléstől függ, és nulla, ha <span class="m">c = ȳ</span>. A második tag, <span class="m">s²</span>, egyáltalán nem függ <span class="m">c</span>-től: ez az árak saját szóródása. Ebből két dolog következik. Az MSE minimuma az átlagnál van, és a legkisebb elérhető érték maga a szórásnégyzet (a hét árnál kb. 2,78 (millió Ft)²). Egyetlen állandó becslés sem lehet ennél jobb: ennél a modellnél ezt a részt az árak ingadozása okozza, nem a becslés. Ez a korlát a választott modellre vonatkozik: ha a modell az alapterületet vagy a lakás állapotát is látja, az ingadozás egy része megmagyarázható, és a hiba csökkenhet. <b>Irreducibilis hibának</b> csak azt a bizonytalanságot nevezzük, amely az adott bemeneti információ mellett is megmarad.</p>
         <h3>És miért a medián az MAE-t?</h3>
         <p>Toljuk <span class="m">c</span>-t egy hajszálnyival jobbra. Minden olyan árnál, amely <span class="m">c</span> alatt van, a távolság nő, minden felette lévőnél csökken, mindegyiknél ugyanannyival. Ha több ár van alatta, mint felette, a mozgatás rontott. Ha kevesebb, javított. A mérleg akkor áll egyensúlyban, amikor ugyanannyi ár van alatta, mint felette: ez a medián. A kiugró érték ezért nem húzza el: az MAE-nek csak az számít, hogy egy ár melyik oldalon van, az nem, hogy milyen messze.</p>
-        <p class="note"><b class="lbl">RMSE.</b> Az MSE (millió Ft)²-ben van. A gyöke, <span class="m">RMSE = √MSE</span>, újra millió forintban olvasható, és ha a becslés az átlag, pontosan a szórást adja (itt kb. 1,67 millió Ft). A tanításnál mindegy, melyiket minimalizáljuk, mert a gyökvonás nem változtat a minimum helyén. Az RMSE a jelentésben hasznos.</p>
+        <p class="note"><b class="lbl">RMSE.</b> Az MSE (millió Ft)²-ben van. A gyöke, <span class="m">RMSE = √MSE</span>, újra millió forintban olvasható, és ha a becslés az átlag, pontosan a szórást adja (itt kb. 1,67 millió Ft). A kettőnek ugyanott van a minimuma, mert a gyökvonás nem változtat a minimum helyén. A gradiensük viszont különbözik, ezért ugyanazzal az optimalizálóval és lépésközzel a tanulás menete eltérhet. Az RMSE főleg a jelentésben hasznos.</p>
 <pre class="py" data-name="mse_mae.py">y = np.array([52, 48, 51, 53, 49, 50, 52])  # hét eladott lakás ára [millió Ft]
 
 def mse(c):                          # átlagos négyzetes hiba egy "c" becslésre
@@ -346,7 +346,7 @@ print(round(w_opt, 2))                                # ≈ 5.99 millió Ft / 10
       </div>
 
       <div role="tabpanel" id="p-4a" aria-labelledby="t-4a">
-        <p>Képzeld el, hogy sűrű ködben állsz egy domboldalon, és le kell jutnod a völgybe. A völgyet nem látod, de a talpadon érzed, merre lejt a talaj. A legjobb stratégia: lépj egyet a lejtés irányába, aztán újra tapogasd ki, merre lejt, és lépj megint. Ez a <b>gradiens-módszer</b>. A <b>gradiens</b> a lejtő meredeksége és iránya.</p>
+        <p>Képzeld el, hogy sűrű ködben állsz egy domboldalon, és le kell jutnod a völgybe. A völgyet nem látod, de a talpadon érzed, merre lejt a talaj. A legjobb stratégia: lépj egyet a lejtés irányába, aztán újra tapogasd ki, merre lejt, és lépj megint. Ez a <b>gradiens-módszer</b>. A <b>gradiens</b> azt mutatja meg, merre nőne leggyorsabban a veszteség, és milyen meredeken; a módszer ezért az ellenkező irányba, lefelé lép.</p>
         <p>Egyetlen fontos döntés marad: mekkorát lépj. Ez a <b>tanulási ráta</b>. Ha túl kicsit, évekig tart leérni. Ha túl nagyot, átlépsz a völgy felett a túloldalra, és ha nagyon nagyot, minden lépéssel egyre magasabbra jutsz: az algoritmus „szétszáll”.</p>
 
         <div class="demo" id="d4">
@@ -369,8 +369,8 @@ print(round(w_opt, 2))                                # ≈ 5.99 millió Ft / 10
           </div>
         </div>
 
-        <p>Egy neurális hálóban ugyanez történik, csak nem egy, hanem millió paraméterrel egyszerre. Minden paraméterre kiszámolják, merre és mennyire lejt a táj abban az irányban, és mindegyiket egy kicsit a lejtővel ellentétesen mozdítják. Ezt a számítást végzi el hatékonyan a <b>visszaterjesztés</b> (<em>backpropagation</em>).</p>
-        <p class="key"><b>Kulcsgondolat.</b> A tanuló algoritmus csak a veszteség meredekségét érzékeli. Ezért kell a veszteségfüggvénynek simának lennie, és ezért nem lehet közvetlenül a „talált vagy nem” mércén tanítani: az szinte mindenhol vízszintes, nem mutat irányt.</p>
+        <p>Egy neurális hálóban ugyanez történik, csak nem egy, hanem millió paraméterrel egyszerre. Minden paraméterre kiszámolják, mennyire változna a veszteség, ha azt a paramétert kicsit megmozdítanánk (ez a gradiens), és mindegyiket egy kicsit abba az irányba mozdítják, amerre a veszteség csökken. A gradienst hatékonyan a <b>visszaterjesztés</b> (<em>backpropagation</em>) számolja ki; a paramétereket pedig az optimalizáló módosítja.</p>
+        <p class="key"><b>Kulcsgondolat.</b> A tanuló algoritmus csak a veszteség meredekségét érzékeli. Ezért olyan veszteség kell, amely használható irányjelzést ad a paraméterek módosításához. Néhány nem deriválható pont (mint az abszolút érték vagy a ReLU törése) kezelhető; a „talált vagy nem” mércén viszont nem lehet közvetlenül tanítani, mert szinte mindenhol vízszintes, és nem mutat irányt.</p>
       </div>
 
       <div role="tabpanel" id="p-4b" aria-labelledby="t-4b" hidden>
@@ -481,7 +481,7 @@ for k in range(50):
 
         <h3>Miért nem a találati arányon tanítunk?</h3>
         <p>A találati arány (hány százalékot talált el) a számunkra fontos mérce, de ugyanaz a baj vele, mint a „talált vagy nem” veszteséggel. Egy kis változtatás a súlyokon általában egyetlen döntést sem fordít meg, így a meredeksége szinte mindenhol nulla. A keresztentrópia viszont a valószínűség minden apró változására reagál, így mindig van iránya. A találati arányt a tanítás után mérjük, a keresztentrópián tanítunk.</p>
-        <p class="key"><b>Kulcsgondolat.</b> A keresztentrópia nem csak azt bünteti, ha a modell téved, hanem azt is, <em>mennyire volt biztos</em> a tévedésében. Ettől tanul meg a modell őszinte valószínűségeket adni, nem csak tippelni.</p>
+        <p class="key"><b>Kulcsgondolat.</b> A keresztentrópia nem csak azt bünteti, ha a modell téved, hanem azt is, <em>mennyire volt biztos</em> a tévedésében. Ez jó tanulási cél valószínűségi előrejelzéshez: a modellt a jól kalibrált valószínűségek felé tereli. Garanciát viszont nem ad: véges adaton, adott modellel és tanítással a modern neurális hálók gyakran túl magabiztosak, ezért a kalibrációt külön mérni kell <a class="ref" href="#ref-43">[43]</a>.</p>
       </div>
 
       <div role="tabpanel" id="p-5b" aria-labelledby="t-5b" hidden>
@@ -515,7 +515,7 @@ grad_z = p - y                     # a veszteség gradiense a logitok szerint</p
         <h3>Információelméleti háttér</h3>
         <p>Shannon információelméletében egy <span class="m">p</span> valószínűségű esemény <b>információtartalma</b> (meglepetése) <span class="m">−log p</span> <a class="ref" href="#ref-13">[13]</a>. A keresztentrópia tehát a helyes válaszon mért átlagos meglepetés, természetes logaritmussal számolva „nat” egységben. A 6. szinten kiderül, hogy a keresztentrópia minimalizálása azonos a maximum likelihood becsléssel.</p>
         <h3>Nagy nyelvi modellek</h3>
-        <p>A mai autoregresszív, csak dekóderből álló nagy nyelvi modellek (a GPT-szerű modellek) előtanítási célja jellemzően ez: minden pozícióban a következő token eloszlását kell megtanulni, sok tízezer osztály (a szótár) közül, és a veszteség a keresztentrópia. Más nyelvimodell-családok más célt használnak, például kitakart szavak visszajóslását. A gyakran közölt <b>perplexitás</b> ennek exponenciálisa, <span class="m">e<sup>CE</sup></span>: intuitívan úgy értelmezhető, mintha a modell átlagosan ennyi egyformán valószínű lehetőség közül választana. Ez csak szemléltetés: a valódi eloszlások nem egyenletesek. Kaplan és munkatársai azt mutatták, hogy ez a veszteség a modellméret, az adatmennyiség és a számítás függvényében jó közelítéssel hatványfüggvény szerint csökken <a class="ref" href="#ref-38">[38]</a>.</p>
+        <p>A mai autoregresszív, csak dekóderből álló nagy nyelvi modellek (a GPT-szerű modellek) előtanítási célja jellemzően ez: minden pozícióban a következő token eloszlását kell megtanulni, sok tízezer osztály (a szótár) közül, és a veszteség a keresztentrópia. Más nyelvimodell-családok más célt használnak, például kitakart szavak visszajóslását. A gyakran közölt <b>perplexitás</b> ennek exponenciálisa, <span class="m">e<sup>CE</sup></span>: szemléletesen úgy értelmezhető, mintha a modell átlagosan ennyi egyformán valószínű lehetőség közül választana. Ez csak szemléltetés: a valódi eloszlások nem egyenletesek. Kaplan és munkatársai azt mutatták, hogy ez a veszteség a modellméret, az adatmennyiség és a számítás függvényében jó közelítéssel hatványfüggvény szerint csökken <a class="ref" href="#ref-38">[38]</a>.</p>
         <h3>Módosított keresztentrópiák</h3>
         <ul>
           <li><b>Címkesimítás</b> (<em>label smoothing</em>): a one-hot célt kissé „elkenik”, például 0,9 a helyesre, a maradék egyenletesen elosztva. Ez visszafogja a túlzott magabiztosságot <a class="ref" href="#ref-14">[14]</a>. Müller és munkatársai kimutatták, hogy javíthatja a kalibrációt, de ronthatja a modell alkalmazhatóságát tanítómodellként <a class="ref" href="#ref-15">[15]</a>.</li>
@@ -549,7 +549,7 @@ grad_z = p - y                     # a veszteség gradiense a logitok szerint</p
 
       <div role="tabpanel" id="p-6a" aria-labelledby="t-6a">
         <p>Eddig úgy tűnhetett, hogy az MSE, az MAE és a keresztentrópia három külön ötlet. Valójában egyetlen elvből következnek. Az elv neve <b>maximum likelihood</b>: válaszd azt a modellt, amelyik mellett a ténylegesen megfigyelt adat a <em>legvalószínűbb</em>.</p>
-        <p>Ehhez el kell döntened, hogyan képzeled a zajt. Ha úgy gondolod, hogy a hibák többnyire kicsik, a nagy hibák pedig nagyon ritkák (a jól ismert haranggörbe, a <b>Gauss-eloszlás</b>), abból az MSE következik. Ha úgy gondolod, hogy a nagy kiugrások gyakoribbak ennél (csúcsosabb eloszlás vastagabb szélekkel, a <b>Laplace-eloszlás</b>), abból az MAE. A kategóriák valószínűségeiből pedig a keresztentrópia.</p>
+        <p>Ehhez el kell döntened, hogyan képzeled a zajt. Ha úgy gondolod, hogy a hibák többnyire kicsik, a nagy hibák pedig nagyon ritkák (a jól ismert haranggörbe, a <b>Gauss-eloszlás</b>), abból az MSE következik (megfordítva nem igaz: az MSE-hez nem kötelező Gauss-zajt feltenni). Ha úgy gondolod, hogy a nagy kiugrások gyakoribbak ennél (csúcsosabb eloszlás vastagabb szélekkel, a <b>Laplace-eloszlás</b>), abból az MAE. A kategóriák valószínűségeiből pedig a keresztentrópia.</p>
 
         <div class="demo" id="d6">
           <h4>Kísérlet: zajfeltevésből veszteség</h4>
@@ -567,7 +567,7 @@ grad_z = p - y                     # a veszteség gradiense a logitok szerint</p
         </div>
 
         <p>Ez a felismerés megfordítja a kérdést. Ha tudod, milyen az adataid zaja, abból levezetheted a hozzá illő veszteséget. Egy jó digitális hőmérő leolvasási hibája közel Gauss-eloszlású. Egy kézzel vezetett időjárás-napló, amelybe néha elütnek egy számjegyet, már nem: ritkán, de akkor nagyot téved. A 2. szinten ösztönösen érzett kérdésre („a 90 milliós ár valódi-e”) itt kapsz elvi választ: a veszteség választása egy feltevés a világról.</p>
-        <p class="key"><b>Kulcsgondolat.</b> Minden veszteség mögött egy kimondatlan feltevés áll arról, milyen hibákat tart a modell gyakorinak és ritkának. Az MSE választásával azt is mondod, hogy a zaj haranggörbe alakú, akár tudod ezt, akár nem.</p>
+        <p class="key"><b>Kulcsgondolat.</b> Sok veszteség mögött egy kimondatlan feltevés áll arról, milyen hibákat tart a modell gyakorinak és ritkának. Az MSE egyik valószínűségi indoklása a haranggörbe alakú (Gauss-) zaj. MSE-t azonban akkor is választhatsz, ha egyszerűen a nagy eltéréseket akarod erősebben büntetni; ehhez nem kell normális eloszlást feltételezni. A veszteség a döntés költségeiből is levezethető (erről a 7. szint szól).</p>
       </div>
 
       <div role="tabpanel" id="p-6b" aria-labelledby="t-6b" hidden>
@@ -641,7 +641,7 @@ nll = np.mean(e**2 / (2 * sigma**2) + np.log(sigma * np.sqrt(2 * np.pi)))
         </div>
 
         <h3>Túl jó tanulás: a túlillesztés</h3>
-        <p>Ha a modell elég nagy, a tanítóadaton a veszteséget szinte nullára is le tudja vinni. Ez gyanús, mert az adatok zajosak, és a 2. szinten láttuk, hogy a zajt nem lehet megmagyarázni. Ilyenkor a modell a zajt is bemagolta, és új lakásokon rosszabbul teljesít. Olyan ez, mint a diák, aki a tavalyi feladatsor megoldásait tanulta meg, nem a módszert.</p>
+        <p>Ha a modell elég nagy, a tanítóadaton a veszteséget szinte nullára is le tudja vinni. Ez gyanús, mert az adatokban mindig marad olyan ingadozás, amelyet a bemenetek nem magyaráznak meg (a 2. szint irreducibilis hibája). Ilyenkor a modell a zajt is bemagolta, és új lakásokon rosszabbul teljesít. Olyan ez, mint a diák, aki a tavalyi feladatsor megoldásait tanulta meg, nem a módszert.</p>
         <p>Ezért az adatok egy részét félretesszük, és csak ellenőrzésre használjuk: ez a <b>validációs halmaz</b>. A tanítás közben mindkét veszteséget figyeljük.</p>
         <div class="demo" id="d7b">
           <h4>Tanítási és validációs veszteség</h4>
@@ -733,8 +733,9 @@ def cel_fuggveny(w, X, y, lam):
         <h3>A nagy nyelvi modellek esete</h3>
         <p>Egy nyelvi modell finomhangolásánál a „jó válasz” mércéjét nem lehet képletbe írni. Ezért <b>megtanulják</b>: emberek sok válaszpárt összehasonlítanak, és ezekből egy külön modell, a <b>jutalommodell</b>, megtanulja megjósolni, melyik válasz tetszene jobban. Ezután a nyelvi modellt úgy tanítják, hogy ezt a jutalmat maximalizálja. Ez az RLHF, a megerősítéses tanulás emberi visszajelzésből <a class="ref" href="#ref-34">[34]</a>.</p>
         <p>A jutalommodell viszont maga is helyettesítő, és ha túl erősen optimalizálnak rá, a nyelvi modell megtanulja kihasználni a gyengeségeit. Ezért kap egy fékezőt: egy büntetést azért, ha túl messzire távolodik az eredeti modelltől. Ez a büntetés a 6. szinten megismert KL-divergencia.</p>
-        <p class="key"><b>Kulcsgondolat.</b> A veszteségfüggvény az, amit a rendszer „akar”. Ha a mérce és a valódi cél eltér, egy elég erős optimalizáló megtalálja a különbséget, és azt fogja kihasználni. Ezért egy rendszer tervezésekor a legnehezebb kérdés sokszor nem az, hogyan optimalizáljunk, hanem az, hogy mit.</p>
-        <h3>Kitekintés</h3>
+        <p class="key"><b>Kulcsgondolat.</b> Képletesen: a veszteségfüggvény az, amit a tanítás során a rendszer „akar” (ez metafora, nem a kész modell szándéka). Ha a mérce és a valódi cél eltér, egy elég erős optimalizáló megtalálhatja a különbséget, és kihasználhatja; ez kockázat, nem minden célfüggvénynél szükségszerű. Ezért egy rendszer tervezésekor a legnehezebb kérdés sokszor nem az, hogyan optimalizáljunk, hanem az, hogy mit.</p>
+        <h3>Kitekintés: kapcsolódó elméletek és spekulatív modellek</h3>
+        <p class="note"><b class="lbl">Választható kitekintés.</b> Az alábbi elméletek vitatottak, részben spekulatívak. Nem a veszteségfüggvényről tanult mérnöki állítások bizonyítékai, csak rokon gondolatok.</p>
         <p>A veszteségfüggvény gondolata messze túlnyúlik a gépi tanuláson. Friston szabadenergia-elve szerint az agy is egy mennyiséget minimalizál: a predikciós hibájához kötődő variációs szabadenergiát <a class="ref" href="#ref-36">[36]</a>. Vanchurin spekulatív modelljében pedig a fizikai világ egy tanuló hálózatként írható le, amelyben a veszteség szerepét egy termodinamikai mennyiség tölti be <a class="ref" href="#ref-37">[37]</a>. Mindkettő ugyanazt a kérdést veti fel, amelyből ez az anyag kiindult: mit minimalizál a rendszer, és ki vagy mi határozta meg ezt?</p>
       </div>
 
@@ -771,7 +772,7 @@ veszteseg = -cel                             # a veszteség ennek a mínusz egys
   <h2 id="h-ossz">Összefoglaló táblázat</h2>
   <p class="ui">Melyik veszteség mögött milyen feltevés áll, és mikor érdemes választani.</p>
   <div class="tbl"><table>
-    <thead><tr><th scope="col">Veszteség</th><th scope="col">Feladat</th><th scope="col">Mögötte álló feltevés</th><th scope="col">Mikor válaszd</th></tr></thead>
+    <thead><tr><th scope="col">Veszteség</th><th scope="col">Feladat</th><th scope="col">Valószínűségi indoklás, illetve feltevés</th><th scope="col">Mikor válaszd</th></tr></thead>
     <tbody>
       <tr><th scope="row">MSE (négyzetes)</th><td>szám jóslása</td><td>Gauss-zaj</td><td>a nagy hibák valódiak és drágák</td></tr>
       <tr><th scope="row">MAE (abszolút)</th><td>szám jóslása</td><td>Laplace-zaj</td><td>kiugró adathibák várhatók</td></tr>
@@ -867,6 +868,7 @@ veszteseg = -cel                             # a veszteség ennek a mínusz egys
 <li id="ref-40"><span class="rn">[40]</span><p>Martens, J. (2020). New Insights and Perspectives on the Natural Gradient Method. <cite>Journal of Machine Learning Research</cite>, 21. <span class="id"><a href="https://arxiv.org/abs/1412.1193">arXiv:1412.1193</a> · 6. szint</span></p></li>
 <li id="ref-41"><span class="rn">[41]</span><p>Kunstner, F., Balles, L., Hennig, P. (2019). Limitations of the Empirical Fisher Approximation for Natural Gradient Descent. <cite>NeurIPS.</cite> <span class="id"><a href="https://arxiv.org/abs/1905.12558">arXiv:1905.12558</a> · 6. szint</span></p></li>
 <li id="ref-42"><span class="rn">[42]</span><p>Bishop, C. M. (2006). <cite>Pattern Recognition and Machine Learning.</cite> Springer, 10.1. fejezet. <span class="id">6. szint</span></p></li>
+<li id="ref-43"><span class="rn">[43]</span><p>Guo, C., Pleiss, G., Sun, Y., Weinberger, K. Q. (2017). On Calibration of Modern Neural Networks. <cite>ICML.</cite> <span class="id"><a href="https://arxiv.org/abs/1706.04599">arXiv:1706.04599</a> · 5. szint</span></p></li>
   </ol>
 </section>
 
@@ -904,7 +906,7 @@ window.KVIZ = {
     a: 0, x: 'Az átlag 50,7 millióról 56,1 millióra ugrik, a medián 51 millió marad. Az MSE-ben a nagy eltérés négyzete dominál, a mediánnak viszont csak az számít, melyik oldalon van egy ár, az nem, hogy milyen messze.' },
   { q: 'Mi következik az MSE(c) = (ȳ − c)² + s² felbontásból?',
     o: ['Jó c választásával az MSE nullára csökkenthető.', 'A legkisebb elérhető MSE az árak szórásnégyzete.', 'Az MSE egyáltalán nem függ a c becsléstől.'],
-    a: 1, x: 'A második tag, s², az árak saját szóródása. Ezt semmilyen állandó becslés nem tudja eltüntetni: ez az irreducibilis hiba. Nullára csak akkor csökkenhetne, ha minden ár egyforma lenne.' }
+    a: 1, x: 'A második tag, s², az árak saját szóródása. Ezt semmilyen állandó becslés nem tudja eltüntetni. Ez a korlát az állandó becslésre vonatkozik: ha a modell több információt lát (például az alapterületet), a hiba csökkenhet.' }
  ],
  3: [
   { q: 'Mi a veszteségtáj?',
@@ -920,13 +922,13 @@ window.KVIZ = {
  4: [
   { q: 'Merre lép a gradiens-módszer?',
     o: ['A gradiens irányába, felfelé.', 'A gradienssel szemben, lefelé.', 'Mindig véletlen irányba.'],
-    a: 1, x: 'A gradiens a legmeredekebb emelkedés irányába mutat, ezért a lépés w − η·L′(w): a lejtővel szemben.' },
+    a: 1, x: 'A gradiens a legmeredekebb emelkedés irányába mutat, ezért a lépés w − η·L′(w): a gradienssel ellentétes irányba, lefelé.' },
   { q: 'A táj görbülete L″ = 204. Mi történik η = 0,011 tanulási rátával?',
     o: ['Egyenletesen közelít a minimumhoz.', 'Oszcillálva, de konvergál.', 'Szétszáll, mert η > 2/L″ ≈ 0,0098.'],
     a: 2, x: 'A távolság lépésenként a q = 1 − η·L″ ≈ −1,24 szorzóval szorzódik. Mivel |q| > 1, a távolság minden lépéssel nő. Oszcillálva konvergálna, ha η 0,0049 és 0,0098 közé esne.' },
   { q: 'Miért nem lehet közvetlenül a „talált vagy nem” (0/1) veszteségen tanítani gradiens-módszerrel?',
     o: ['Mert túl lassú kiszámolni.', 'Mert szinte mindenhol vízszintes.', 'Mert negatív értéket is felvehet.'],
-    a: 1, x: 'Egy kis paraméterváltozás a 0/1 veszteséget általában nem mozdítja, így a meredeksége szinte mindenhol nulla, és nem mutat irányt. Ezért tanítunk sima helyettesítő veszteségen.' }
+    a: 1, x: 'Egy kis paraméterváltozás a 0/1 veszteséget általában nem mozdítja, így a meredeksége szinte mindenhol nulla, és nem mutat irányt. Ezért olyan helyettesítő veszteségen tanítunk, amely használható irányt mutat.' }
  ],
  5: [
   { q: 'A helyes osztályra adott valószínűség 0,01. Mekkora nagyjából a keresztentrópia?',

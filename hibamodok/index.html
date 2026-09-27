@@ -14,7 +14,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230b0c0e'/><path d='M5 10 C11 10 13 22 16 22 C19 22 21 10 27 10' fill='none' stroke='%23e8b44c' stroke-width='2.4' stroke-linecap='round'/><circle cx='16' cy='22' r='2.6' fill='%23ff8a7a'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geologica:slnt,wght,CRSV,SHRP@-12..0,100..900,0..1,0..100&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&display=swap" rel="stylesheet">
-<script>try{var t=localStorage.getItem('ait-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<script>var t=null;try{t=localStorage.getItem('ait-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark')</script>
 <link rel="stylesheet" href="/assets/ait.css">
 <link rel="stylesheet" href="/assets/tananyag.css">
 </head>
@@ -33,7 +33,7 @@
     <div>
       <h1>Miért romlik el egy LLM-rendszer?</h1>
       <p class="lede">A rendszer nem áll le, nem dob hibaüzenetet, és mégis rossz választ ad. Ez a nyelvi modellekre épülő rendszerek alapértelmezett hibamódja.</p>
-      <p class="facts">10 szint · kb. 4 óra · középhaladó · 20 forrás. Minden szint három mélységben olvasható, és kvízzel zárul: a következő szint 3-ból 2 helyes válasszal nyílik meg.</p>
+      <p class="facts">10 szint · kb. 4 óra · középhaladó · 19 forrás. Minden szint három mélységben olvasható, és kvízzel zárul: a következő szint 3-ból 2 helyes válasszal nyílik meg.</p>
       <div class="validity"><span class="valid">Érvényes: 2026. szeptember</span><span class="ui dim">Felülvizsgálandó: 2027. március</span></div>
       <a class="start" href="#bevezetes">Kezdés a bevezetővel →</a>
     </div>
@@ -86,7 +86,7 @@
 <p>Ez a különbség két gyakorlati következménnyel jár, és lényegében az egész anyag ebből a kettőből bomlik ki:</p>
 
 <ul>
-<li><b>Nem lehet debuggolni, csak mérni.</b> Egyetlen rossz válasz nem jelent semmit, egyetlen jó sem. Csak a minták mondanak valamit, és mintát csak méréssel látsz.</li>
+<li><b>A hibakeresés mellé mérés is kell.</b> Egy konkrét rossz válasz megmutathatja a hibát: érdemes végignézni a feldolgozás lépéseit (a dokumentumot, a keresést, a promptot, az eszközhívást, a verziót). Azt viszont, hogy a hiba milyen gyakran fordul elő, és hogy egy javítás tényleg javított-e, csak sok teszteseten végzett mérés mutatja meg.</li>
 <li><b>A hiba nem a modellben van, hanem a rendszerben.</b> A legtöbb éles hiba nem abból fakad, hogy a modell buta, hanem hogy rossz kontextust kapott, rossz sorrendben, rossz határokkal.</li>
 </ul>
 
@@ -116,22 +116,22 @@
       </div>
       <div role="tabpanel" id="p-1a" aria-labelledby="t-1a">
 <p>Képzelj el egy vizsgát, ahol a rossz válaszért nulla pont jár, az üresen hagyásért szintén nulla. Mit csinál minden racionális vizsgázó? Tippel. Nincs mit veszíteni.</p>
-<p>Pontosan ez a helyzet a nyelvi modellekkel. A tanítás és az értékelés túlnyomó része pontosság alapú: vagy eltaláltad, vagy nem. Az „nem tudom" ugyanannyit ér, mint a rossz válasz — vagyis semmit. Így a modell megtanulja, hogy bizonytalanság esetén is érdemes magabiztos választ adni, mert néha bejön.</p>
+<p>Pontosan ez a helyzet a nyelvi modellekkel. A tanítás és az értékelés túlnyomó része pontosság alapú: vagy eltaláltad, vagy nem. A „nem tudom” ugyanannyit ér, mint a rossz válasz — vagyis semmit. Így a modell megtanulja, hogy bizonytalanság esetén is érdemes magabiztos választ adni, mert néha bejön.</p>
 <p>A hallucináció tehát nem egyszerűen hiba a rendszerben: a modell részben pontosan azt tanulta meg, amit jutalmaztunk benne. Ez egy fontos ok, de nem az egyetlen. Hallucinációhoz vezethet a hiányzó vagy elavult tudás, a félrevezető kérdés vagy kontextus, a rossz visszakeresés és a mintavételezés is; ezekről a következő szintek szólnak.</p>
 <div class="note warn">
-<b>Amit ebből érdemes elvinni:</b> a „majd egy jobb modell megoldja" várakozás félrevezető. Amíg az értékelési pontrendszer a tippelést jutalmazza, a tippelés megmarad. Ez a rész ösztönzési probléma, nem architektúrális.
+<b>Amit ebből érdemes elvinni:</b> a „majd egy jobb modell megoldja” várakozás félrevezető. Amíg az értékelési pontrendszer a tippelést jutalmazza, a tippelés megmarad. Ez a rész ösztönzési probléma, nem architekturális.
       </div>
       <div role="tabpanel" id="p-1b" aria-labelledby="t-1b" hidden>
 <p>Két külön forrása van, és a kettő más eszközzel kezelhető.</p>
 
-<p><b>(a) Előtanítási forrás.</b> A modell a szöveg valószínűségi eloszlását tanulja. Ha egy tény a tanítóadatban pontosan egyszer szerepel, a modell nem tudja megkülönböztetni a zajtól. Kalai és társai formálisan is megmutatták: ha a „valid vagy sem" eldöntése statisztikailag nehéz, akkor a generálási hibaarány alulról korlátozott — vagyis nem nullázható ki jobb adattal sem. <a class="ref" href="#ref-1">[1]</a></p>
+<p><b>(a) Előtanítási forrás.</b> A modell a szöveg valószínűségi eloszlását tanulja. Vannak tények, amelyek a tanítóadatból nem következtethetők ki, csak megjegyezhetők (például egy ritka születésnap). Ha egy ilyen tény csak egyszer szerepel, a modell nehezen tudja megkülönböztetni a hasonló, de hamis állításoktól. Kalai és társai formálisan is megmutatták: ha a „helyes vagy sem” eldöntése statisztikailag nehéz, akkor az előtanított modell generálási hibaaránya bizonyos feltételek mellett alulról korlátozott. Ez nem jelenti, hogy minden hallucináció elkerülhetetlen, vagy hogy jobb adattal, visszautasítási lehetőséggel és ellenőrzéssel ne lehetne csökkenteni a hibák számát. <a class="ref" href="#ref-1">[1]</a></p>
 
-<p><b>(b) Utótanítási forrás.</b> Itt jön be a vizsga-analógia. Ha a benchmarkok pontosságot mérnek, a modell a tippelésre optimalizálódik. A javaslatuk: a pontrendszer büntesse jobban a magabiztos tévedést, mint a bizonytalanság kimondását. <a class="ref" href="#ref-1">[1]</a><a class="ref" href="#ref-2">[2]</a></p>
+<p><b>(b) Utótanítási forrás.</b> Itt jön be a vizsga-analógia. Ez nem az előtanítás célja (az a következő token jóslása keresztentrópiával), hanem az értékelés és az utótanítás ösztönzője; a hasonlat ezt a részt írja le, nem a teljes tanítást. Ha a benchmarkok pontosságot mérnek, a modell a tippelésre optimalizálódik. A javaslatuk: a pontrendszer büntesse jobban a magabiztos tévedést, mint a bizonytalanság kimondását. <a class="ref" href="#ref-1">[1]</a><a class="ref" href="#ref-2">[2]</a></p>
 
 <p>A gyakorlatban ez azt jelenti, hogy explicit engedélyt kell adni a visszalépésre, és mérni kell, hogy él-e vele:</p>
 
 <pre class="py" data-name="absztenciós ráta mérése"># A kérdéssort úgy állítjuk össze, hogy tudjuk: bizonyos kérdésekre
-# nincs válasz a megadott kontextusban. Ezekre az "nem tudom" a JÓ válasz.
+# nincs válasz a megadott kontextusban. Ezekre a "nem tudom" a JÓ válasz.
 
 SYSTEM = """Csak a megadott kontextusból válaszolj.
 Ha a kontextus nem tartalmazza a választ, pontosan ezt írd: NINCS_ADAT
@@ -159,12 +159,12 @@ def absztencios_rata(model, tesztsor):
     }</pre>
 
 <div class="note">
-<b>Ezt a számot kevesen mérik, és ez az egyik legjobban megtérülő eval.</b> Egy rendszer, ami 95%-os pontosságú a válaszolható kérdéseken, de 0%-os absztenciós rátájú, éles környezetben rosszabb, mint egy 85%-os, ami 80%-ban vissza tud lépni. Az első hazudik, a második jelez.
+<b>Ezt a számot kevesen mérik, és ez az egyik legjobban megtérülő eval.</b> Egy rendszer, ami 95%-os pontosságú a válaszolható kérdéseken, de 0%-os absztenciós rátájú, sok éles környezetben rosszabb, mint egy 85%-os, ami 80%-ban vissza tud lépni, főleg ha egy téves válasz sokba kerül. Az első akkor is válaszol, ha nincs mire alapoznia; a második jelez. Hogy melyik a jobb, a hibák költségén és a kérdések arányán múlik.
       </div>
       <div role="tabpanel" id="p-1c" aria-labelledby="t-1c" hidden>
 <p>A tétel formális magja: a generálást visszavezetik egy bináris osztályozási feladatra (<i>Is-It-Valid</i>), és megmutatják, hogy a generatív hibaarány alulról korlátos az IIV-tévesztési arány többszörösével. A következmény erős: a korlát nem egy adott architektúrából vagy a gyenge adatminőségből fakad, hanem magából a statisztikai feladatból. <a class="ref" href="#ref-1">[1]</a><a class="ref" href="#ref-3">[3]</a></p>
 
-<p>A korábbi, 2024-es eredmény (Kalai–Vempala) ennél is élesebb: a <em>kalibrált</em> nyelvi modellek szükségszerűen hallucinálnak. Ha a modell eloszlása jól kalibrált a tanító eloszláshoz, akkor a ritka tényeknél elkerülhetetlen a téves generálás — ez az ún. „monofaktum-ráta" (egyszer előforduló tények aránya) által alulról korlátozott. <a class="ref" href="#ref-3">[3]</a></p>
+<p>A korábbi, 2024-es eredmény (Kalai–Vempala) ennél is élesebb: a <em>kalibrált</em> nyelvi modellek szükségszerűen hallucinálnak. Ha a modell eloszlása jól kalibrált a tanító eloszláshoz, akkor az adatokból ki nem következtethető, ritka („önkényes”) tényeknél elkerülhetetlen a téves generálás; a szabályszerű összefüggésekre és a többször előforduló tényekre a tétel nem ezt mondja — ez az ún. „monofaktum-ráta” (egyszer előforduló tények aránya) által alulról korlátozott. <a class="ref" href="#ref-3">[3]</a></p>
 
 <p>Nyitott vitapont: a 2025-ös papír állítása szerint a hallucináció csak az alapmodelleknél elkerülhetetlen, utótanítással és értékelésváltoztatással érdemben szorítható. Mások (Xu és tsai.) <a class="ref" href="#ref-19">[19]</a> amellett érvelnek, hogy elvi, kiszámíthatósági korlátról van szó. A kettő nem feltétlenül mond ellent — más objektumról beszélnek —, de a szakirodalomban nem tisztázott a viszonyuk.</p>
 
@@ -186,7 +186,7 @@ def absztencios_rata(model, tesztsor):
     </div>
   </header>
   <div class="lvl-body">
-    <p class="lead-p">A „hallucinál" szó legalább négy különböző hibát takar, és mindegyik ellen más a védekezés. Ez a szint szótár.</p>
+    <p class="lead-p">A „hallucinál” szó legalább négy különböző hibát takar, és mindegyik ellen más a védekezés. Ez a szint szótár.</p>
     <div class="depth">
       <div role="tablist" aria-label="Mélység">
         <button role="tab" id="t-2a" aria-controls="p-2a" aria-selected="true"><b>Egyszerűen</b><span>mi történik</span></button>
@@ -194,7 +194,7 @@ def absztencios_rata(model, tesztsor):
         <button role="tab" id="t-2c" aria-controls="p-2c" aria-selected="false" tabindex="-1"><b>Kutatói szint</b><span>forrásokkal</span></button>
       </div>
       <div role="tabpanel" id="p-2a" aria-labelledby="t-2a">
-<div class="tbl"><table><thead><tr><th scope="col">Típus</th><th scope="col">Mi történik</th><th scope="col">Tipikus jel</th></tr></thead><tbody><tr><td><b>Tényhallucináció</b></td><td>Kitalál egy tényt, ami nincs sehol</td><td>Nem létező jogszabály, nem létező szerző</td></tr><tr><td><b>Hűtlenség</b><br><span class="dim">(faithfulness)</span></td><td>Van forrás, de a válasz nem abból következik</td><td>Forrásjelölt állítás, ami a forrásban nincs benne</td></tr><tr><td><b>Túláltalánosítás</b></td><td>Egy esetből szabályt csinál</td><td>„Mindig", „soha", pedig egy példa volt</td></tr><tr><td><b>Utólagos indoklás</b></td><td>A válasz megvan, az érvelés hozzá készül</td><td>Meggyőző levezetés rossz eredményhez</td></tr></tbody></table></div>
+<div class="tbl"><table><thead><tr><th scope="col">Típus</th><th scope="col">Mi történik</th><th scope="col">Tipikus jel</th></tr></thead><tbody><tr><td><b>Tényhallucináció</b></td><td>Kitalál egy tényt, ami nincs sehol</td><td>Nem létező jogszabály, nem létező szerző</td></tr><tr><td><b>Hűtlenség</b><br><span class="dim">(faithfulness)</span></td><td>Van forrás, de a válasz nem abból következik</td><td>Forrásjelölt állítás, ami a forrásban nincs benne</td></tr><tr><td><b>Túláltalánosítás</b></td><td>Egy esetből szabályt csinál</td><td>„Mindig”, „soha”, pedig egy példa volt</td></tr><tr><td><b>Utólagos indoklás</b></td><td>A válasz megvan, az érvelés hozzá készül</td><td>Meggyőző levezetés rossz eredményhez</td></tr></tbody></table></div>
 <p>A negyedik a legalattomosabb, mert a látszólagos gondolatmenet növeli a bizalmat, miközben nem feltétlenül az a folyamat, ami ténylegesen a választ előállította.</p>
       </div>
       <div role="tabpanel" id="p-2b" aria-labelledby="t-2b" hidden>
@@ -229,7 +229,7 @@ def husegi_pontszam(model, valasz, forrasok):
     }</pre>
 
 <div class="note warn">
-<b>Csapda:</b> ez maga is egy modellt használ bírónak, vagyis a bíró is hibázhat. Ezért kell hozzá egy kis, kézzel címkézett halmaz, amin méred, hogy a bíró mennyire egyezik veled. Ha az egyezés 80% alatt van, a mérőműszered rosszabb, mint amit mér. Erről bővebben a 9. szinten.
+<b>Csapda:</b> ez maga is egy modellt használ bírónak, vagyis a bíró is hibázhat. Ezért kell hozzá egy kis, kézzel címkézett halmaz, amin méred, hogy a bíró mennyire egyezik veled. Ha az egyezés alacsony (induló ökölszabálynak jó a 80%), a bíró nem megbízható mérőműszer. Egy magas összegzett egyezés viszont ritka, súlyos hibákat is elfedhet, ezért ezeket külön is nézd meg. Erről bővebben a 9. szinten.
       </div>
       <div role="tabpanel" id="p-2c" aria-labelledby="t-2c" hidden>
 <p>A terminológia a szakirodalomban sem egységes. A legelterjedtebb felosztás a <i>faithfulness</i> (a forráshoz való hűség) és a <i>factuality</i> (a világhoz való hűség) kettőse — ezek függetlenek: egy válasz lehet hűséges egy téves forráshoz, és lehet tényszerűen igaz úgy, hogy a megadott forrásból nem következik.</p>
@@ -264,7 +264,7 @@ def husegi_pontszam(model, valasz, forrasok):
       <div role="tabpanel" id="p-3a" aria-labelledby="t-3a">
 <p>A modell nem egy választ állít elő, hanem egy valószínűségi eloszlást a következő szóra, és abból húz. A <b>hőmérséklet</b> azt szabályozza, mennyire hegyes ez az eloszlás: alacsony hőmérsékleten szinte mindig a legvalószínűbbet választja, magason szívesebben tér el.</p>
 
-<p>Amit sokan hisznek: hőmérséklet nullára, és determinisztikus lesz. Nem lesz. Közelebb kerül hozzá, de a gyakorlatban még mindig ingadozik — a lebegőpontos összegzés sorrendje, a kiszolgáló batch-mérete, a hardver mind belejátszik. Ha egy kérésedet más kérésekkel egy kötegben dolgozzák fel, az eredmény bitre nem ugyanaz.</p>
+<p>Amit sokan hisznek: hőmérséklet nullára, és a teljes rendszer determinisztikus lesz. Rögzített logitokból a mohó választás valóban determinisztikus, de a teljes kiszolgálórendszer ettől még adhat eltérő kimenetet: a lebegőpontos összegzés sorrendje, a kiszolgáló kötegmérete, a hardver és a szoftververzió mind belejátszhat. Ha egy kérésedet más kérésekkel egy kötegben dolgozzák fel, az eredmény bitre nem feltétlenül ugyanaz. Saját, rögzített környezetben determinisztikus műveletekkel ismételhető futtatás is elérhető; más gépre vagy verzióra ez nem mindig vihető át.</p>
 
 <div class="note fault">
 <b>A gyakorlati következmény:</b> egy tesztből nem lehet következtetni. Ha lefuttatsz egy esetet és jó, az nem jelenti azt, hogy jó. Ötször kell lefuttatni, és megnézni, hányszor jó. Ettől lesz a tesztelésből mérés.
@@ -318,7 +318,7 @@ if egyetertes &lt; 0.6:
       <div role="tabpanel" id="p-3c" aria-labelledby="t-3c" hidden>
 <p>Az önkonzisztencia (Wang és tsai., 2022) <a class="ref" href="#ref-16">[16]</a> eredetileg láncolt gondolkodáshoz készült: több érvelési utat mintavételezünk, és a leggyakoribb végeredmény nyer. A mögöttes megfigyelés az, hogy a helyes válaszhoz több különböző út vezet, a hibás válaszokhoz kevesebb és szórtabb — vagyis a helyes válasz eloszlása koncentráltabb.</p>
 
-<p>Érdekes és kevéssé ismert részlet: a hőmérséklet nulla melletti maradék nem-determinizmus jelentős része nem a mintavételből jön, hanem a lebegőpontos műveletek nem-asszociativitásából párhuzamos kernelekben. Ugyanaz a modell, ugyanaz a súly, más batch-összetétel — más numerikus eredmény, és ha két token valószínűsége közel van, ez át is billentheti a választást. A szolgáltatók által kínált <code>seed</code> paraméter ezért „legjobb erőfeszítés", nem garancia.</p>
+<p>Érdekes és kevéssé ismert részlet: a hőmérséklet nulla melletti maradék nem-determinizmus jelentős része nem a mintavételből jön, hanem a lebegőpontos műveletek nem-asszociativitásából párhuzamos kernelekben. Ugyanaz a modell, ugyanaz a súly, más batch-összetétel — más numerikus eredmény, és ha két token valószínűsége közel van, ez át is billentheti a választást. A szolgáltatók által kínált <code>seed</code> paraméter ezért „legjobb erőfeszítés”, nem garancia.</p>
 
 <p>Nyitott: hogyan definiáljuk az értelmes reprodukálhatóságot egy olyan rendszerben, ahol a bitpontos egyezés se nem elérhető, se nem a helyes cél. A javaslatok többsége eloszlásszintű egyezést mér — ez viszont sokkal nagyobb mintát igényel, mint amennyit a legtöbb csapat futtat.</p>
       </div>
@@ -364,7 +364,7 @@ if egyetertes &lt; 0.6:
   <text x="330" y="228" font-size="17" fill="currentColor" opacity=".7" text-anchor="middle">a releváns információ pozíciója</text>
   <text x="26" y="120" font-size="17" fill="currentColor" opacity=".7" text-anchor="middle" transform="rotate(-90 26 120)">pontosság</text>
 </svg>
-<figcaption>A „lost in the middle" jelenség sematikus alakja Liu és tsai. (2024) mérései nyomán. <a class="ref" href="#ref-4">[4]</a></figcaption>
+<figcaption>A „lost in the middle” jelenség sematikus alakja Liu és tsai. (2024) mérései nyomán. <a class="ref" href="#ref-4">[4]</a></figcaption>
 </figure>
       </div>
       <div role="tabpanel" id="p-4b" aria-labelledby="t-4b" hidden>
@@ -442,11 +442,11 @@ if egyetertes &lt; 0.6:
 </ol>
 <p>A legtöbb csapat a negyediket próbálja javítani promptolással, miközben a hiba az elsőben van. Ezért kell szétbontani a mérést.</p>
 <div class="note warn">
-<b>A hibás válasz nem mindig hallucináció.</b> Ha a kereső rossz, de valódi dokumentumot ad át, a modell akár teljesen hűen is összefoglalhatja a rossz forrást. A válasz hibás, a modell mégsem talált ki semmit. Ezt promptolással nem lehet megjavítani, csak a keresésnél. A <a href="/rag-labor/#szint-6">RAG-labor 6. lépésében</a> ezt ki is próbálhatod.
+<b>A hibás válasz nem mindig hallucináció.</b> Ha a kereső rossz, de valódi dokumentumot ad át, a modell akár teljesen hűen is összefoglalhatja a rossz forrást. A válasz hibás, a modell mégsem talált ki semmit. Ennek közvetlenebb és megbízhatóbban ellenőrizhető javítása a keresésnél van, nem a promptban. A <a href="/rag-labor/#szint-6">RAG-labor 6. lépésében</a> ezt ki is próbálhatod.
       </div>
       </div>
       <div role="tabpanel" id="p-5b" aria-labelledby="t-5b" hidden>
-<p>A szétbontás módja: külön méred a visszakeresést és külön a generálást. A visszakeresés mérőszáma a <b>recall@k</b> — a kérdések hány százalékánál van benne a helyes darab az első k találatban.</p>
+<p>A szétbontás módja: külön méred a visszakeresést és külön a generálást. A visszakeresés egyszerű mérőszáma: a kérdések hány százalékánál van benne legalább egy helyes darab az első k találatban. Ezt pontosabban <b>hit rate@k</b>-nak (találati aránynak) nevezik; ha kérdésenként egyetlen helyes darab van, egybeesik a <b>recall@k</b>-val, és a gyakorlatban sokszor így is hívják.</p>
 
 <pre class="py" data-name="a hiba lokalizálása">def hibalokalizalas(rendszer, golden):
     """golden: [(kerdes, helyes_darab_id, helyes_valasz), ...]
@@ -482,13 +482,13 @@ if egyetertes &lt; 0.6:
 <p>A darabolásról röviden: a fix hosszú, átfedés nélküli vágás a legrosszabb megoldás, mert vakon vág a mondat közepén. A használható alapbeállítás strukturális darabolás (bekezdés-, fejezet- vagy táblázathatáron), 10–20% átfedéssel, és minden darabhoz hozzáfűzött fejléc-kontextussal (melyik dokumentum, melyik fejezet).</p>
       </div>
       <div role="tabpanel" id="p-5c" aria-labelledby="t-5c" hidden>
-<p>A tisztán szemantikus keresés szisztematikusan gyenge bizonyos lekérdezéstípusokon: pontos azonosítók, cikkszámok, jogszabályhelyek, ritka tulajdonnevek. A beágyazás ezeket „elmossa" — épp az különbözteti meg őket, ami a vektortérben nem reprezentálódik jól. Ezért a hibrid keresés (szemantikus + BM25 kulcsszavas) szinte mindig jobb, mint bármelyik önmagában.</p>
+<p>A tisztán szemantikus keresés szisztematikusan gyenge bizonyos lekérdezéstípusokon: pontos azonosítók, cikkszámok, jogszabályhelyek, ritka tulajdonnevek. A beágyazás ezeket „elmossa” — épp az különbözteti meg őket, ami a vektortérben nem reprezentálódik jól. Ezért érdemes kipróbálni a hibrid keresést (szemantikus + BM25 kulcsszavas), amely eltérő erősségű módszereket kombinál. A javulás azonban nem garantált: egy gyenge keresési ág vagy rossz összevonás ronthatja is az eredményt, ahogy a <a href="/rag-labor/#szint-8">RAG-labor mérése</a> is mutatja. Hasonlítsd össze a módszereket ugyanazon a kérdéssoron.</p>
 
 <p>A fúzió bevált módja a reciprok rangfúzió (RRF): nem a pontszámokat kell összeadni (különböző skálákon vannak, nem kompatibilisek), hanem a rangokból számolni:</p>
 
 <pre class="py" data-name="képlet">RRF(d) = Σ_i  1 / (k + rang_i(d))        # k ≈ 60 a szokásos érték</pre>
 
-<p>Kutatási szinten a nyitott kérdés a darabolás elméleti kezelése: nincs jó formális kerete annak, hogy mit veszítünk a vágással. A „mennyi információ vész el, ha a szöveget k darabra vágom" kérdésre nincs használható mérőszám, csak empirikus hangolás. Ez nyitott terület, ahol egy jól megfogalmazott mérőszám valódi hozzájárulás lehetne.</p>
+<p>Kutatási szinten a nyitott kérdés a darabolás elméleti kezelése: nincs jó formális kerete annak, hogy mit veszítünk a vágással. A „mennyi információ vész el, ha a szöveget k darabra vágom” kérdésre nincs használható mérőszám, csak empirikus hangolás. Ez nyitott terület, ahol egy jól megfogalmazott mérőszám valódi hozzájárulás lehetne.</p>
       </div>
     </div>
     <div class="quiz" data-level="5"></div>
@@ -506,7 +506,7 @@ if egyetertes &lt; 0.6:
     </div>
   </header>
   <div class="lvl-body">
-    <p class="lead-p">Az LLM-ek összemossák az adatot és az utasítást. Ez nem javítható hiba, hanem architektúrális tulajdonság — és emiatt a legsúlyosabb biztonsági kérdés a területen.</p>
+    <p class="lead-p">Az LLM-ek bemenetében az adat és az utasítás ugyanazon a csatornán érkezik. Ez nem egy egyszerűen javítható hiba, hanem a mai felépítés tulajdonsága, és emiatt a terület egyik legsúlyosabb biztonsági kérdése.</p>
     <div class="depth">
       <div role="tablist" aria-label="Mélység">
         <button role="tab" id="t-6a" aria-controls="p-6a" aria-selected="true"><b>Egyszerűen</b><span>mi történik</span></button>
@@ -514,11 +514,11 @@ if egyetertes &lt; 0.6:
         <button role="tab" id="t-6c" aria-controls="p-6c" aria-selected="false" tabindex="-1"><b>Kutatói szint</b><span>forrásokkal</span></button>
       </div>
       <div role="tabpanel" id="p-6a" aria-labelledby="t-6a">
-<p>Egy adatbázisban az SQL-parancs és az adat külön dolog, és paraméterezett lekérdezéssel a határ megvédhető. Egy nyelvi modellben nincs ilyen határ: a rendszerprompt, a felhasználó kérdése és a beolvasott dokumentum ugyanabban a token-folyamban érkezik. A modellnek nincs mechanizmusa arra, hogy az egyiket parancsnak, a másikat adatnak tekintse — csak tanult hajlama van rá.</p>
+<p>Egy adatbázisban az SQL-parancs és az adat külön dolog, és paraméterezett lekérdezéssel a határ megvédhető. Egy nyelvi modellben nincs ilyen határ: a rendszerprompt, a felhasználó kérdése és a beolvasott dokumentum ugyanabban a token-folyamban érkezik. A modell tanulhatja a rendszerutasítás, a felhasználói kérés és a külső tartalom eltérő kezelését (erre valók a szerepjelölők és az utasításhierarchiára tanítás, lásd lent), de ez nem garantálja, hogy mindig helyesen követi a bizalmi határokat. A jogosultságokat és a végrehajtható műveletek korlátait ezért a környező szoftvernek kell kikényszerítenie.</p>
 
 <p>A <b>közvetett</b> változat a veszélyes. Nem a felhasználó támad, hanem valaki elhelyez egy utasítást egy dokumentumban, amit a rendszer később beolvas. Greshake és társai pont ezt mutatták meg: az LLM-integrált alkalmazások elmossák az adat és az utasítás határát, és a támadó úgy tudja befolyásolni a modellt, hogy stratégiailag elhelyez egy promptot olyan adatban, amit a rendszer futásidőben visszakeres. <a class="ref" href="#ref-6">[6]</a></p>
 
-<p>Három rokon fogalmat érdemes szétválasztani. <b>Közvetlen</b> prompt injectionről akkor beszélünk, ha a felhasználó maga írja be az utasítást, amely eltéríti a rendszert. <b>Közvetett</b>, ha az utasítás egy külső forrásból, például weboldalból vagy fájlból érkezik, amelyet a rendszer beolvas. A <b>jailbreak</b> olyan bemenet, amelynek célja, hogy a modell figyelmen kívül hagyja a biztonsági szabályait. A hétköznapi szóhasználat összemossa őket, és valóban átfednek: egy elterjedt biztonsági besorolás a jailbreaket a prompt injection egyik formájának tekinti <a class="ref" href="#ref-20">[20]</a>. A különbség a támadás forrásában (felhasználó vagy beolvasott adat) és céljában (a feladat eltérítése vagy a biztonsági korlátok megkerülése) van, és a védekezés is ennek megfelelően más.</p>
+<p>Három rokon fogalmat érdemes szétválasztani. <b>Közvetlen</b> prompt injectionről akkor beszélünk, ha a felhasználó maga írja be az utasítást, amely eltéríti a rendszert. <b>Közvetett</b>, ha az utasítás egy külső forrásból, például weboldalból vagy fájlból érkezik, amelyet a rendszer beolvas. A <b>jailbreak</b> olyan bemenet, amelynek célja, hogy a modell figyelmen kívül hagyja a biztonsági szabályait. A hétköznapi szóhasználat összemossa őket, és valóban átfednek: egy elterjedt biztonsági besorolás a jailbreaket a prompt injection egyik formájának tekinti <a class="ref" href="#ref-7">[7]</a>. A különbség a támadás forrásában (felhasználó vagy beolvasott adat) és céljában (a feladat eltérítése vagy a biztonsági korlátok megkerülése) van, és a védekezés is ennek megfelelően más.</p>
 
 <div class="note fault">
 <b>Konkrét példa.</b> Egy PDF-be fehér betűvel beírsz egy mondatot. Ember nem látja. A kinyerő rendszer beolvassa, a modell megkapja, és úgy kezeli, mint utasítást. Ha a rendszerednek van eszközhozzáférése — e-mail küldés, adatbázis-írás —, akkor a támadó ezeket az eszközöket tudja mozgatni.
@@ -526,7 +526,7 @@ if egyetertes &lt; 0.6:
       <div role="tabpanel" id="p-6b" aria-labelledby="t-6b" hidden>
 <p>A legfontosabb, amit el kell fogadni: <b>a prompt injection ellen nincs teljes védelem</b>. Nem létezik a paraméterezett lekérdezés megfelelője. Amit építeni lehet, az rétegzett kockázatcsökkentés.</p>
 
-<div class="tbl"><table><thead><tr><th scope="col">Réteg</th><th scope="col">Mit csinál</th><th scope="col">Mennyit ér</th></tr></thead><tbody><tr><td>Jelölés (spotlighting)</td><td>Explicit határolók, „ami ezen belül van, az adat"</td><td>Emeli a lécet, nem zárja ki</td></tr><tr><td>Bemenetszűrés</td><td>Gyanús minták keresése a beolvasott adatban</td><td>Gyenge — végtelen a megfogalmazási tér</td></tr><tr><td>Kimenetszűrés</td><td>A válasz ellenőrzése kiadás előtt</td><td>Elkap néhány esetet</td></tr><tr><td><b>Jogosultságkorlátozás</b></td><td>Az ágens csak azt tudja, amit az adott felhasználó</td><td><b>Ez a valódi védelem</b></td></tr><tr><td><b>Emberi jóváhagyás</b></td><td>Visszafordíthatatlan műveletnél kötelező</td><td><b>Ez a második valódi védelem</b></td></tr></tbody></table></div>
+<div class="tbl"><table><thead><tr><th scope="col">Réteg</th><th scope="col">Mit csinál</th><th scope="col">Mennyit ér</th></tr></thead><tbody><tr><td>Jelölés (spotlighting)</td><td>Explicit határolók, „ami ezen belül van, az adat”</td><td>Emeli a lécet, nem zárja ki</td></tr><tr><td>Bemenetszűrés</td><td>Gyanús minták keresése a beolvasott adatban</td><td>Gyenge — végtelen a megfogalmazási tér</td></tr><tr><td>Kimenetszűrés</td><td>A válasz ellenőrzése kiadás előtt</td><td>Elkap néhány esetet</td></tr><tr><td><b>Jogosultságkorlátozás</b></td><td>Az ágens csak azt tudja, amit az adott felhasználó</td><td><b>Ez a valódi védelem</b></td></tr><tr><td><b>Emberi jóváhagyás</b></td><td>Visszafordíthatatlan műveletnél kötelező</td><td><b>Ez a második valódi védelem</b></td></tr></tbody></table></div>
 
 <pre class="py" data-name="jelölés és műveleti kapu">import uuid
 
@@ -548,7 +548,11 @@ def eszkoz_hivas(nev, argumentumok, forras_bizalom):
     """forras_bizalom: 'felhasznalo' vagy 'kulso_dokumentum'
 
     A kulcs: ha az ötlet KÜLSŐ tartalomból származik, nem hajtjuk
-    végre automatikusan a visszafordíthatatlan műveleteket."""
+    végre automatikusan a visszafordíthatatlan műveleteket.
+
+    Szemléltető vázlat, nem kész biztonsági megoldás: a forras_bizalom
+    értékét megbízhatóan, a modelltől függetlenül kell megállapítani
+    (például a kérés útjából), különben a támadó azt is befolyásolhatja."""
     if nev in VESZELYES and forras_bizalom != "felhasznalo":
         return emberi_jovahagyas_kerese(nev, argumentumok)
     return vegrehajt(nev, argumentumok)</pre>
@@ -561,7 +565,7 @@ def eszkoz_hivas(nev, argumentumok, forras_bizalom):
 <li><b>Benchmarkolás</b> (Yi és tsai., 2023) <a class="ref" href="#ref-11">[11]</a>: mérhetővé tétel, ami nélkül a védelmi állítások ellenőrizhetetlenek.</li>
 </ul>
 
-<p>Az elvi probléma, amit érdemes megérteni: amíg a modell bemenete egyetlen, típus nélküli token-folyam, addig a támadó ugyanazon a csatornán beszél a modellhez, mint a fejlesztő. A megoldás valószínűleg architektúrális lesz — szétválasztott csatornák vagy a bizalmi szint token-szintű kódolása —, nem promptmérnökségi.</p>
+<p>Az elvi probléma, amit érdemes megérteni: amíg a modell bemenete egyetlen, típus nélküli token-folyam, addig a támadó ugyanazon a csatornán beszél a modellhez, mint a fejlesztő. A megoldás valószínűleg architekturális lesz — szétválasztott csatornák vagy a bizalmi szint token-szintű kódolása —, nem promptmérnökségi.</p>
 
 <p>Ez az a terület, ahol a legnagyobb rés van az iparági gyakorlat és a nyilvános tudás között: a legtöbb éles ágens-rendszer ma olyan jogosultsági modellel fut, ami akkor lenne elfogadható, ha a prompt injection megoldott lenne. Nem az.</p>
       </div>
@@ -594,10 +598,10 @@ def eszkoz_hivas(nev, argumentumok, forras_bizalom):
 <p>Ezért van az, hogy a demók működnek és az éles rendszerek nem. A demó három lépés. Az éles feladat tizenöt.</p>
 
 <div class="note warn">
-<b>A tervezési következmény:</b> a lépésszám csökkentése többet ér, mint a lépésenkénti pontosság emelése. Ha 10 lépésről 5-re mész, ugyanazzal a 95%-os lépéspontossággal 60%-ról 77%-ra ugrasz — ehhez a másik úton lépésenként 97,5%-ot kellene elérned.
+<b>A tervezési következmény:</b> a fölösleges lépések elhagyása sokat érhet. Ha 10 lépésről 5-re mész, ugyanazzal a 95%-os lépéspontossággal (független lépéseket feltételezve) 60%-ról 77%-ra ugrasz; ehhez a másik úton lépésenként 97,5%-ot kellene elérned. Egy szükséges ellenőrző lépést viszont nem érdemes elhagyni: az rontaná az eredményt.
       </div>
       <div role="tabpanel" id="p-7b" aria-labelledby="t-7b" hidden>
-<p>A képlet naiv, mert függetlenséget feltételez, és a valóságban a hibák korrelálnak — de a korreláció általában <em>rontja</em> a helyzetet, nem javítja: egy korai hiba a következő lépéseket is elrontja. Az alábbi kalkulátor a naiv esetet mutatja, ami így felső becslés.</p>
+<p>A kalkulátor azt az egyszerű esetet mutatja, amelyben a lépések függetlenek, azonos eséllyel sikerülnek, és a teljes feladathoz mindegyiknek sikerülnie kell. A valódi rendszer eredményét a lépések függése, az ellenőrzés és a hibajavítás is befolyásolja, ezért a görbe se nem felső, se nem alsó korlát. Ha például minden lépés ugyanazon a feltételen múlik (vagy mind sikerül, vagy egyik sem), 95%-os lépéssiker mellett a teljes siker is 95% lehet.</p>
 
 <div class="demo" id="dchain">
   <h4>Kísérlet: lánchossz-kalkulátor</h4>
@@ -608,7 +612,7 @@ def eszkoz_hivas(nev, argumentumok, forras_bizalom):
     <div class="bar"><span class="w">ellenőrzés nélkül</span><span class="tr"><i id="chainbar"></i></span><span class="pc" id="chainout"></span></div>
     <div class="bar best"><span class="w">ellenőrzéssel</span><span class="tr"><i id="checkbar"></i></span><span class="pc" id="checkout"></span></div>
   </div>
-  <p class="plotcap">A teljes lánc sikeraránya, független lépéseket feltételezve. A valóságban a hibák korrelálnak, ami általában tovább ront a helyzeten.</p>
+  <p class="plotcap">A teljes lánc sikeraránya, független lépéseket feltételezve. A valóságban a lépések összefügghetnek, ezért a tényleges arány ettől mindkét irányba eltérhet.</p>
 </div>
 
 <pre class="py" data-name="ellenőrzőpontos lánc">def ellenorzott_lanc(lepesek, max_ujraprobalas=2):
@@ -642,9 +646,9 @@ def eszkoz_hivas(nev, argumentumok, forras_bizalom):
 <p>A <code>naplo</code> mező nem díszítés. Ha nem tudod megmondani, melyik lépésnél hány újrapróbálkozás kellett, akkor nincs adatod arról, hol a szűk keresztmetszet — és megint találgatni fogsz.</p>
       </div>
       <div role="tabpanel" id="p-7c" aria-labelledby="t-7c" hidden>
-<p>A független szorzódás modellje jó első közelítés, de két ponton félrevezet. Egyrészt a hibák korreláltak: a hibás állapot átöröklődik, így a feltételes sikervalószínűség egy korábbi hiba után jóval alacsonyabb, mint a feltétel nélküli. Másrészt bizonyos hibák öngyógyulóak — egy fölösleges keresési lépés nem rontja el a végeredményt.</p>
+<p>Függetlenség nélkül is igaz a láncszabály: P(minden lépés sikerül) = P(S₁) · P(S₂ | S₁) · … · P(Sₙ | S₁, …, Sₙ₋₁). Ha minden, az addigi sikerre feltételes lépéssiker 95%, a 0,95<sup>n</sup> alak függetlenség nélkül is kijön. A külön, feltétel nélkül mért 95%-os arányok összeszorzásához viszont már függetlenséget kell feltenni. A független modell két ponton félrevezethet: a lépések sikere összefügghet, és bizonyos hibák nem végzetesek (egy fölösleges keresési lépés nem rontja el a végeredményt).</p>
 
-<p>Ezért a lánc valódi viselkedése nem exponenciális görbe, hanem egy abszorbeáló állapotokkal kiegészített Markov-lánc. Ha egyszer belefut egy abszorbeáló hibaállapotba, ott is marad — az ellenőrzőpontok gyakorlati szerepe éppen az, hogy ezeket az állapotokat detektálják és kilépjenek belőlük, mielőtt tovább terjed.</p>
+<p>Egy lehetséges modellezési választás, ha a folyamat állapotait jól definiáljuk: Markov-láncként leírni, külön javítható hibaállapottal és végleges sikertelenséggel (abszorbeáló állapottal, amelyből a modell szerint nincs kilépés). Az ellenőrzőpontok szerepe ebben a képben az, hogy a javítható hibaállapotot észrevegyék, és visszavigyék a folyamatot a jó útra, mielőtt végleges kudarccá válik. Ez szemléltető modell, nem az ágensek viselkedésének bizonyított magyarázata.</p>
 
 <p>Nyitott és gyakorlatilag fontos kérdés: az ágens-benchmarkok nagy része végponti sikert mér (megcsinálta vagy nem), ami elrejti a lépésszintű viselkedést. Egy rendszer, ami 40%-ban sikeres 15 lépésből és egy, ami 40%-ban sikeres 4-ből, nagyon eltérő minőségű — de ugyanazt a pontszámot kapja.</p>
       </div>
@@ -697,30 +701,38 @@ class PromptVerzio:
         self.datum  = datetime.date.today().isoformat()
 
 
+# Minden metrikánál rögzítjük, melyik irány a jobb: a pontosságnál a
+# nagyobb, a költségnél, a hibaaránynál és a késleltetésnél a kisebb.
+JOBB_IRANY = {"pontossag": +1, "absztencio": +1, "hibaarany": -1,
+              "koltseg": -1, "kesleltetes": -1}
+
 def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
     """Nem engedjük ki, ha bármelyik metrika a zajsávon túl romlik.
 
-    A 'zajsav' azért kell, mert a mérés maga is zajos (lásd 3. szint):
-    1-2 százalékpont ingadozás nem jelent valódi romlást."""
+    A 'zajsav' azért kell, mert a mérés maga is zajos (lásd 3. szint).
+    A 0,02 a példa induló értéke: a saját rendszerednél a mérés
+    ismételhetőségéből (a futások szórásából) érdemes megválasztani."""
     u = merj(uj, golden)
     r = merj(referencia, golden)
 
-    romlas = {k: r[k] - u[k] for k in r if r[k] - u[k] &gt; zajsav}
+    # romlás = mennyit rosszabb az új a jó irányhoz képest
+    romlas = {k: (r[k] - u[k]) * JOBB_IRANY[k] for k in r
+              if (r[k] - u[k]) * JOBB_IRANY[k] &gt; zajsav}
     if romlas:
         return {"kiadhato": False, "romlott": romlas,
                 "uzenet": f"{uj.hash}: regresszió a(z) "
                           f"{list(romlas)} metrikákon"}
-    return {"kiadhato": True, "javulas": {k: u[k]-r[k] for k in r}}</pre>
+    return {"kiadhato": True, "javulas": {k: (u[k]-r[k]) * JOBB_IRANY[k] for k in r}}</pre>
 
 <div class="note warn">
-<b>Egyetlen konkrét szabály, ami sok bajtól megóv:</b> soha ne mutass a legfrissebb modellverzióra („latest"). Mindig rögzített verzióra hivatkozz, és a váltás legyen tudatos, mért lépés. A csendes modellfrissítés az egyik leggyakoribb oka annak, hogy „hirtelen elromlott".
+<b>Egyetlen konkrét szabály, ami sok bajtól megóv:</b> soha ne mutass a legfrissebb modellverzióra („latest”). Mindig rögzített verzióra hivatkozz, és a váltás legyen tudatos, mért lépés. A csendes modellfrissítés az egyik leggyakoribb oka annak, hogy „hirtelen elromlott”.
       </div>
       <div role="tabpanel" id="p-8c" aria-labelledby="t-8c" hidden>
 <p>A használatelmozdulás mérése az érdekes rész, mert a bemenetek eloszlását kell figyelni, nem a kimenetet. Használható eljárás: a beérkező kérdéseket beágyazod, klaszterezed, és hetente összeveted az eloszlást a golden set eloszlásával. Ha új klaszterek jelennek meg, amikre nincs teszteseted, az előrejelzi a romlást, mielőtt panasz lenne.</p>
 
 <p>A formális eszközök (populációstabilitási index, Kullback–Leibler-divergencia a klasztereloszláson) itt jól működnek. A gondolat ugyanaz, mint amikor egy orvos azt figyeli, eltolódnak-e egy beteg laborértékei a megszokott tartományhoz képest, csak itt a figyelt mennyiség egy beágyazási eloszlás.</p>
 
-<p>Ami nyitott: nincs jó gyakorlat arra, hogyan kell a golden setet karbantartani úgy, hogy ne „fagyjon rá" egy elavult használati mintára. Ha mindig ugyanazon a 200 kérdésen mérsz, akkor egy idő után arra optimalizálsz, ami már nem az, amit a felhasználók csinálnak. Ez csendesebb és alattomosabb, mint maga a romlás.</p>
+<p>Ami nyitott: nincs jó gyakorlat arra, hogyan kell a golden setet karbantartani úgy, hogy ne „fagyjon rá” egy elavult használati mintára. Ha mindig ugyanazon a 200 kérdésen mérsz, akkor egy idő után arra optimalizálsz, ami már nem az, amit a felhasználók csinálnak. Ez csendesebb és alattomosabb, mint maga a romlás.</p>
       </div>
     </div>
     <div class="quiz" data-level="8"></div>
@@ -746,7 +758,7 @@ def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
         <button role="tab" id="t-9c" aria-controls="p-9c" aria-selected="false" tabindex="-1"><b>Kutatói szint</b><span>forrásokkal</span></button>
       </div>
       <div role="tabpanel" id="p-9a" aria-labelledby="t-9a">
-<p>A mérés alapproblémája: nincs egyetlen helyes válasz. Egy összefoglaló lehet jó ötféleképpen. Egy kódrészlet helyes lehet más szerkezettel. A klasszikus gépi tanulási metrikák (pontosság, F1) nem működnek.</p>
+<p>A mérés alapproblémája: nincs egyetlen helyes válasz. Egy összefoglaló lehet jó ötféleképpen. Egy kódrészlet helyes lehet más szerkezettel. Ezért a szabad szöveges minőséget nem lehet egyetlen pontosságmutatóval leírni. A mérőszámot a feladathoz válaszd: osztályozásnál és adatkinyerésnél a pontosság vagy az F1 is hasznos; nyitott szöveges válaszoknál ezeket tartalmi, forráshelyességi és emberi értékeléssel kell kiegészíteni.</p>
 
 <p>Ami működik: egy <b>golden set</b> — néhány tucat vagy száz eset, amiről te magad eldöntötted, mi a jó válasz —, és rajta egy sor különböző típusú ellenőrzés. Nem egy szám, hanem néhány, mert a rendszer több irányban tud elromlani.</p>
 
@@ -759,8 +771,9 @@ def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
 <div class="tbl"><table><thead><tr><th scope="col">Szint</th><th scope="col">Eszköz</th><th scope="col">Költség</th><th scope="col">Mit fog meg</th></tr></thead><tbody><tr><td>1. Determinisztikus</td><td>Séma, regex, tartomány, JSON-érvényesség</td><td>~0</td><td>Formai hibák, hiányzó mezők</td></tr><tr><td>2. Referenciás</td><td>Kulcstény-lefedettség, forrásjelölés megléte</td><td>Alacsony</td><td>Tartalmi hiányok</td></tr><tr><td>3. Modellbíró</td><td>LLM-as-judge rubrikával</td><td>Magas</td><td>Minőség, hangnem, érvelés</td></tr></tbody></table></div>
 
 <pre class="py" data-name="rétegzett eval-futtató">def eval_futtatas(rendszer, golden, ismetles=3):
-    """Az ismetles NEM opcionális: a rendszer nem-determinisztikus,
-    így egy futás nem mérés, csak megfigyelés (lásd 3. szint)."""
+    """Ismétlés nélkül egy futás csak megfigyelés, ha a rendszer
+    nem-determinisztikus (lásd 3. szint). A 3 induló érték; hogy mennyi
+    elég, a feladat változatosságától és a hibák költségétől függ."""
     sorok = []
     for eset in golden:
         futasok = []
@@ -786,7 +799,7 @@ def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
     return sorok</pre>
 
 <div class="note warn">
-<b>A modellbíró kalibrálása.</b> Mielőtt bármit elhiszel neki, címkézz fel kézzel 30 esetet, és nézd meg, mennyire egyezik a bíróval. 80% alatt a bíró zajforrás. Emeld a rubrika konkrétságát (ne „jó-e", hanem „tartalmazza-e X-et, hivatkozik-e forrásra, van-e benne nem alátámasztott állítás"), és mérd újra.
+<b>A modellbíró kalibrálása.</b> Mielőtt bármit elhiszel neki, címkézz fel kézzel néhány tucat esetet (induló méretnek 30 is elég lehet), és nézd meg, mennyire egyezik a bíróval. Ha az egyezés alacsony (induló ökölszabálynak jó a 80%), a bíró zajforrás. Emeld a rubrika konkrétságát (ne „jó-e”, hanem „tartalmazza-e X-et, hivatkozik-e forrásra, van-e benne nem alátámasztott állítás”), és mérd újra.
       </div>
       <div role="tabpanel" id="p-9c" aria-labelledby="t-9c" hidden>
 <p>A modellbírók ismert torzításai, amelyeket a szakirodalom dokumentál és amiket kompenzálni kell:</p>
@@ -817,16 +830,16 @@ def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
   </header>
   <div class="lvl-body">
     <p class="lead-p">Összefoglaló táblázat: hibamód, korai jel, és a legolcsóbb hatásos beavatkozás.</p>
-<div class="tbl"><table><thead><tr><th scope="col">Hibamód</th><th scope="col">Korai jel</th><th scope="col">Legolcsóbb beavatkozás</th></tr></thead><tbody><tr><td>Hallucináció</td><td>Sosem mondja, hogy nem tudja</td><td>Explicit absztenciós utasítás + absztenciós ráta mérése</td></tr><tr><td>Hűtlenség</td><td>Forrásjelölt állítás a forrásban nincs benne</td><td>Kötelező forrásjelölés + állításszintű ellenőrzés mintán</td></tr><tr><td>Nem-determinizmus</td><td>Ugyanaz a teszt hol átmegy, hol nem</td><td>Minden mérés 3–5 ismétléssel, szórás jelentése</td></tr><tr><td>Kontextusromlás</td><td>Hosszú bemenetnél romlik a pontosság</td><td>Kérdés megismétlése a végén + kevesebb, jobb dokumentum</td></tr><tr><td>Visszakeresési hiba</td><td>„Nincs benne az adat", pedig benne van</td><td>Recall@k külön mérése + hibrid keresés</td></tr><tr><td>Prompt injection</td><td>Furcsa, témán kívüli viselkedés</td><td>Jogosultságkorlátozás + emberi kapu a veszélyes műveleteken</td></tr><tr><td>Hibaszorzódás</td><td>A demó megy, az éles nem</td><td>Lépésszám csökkentése + determinisztikus ellenőrzőpontok</td></tr><tr><td>Csendes romlás</td><td>„Múlt héten még jó volt"</td><td>Rögzített modellverzió + regressziós kapu minden változtatásra</td></tr></tbody></table></div>
+<div class="tbl"><table><thead><tr><th scope="col">Hibamód</th><th scope="col">Korai jel</th><th scope="col">Legolcsóbb beavatkozás</th></tr></thead><tbody><tr><td>Hallucináció</td><td>Sosem mondja, hogy nem tudja</td><td>Explicit absztenciós utasítás + absztenciós ráta mérése</td></tr><tr><td>Hűtlenség</td><td>Forrásjelölt állítás a forrásban nincs benne</td><td>Kötelező forrásjelölés + állításszintű ellenőrzés mintán</td></tr><tr><td>Nem-determinizmus</td><td>Ugyanaz a teszt hol átmegy, hol nem</td><td>Ismételt mérés (induló érték: 3–5 futás), szórás jelentése</td></tr><tr><td>Kontextusromlás</td><td>Hosszú bemenetnél romlik a pontosság</td><td>Kérdés megismétlése a végén + kevesebb, jobb dokumentum</td></tr><tr><td>Visszakeresési hiba</td><td>„Nincs benne az adat”, pedig benne van</td><td>Recall@k külön mérése + hibrid keresés kipróbálása és mérése</td></tr><tr><td>Prompt injection</td><td>Furcsa, témán kívüli viselkedés</td><td>Jogosultságkorlátozás + emberi kapu a veszélyes műveleteken</td></tr><tr><td>Hibaszorzódás</td><td>A demó megy, az éles nem</td><td>Lépésszám csökkentése + determinisztikus ellenőrzőpontok</td></tr><tr><td>Csendes romlás</td><td>„Múlt héten még jó volt”</td><td>Rögzített modellverzió + regressziós kapu minden változtatásra</td></tr></tbody></table></div>
 
 <h3>Ha csak egy hetet szánsz rá</h3>
 <p>Ebben a sorrendben térül meg a legjobban:</p>
 <ol>
 <li><b>Építs 30 esetes golden setet.</b> Ez a hét fele. Minden más ezen múlik, és ez az egyetlen lépés, amit nem lehet megspórolni.</li>
 <li><b>Mérd külön a visszakeresést és a generálást.</b> Fél nap, és megmondja, min kell dolgoznod.</li>
-<li><b>Mérd az absztenciós rátát.</b> Fél nap, és megmutatja, mennyire hazudik a rendszered.</li>
+<li><b>Mérd az absztenciós rátát.</b> Fél nap, és megmutatja, milyen gyakran válaszol a rendszered alátámasztás nélkül.</li>
 <li><b>Futtass mindent háromszor.</b> Egy sor változtatás, és onnantól mérésed van, nem megfigyelésed.</li>
-<li><b>Rögzítsd a modellverziót és verziózd a promptot.</b> Egy óra, és megszűnik a „miért változott" kategória.</li>
+<li><b>Rögzítsd a modellverziót és verziózd a promptot.</b> Egy óra, és megszűnik a „miért változott” kategória.</li>
 </ol>
 
 <p class="note"><b>Ami ebből átvihető bármilyen más területre:</b> az egész anyag egyetlen elvre megy vissza — előbb építsd meg a műszert, aztán hangolj. Aki fordítva csinálja, az nem fejleszt, hanem hisz.</p>
@@ -846,7 +859,7 @@ def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
     <div><dt><b>Lost in the middle</b></dt><dd>A jelenség, hogy a modell a kontextus közepén elhelyezett információt gyengébben használja, mint az elején vagy végén lévőt.</dd></div>
     <div><dt><b>Önkonzisztencia</b></dt><dd>Több mintavételezett válasz közül a leggyakoribb kiválasztása. A válaszok egyetértése bizonytalansági jelként is használható.</dd></div>
     <div><dt><b>Prompt injection</b></dt><dd>Támadás, amelyben adatként érkező szöveg utasításként érvényesül. Közvetett változatában a szöveg egy beolvasott dokumentumból jön.</dd></div>
-    <div><dt><b>Recall@k</b></dt><dd>A kérdések aránya, amelyeknél a helyes forrásdarab benne van az első k találatban. A visszakeresés minőségének fő mérőszáma.</dd></div>
+    <div><dt><b>Recall@k</b></dt><dd>Az első k találatban megtalált releváns darabok aránya az összes releváns darabhoz képest, kérdésenként átlagolva. Ha kérdésenként egyetlen releváns darab van, egybeesik a találati aránnyal (hit rate@k): azzal, hogy a kérdések hány százalékánál van legalább egy helyes darab az első k-ban.</dd></div>
     <div><dt><b>Reciprok rangfúzió</b><span>RRF</span></dt><dd>Több keresési rangsor összeolvasztása a rangok reciprokának összegzésével, a nem összemérhető pontszámok helyett.</dd></div>
     <div><dt><b>Spotlighting</b></dt><dd>A külső, nem megbízható tartalom explicit megjelölése a promptban, hogy a modell adatként és ne utasításként kezelje.</dd></div>
     <div><dt><b>Utasításhierarchia</b></dt><dd>Tanítási megközelítés, amely a privilegizált (rendszer-) utasításokat előbbre sorolja a felhasználói és az adatból érkező utasításoknál.</dd></div>
@@ -876,7 +889,6 @@ def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
     <li id="ref-17"><span class="rn">[17]</span><p>Schulhoff, S. és tsai. (2023): <cite>Ignore This Title and HackAPrompt: Exposing Systemic Vulnerabilities of LLMs through a Global Scale Prompt Hacking Competition.</cite> arXiv:2311.16119. <span class="id"><a href="https://arxiv.org/abs/2311.16119">arxiv.org/abs/2311.16119</a></span></p></li>
     <li id="ref-18"><span class="rn">[18]</span><p>Shi, F. és tsai. (2023): <cite>Large Language Models Can Be Easily Distracted by Irrelevant Context.</cite> ICML 2023. <span class="id"><a href="https://arxiv.org/abs/2302.00093">arxiv.org/abs/2302.00093</a></span></p></li>
     <li id="ref-19"><span class="rn">[19]</span><p>Xu, Z., Jain, S., Kankanhalli, M. (2024): <cite>Hallucination is Inevitable: An Innate Limitation of Large Language Models.</cite> arXiv:2401.11817. <span class="id"><a href="https://arxiv.org/abs/2401.11817">arxiv.org/abs/2401.11817</a></span></p></li>
-    <li id="ref-20"><span class="rn">[20]</span><p>OWASP GenAI Security Project (2025): <cite>LLM01:2025 Prompt Injection.</cite> <span class="id"><a href="https://genai.owasp.org/llmrisk/llm01-prompt-injection/">genai.owasp.org/llmrisk/llm01-prompt-injection</a></span></p></li>
   </ol>
 </section>
 
@@ -940,7 +952,7 @@ window.KVIZ = {
     a: 1, x: 'Ha a helyes darab csak a kérdések 62%-ánál van a találatok között, a generálás nem tudja pótolni. A 0,94 azt mutatja, hogy a jó kontextusból a modell jól válaszol.' },
   { q: 'Miért gyenge a tisztán szemantikus keresés pontos azonosítókra, például cikkszámokra?',
     o: ['Mert a beágyazás elmossa azt, ami megkülönbözteti őket.', 'Mert a beágyazó modell nem tud számot olvasni.', 'Mert az azonosítók túl rövidek a darabolóhoz.'],
-    a: 0, x: 'Két cikkszám a vektortérben nagyon közel eshet egymáshoz, pedig egy karakter eltérés is mást jelent. Ezért jobb a hibrid (szemantikus és kulcsszavas) keresés.' },
+    a: 0, x: 'Két cikkszám a vektortérben nagyon közel eshet egymáshoz, pedig egy karakter eltérés is mást jelent. Ezért érdemes kulcsszavas ágat is használni, és mérni, hogy a hibrid (szemantikus és kulcsszavas) keresés javít-e.' },
   { q: 'Miért a rangokból számol a reciprok rangfúzió, nem a pontszámokból?',
     o: ['Mert a rangokat gyorsabb kiszámolni.', 'Mert a keresők pontszámai nem összemérhetők.', 'Mert a pontszámok mindig negatívak.'],
     a: 1, x: 'A szemantikus és a kulcsszavas kereső más skálán pontoz, így a pontszámaik összeadása értelmetlen. A rang mindkettőnél ugyanazt jelenti.' }

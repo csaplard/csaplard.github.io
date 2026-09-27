@@ -3,12 +3,15 @@
 Itt dől el, MELYIK MOTORRAL fut az egész projekt. Egyetlen sort kell
 átírnod alább (BACKEND), és minden más script követi.
 
-    "beepitett" : semmit nem kell telepíteni, nincs kulcs, nincs internet.
+    "beepitett" : a numpy-n kívül semmit nem kell telepíteni, nincs kulcs,
+                  nincs internet. Keres és promptot állít össze; válasz-
+                  generálás helyett a modellnek szánt promptot írja ki.
                   Egy játék-embedding, ami a MECHANIZMUST mutatja meg.
                   Szemantikát NEM tud. Tanuláshoz tökéletes, éles rendszerbe
                   soha ne kerüljön.
-    "lokalis"   : igazi embedding-modell a saját gépeden.
-                  Telepítés: pip install sentence-transformers
+    "lokalis"   : igazi embedding-modell a saját gépeden (az első futásnál
+                  letölti, utána offline is megy). Válaszgeneráló modellt
+                  nem futtat. Telepítés: pip install sentence-transformers
     "api"       : Anthropic API a generáláshoz (+ lokális embedding).
                   Kell hozzá: pip install anthropic, és egy ANTHROPIC_API_KEY
                   környezeti változó.
@@ -120,10 +123,12 @@ def valaszol(prompt, rendszer_uzenet="", max_token=1000):
     mit küldenél ki. Ez amúgy hasznos szokás éles fejlesztésnél is.
     """
     if BACKEND != "api":
+        vonal = "-" * 60
         return (
             "[NINCS MODELLHÍVÁS — BACKEND = '%s']\n"
-            "Az alábbi promptot küldenéd el:\n"
-            "%s\n%s" % (BACKEND, "-" * 60, prompt)
+            "Ezt küldenéd el a modellnek.\n"
+            "%s\nRENDSZERÜZENET:\n%s\n%s\nFELHASZNÁLÓI ÜZENET:\n%s"
+            % (BACKEND, vonal, rendszer_uzenet or "(nincs)", vonal, prompt)
         )
 
     import anthropic

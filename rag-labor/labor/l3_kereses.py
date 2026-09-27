@@ -39,6 +39,32 @@ def index_betolt():
 
 
 # ---------------------------------------------------------------------------
+# Metaadat-szűrés (mindkét keresési ág ugyanezt használja)
+# ---------------------------------------------------------------------------
+
+def megengedett(sor, kurzus_szuro):
+    """Az adott kurzus darabjai, plusz az általános és a több kurzusra
+    vonatkozó darabok (szabályzatok, ügyféljegy-kivonat)."""
+    return sor["kurzus"] in (kurzus_szuro, "altalanos", "tobb")
+
+
+def _szurt_rangsor(pontszamok, sorok, k, kurzus_szuro):
+    """Rangsorolás a szűrő után. A kizárt darabok -inf pontszámot kapnak,
+    és KI IS kerülnek a listából: ha csak a végére tennénk őket, akkor
+    k nagyobb értékénél (vagy kevés megengedett darabnál) visszajönnének.
+    Ha kevesebb megengedett találat van k-nál, rövidebb listát adunk vissza."""
+    if kurzus_szuro:
+        for i, sor in enumerate(sorok):
+            if not megengedett(sor, kurzus_szuro):
+                pontszamok[i] = -np.inf
+    # argsort: a rendezéshez tartozó INDEXEKET adja vissza, nem az értékeket.
+    # A [::-1] megfordítja (csökkenő sorrend).
+    rendezett = np.argsort(pontszamok)[::-1]
+    return [(int(i), float(pontszamok[i])) for i in rendezett
+            if np.isfinite(pontszamok[i])][:k]
+
+
+# ---------------------------------------------------------------------------
 # A) VEKTOROS KERESÉS
 # ---------------------------------------------------------------------------
 
@@ -51,18 +77,7 @@ def vektor_kereses(kerdes, matrix, sorok, k=5, kurzus_szuro=None):
     """
     kv = kozos.embedding(kerdes)
     pontszamok = matrix @ kv  # alakja: (darabszám,)
-
-    # metaadat-szűrés: a nem megfelelő darabokat -inf-re állítjuk,
-    # így biztosan nem kerülnek be a találatok közé
-    if kurzus_szuro:
-        for i, sor in enumerate(sorok):
-            if sor["kurzus"] not in (kurzus_szuro, "altalanos", "tobb"):
-                pontszamok[i] = -np.inf
-
-    # argsort: a rendezéshez tartozó INDEXEKET adja vissza, nem az értékeket.
-    # A [::-1] megfordítja (csökkenő sorrend), a [:k] az első k-t veszi.
-    legjobbak = np.argsort(pontszamok)[::-1][:k]
-    return [(int(i), float(pontszamok[i])) for i in legjobbak]
+    return _szurt_rangsor(pontszamok, sorok, k, kurzus_szuro)
 
 
 # ---------------------------------------------------------------------------
@@ -121,10 +136,10 @@ class BM25:
         return pontszamok
 
 
-def bm25_kereses(kerdes, bm25, k=5):
+def bm25_kereses(kerdes, bm25, k=5, sorok=None, kurzus_szuro=None):
+    """A szűrőhöz a sorok (metaadatok) is kellenek; szűrő nélkül elhagyható."""
     pontszamok = bm25.pontoz(kerdes)
-    legjobbak = np.argsort(pontszamok)[::-1][:k]
-    return [(int(i), float(pontszamok[i])) for i in legjobbak]
+    return _szurt_rangsor(pontszamok, sorok or [], k, kurzus_szuro)
 
 
 # ---------------------------------------------------------------------------

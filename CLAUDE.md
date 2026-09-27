@@ -51,6 +51,10 @@ A repó statikus HTML; a GitHub Pages közvetlenül ezt szolgálja ki. Helyi kip
 - Csak érdemi (0,1°-nál nagyobb) változásra rajzol újra, és csak amíg a modell látható és a lap nincs háttérben.
 - `prefers-reduced-motion` esetén ki van kapcsolva, a kapcsoló sem jelenik meg.
 
+## Téma
+
+- Az oldal alapból sötét módban indul, a rendszerbeállítástól függetlenül. Világos mód csak akkor, ha a látogató a kapcsolóval kiválasztotta (`localStorage: ait-theme`). Ez minden oldal fejének első szkriptjében van.
+
 ## Arculati szabályok (kötelező)
 
 - **Színek csak tokenekből** (`assets/nyito/nyito.css`, forrás: a design-projekt `design/tokens.json` fájlja).

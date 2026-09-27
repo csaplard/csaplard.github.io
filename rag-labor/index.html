@@ -8,13 +8,13 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RAG-labor · AI-tananyagok</title>
-<meta name="description" content="Dokumentumkereső asszisztens nulláról, működő Python-kóddal: darabolás, embedding, hibrid keresés, forrásjelölt válasz, kiértékelés és eszközhívás. API-kulcs nélkül is fut.">
+<meta name="description" content="Dokumentumkereső asszisztens nulláról, működő Python-kóddal: darabolás, embedding, hibrid keresés, forrásjelölt válasz, kiértékelés és eszközhívás. A keresés és a mérés API-kulcs nélkül is fut.">
 <meta name="author" content="Csaplár Dániel">
 <link rel="canonical" href="https://csaplard.github.io/rag-labor/">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230b0c0e'/><rect x='6' y='7' width='12' height='16' fill='none' stroke='%23eceae4' stroke-width='1.5'/><circle cx='21' cy='19' r='5' fill='none' stroke='%23e8b44c' stroke-width='2'/><path d='M24.5 22.5 27 25' stroke='%23e8b44c' stroke-width='2.4' stroke-linecap='round'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geologica:slnt,wght,CRSV,SHRP@-12..0,100..900,0..1,0..100&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&display=swap" rel="stylesheet">
-<script>try{var t=localStorage.getItem('ait-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<script>var t=null;try{t=localStorage.getItem('ait-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark')</script>
 <link rel="stylesheet" href="/assets/ait.css">
 <link rel="stylesheet" href="/assets/tananyag.css">
 </head>
@@ -33,7 +33,7 @@
     <div>
       <h1>RAG-labor: építsünk egyet</h1>
       <p class="lede">Dokumentumokból válaszoló asszisztens nulláról, működő kóddal: darabolás, embedding, hibrid keresés, forrásjelölt válasz, kiértékelés és eszközhívás.</p>
-      <p class="facts">10 lépés · kb. 6 óra · haladó · 9 forrás · előfeltétel: Python-alapok. Minden lépés futtatható, API-kulcs és internet nélkül is. A lépések végén rövid önellenőrző kvíz van; itt semmi nincs zárolva, mert a lépéseket a kóddal együtt követed.</p>
+      <p class="facts">10 lépés · kb. 6 óra · haladó · 9 forrás · előfeltétel: Python-alapok. A keresési és mérési lépések a csomagok telepítése után API-kulcs és internet nélkül is futnak; nyelvi válaszhoz API-kulcs kell. A lépések végén rövid önellenőrző kvíz van; itt semmi nincs zárolva, mert a lépéseket a kóddal együtt követed.</p>
       <div class="validity"><span class="valid">Érvényes: 2026. szeptember</span><span class="ui dim">Felülvizsgálandó: 2027. március</span></div>
       <a class="start" href="labor.zip" download>A labor letöltése (labor.zip) →</a>
     </div>
@@ -54,7 +54,7 @@ python3 l6_eszkoz.py</code></pre>
     <div>
       <h2 id="h-szintek">Mit építünk, és miért pont ezt</h2>
       <p>A végén ez lesz a kezedben: egy rendszer, amely egy online tanfolyamokat szervező oktatási platform hat belső dokumentumából (két kurzusleírás, ügyfélszolgálati útmutató, adatvédelmi szabályzat, ügyféljegy-kivonat, visszatérítési szabályzat) meg tud válaszolni ügyfélszolgálati kérdéseket: forrásmegjelöléssel, mérhető pontossággal, és ott, ahol számolni kell, eszközhívással. A platform és minden adat kitalált. Az ilyen, a válasz előtt keresést futtató felépítést visszakereséssel kiegészített generálásnak (RAG) nevezik. <a class="ref" href="#ref-1">[1]</a></p>
-      <p>Miért éppen ez a feladat? Mert ez a legkisebb rendszer, amelyben az összes valódi nehézség benne van. Ha a végén kicseréled a hat dokumentumot a saját anyagodra, működni fog. És három olyan dolgot tanít, amit olvasásból nem lehet megérteni:</p>
+      <p>Miért éppen ez a feladat? Mert ez a legkisebb rendszer, amelyben az összes valódi nehézség benne van. A felépítést a saját dokumentumaidra is átültetheted; ehhez a beolvasást, a darabolást, a metaadatokat és a tesztkérdéseket az új anyaghoz kell igazítanod, mert a kód ennek a hat dokumentumnak a szerkezetére készült. És három olyan dolgot tanít, amit olvasásból nem lehet megérteni:</p>
       <ol>
         <li><b>A darabolás dönt.</b> A saját méréseiden látod majd, hogy a rendszer minőségét nem a modell, hanem a bemenő adat előkészítése határozza meg.</li>
         <li><b>Mérés nélkül vakrepülés.</b> Építünk egy kiértékelő készletet, és minden változtatást megmérünk.</li>
@@ -76,7 +76,7 @@ python3 l6_eszkoz.py</code></pre>
     <div>
       <div class="layers" data-total="10" data-done="0"><svg viewBox="0 0 140 200" aria-hidden="true"></svg><div><div class="count"><span data-count>0</span><span> / 10</span></div><p>Minden teljesített önellenőrző kvíz egy réteg. A haladásod csak ebben a böngészőben tárolódik.</p></div></div>
       <div class="tools"><button class="pill" type="button" data-reset>Haladás törlése</button></div>
-      <p class="key"><b>Fontos ígéret.</b> Az egész labor futtatható API-kulcs és internet nélkül. Az alapértelmezett üzemmód egy szándékosan primitív, beépített embedding: épp elég ahhoz, hogy minden mechanizmus működjön, és épp elég rossz ahhoz, hogy a 8. lépésben látványos legyen a különbség, amikor igazi modellre váltasz.</p>
+      <p class="key"><b>Mi fut kulcs nélkül?</b> A darabolás, az indexelés, a keresés és a kiértékelés a szükséges csomagok telepítése után internet és API-kulcs nélkül is fut. Ebben a módban a program a modellnek szánt teljes promptot írja ki válasz helyett, az eszközhívást pedig kézi példán mutatja be. Nyelvi válaszok generálásához a mellékelt API-integráció kell (ez a szolgáltatónál díjjal járhat), vagy egy külön bekötött helyi nyelvi modell. Az alapértelmezett üzemmód egy szándékosan primitív, beépített embedding: épp elég ahhoz, hogy minden mechanizmus működjön, és épp elég rossz ahhoz, hogy a 8. lépésben látványos legyen a különbség, amikor igazi modellre váltasz.</p>
     </div>
   </section>
 
@@ -322,9 +322,12 @@ legjobbak = np.argsort(pontszamok)[::-1][:k]</pre>
     <p>És a metaadat-szűrés:</p>
 <pre class="py" data-name="l3_kereses.py">if kurzus_szuro:
     for i, sor in enumerate(sorok):
-        if sor["kurzus"] not in (kurzus_szuro, "altalanos", "tobb"):
-            pontszamok[i] = -np.inf</pre>
-    <p>A <code>-np.inf</code> (mínusz végtelen) trükk: a kizárt darabok garantáltan a lista végére kerülnek, anélkül hogy külön listát kellene építeni. Az <code>"altalanos"</code> és a <code>"tobb"</code> azért van a megengedettek között, mert az általános szabályzatok és az ügyféljegy-kivonat minden kurzusra vonatkoznak.</p>
+        if not megengedett(sor, kurzus_szuro):
+            pontszamok[i] = -np.inf
+rendezett = np.argsort(pontszamok)[::-1]
+return [(int(i), float(pontszamok[i])) for i in rendezett
+        if np.isfinite(pontszamok[i])][:k]</pre>
+    <p>A <code>-np.inf</code> (mínusz végtelen) a kizárt darabokat a lista végére teszi, az <code>np.isfinite</code> pedig ki is veszi őket. Mindkettő kell: ha csak a végére kerülnének, nagyobb <code>k</code> mellett (vagy ha kevés a megengedett darab) visszajönnének a találatok közé. Ha kevesebb megengedett darab van <code>k</code>-nál, rövidebb listát kapsz. Ugyanez a függvény szűri a BM25-ágat is. Az <code>"altalanos"</code> és a <code>"tobb"</code> azért van a megengedettek között, mert az általános szabályzatok és az ügyféljegy-kivonat minden kurzusra vonatkoznak.</p>
     <h3>6.2 · BM25: a kulcsszavas ág</h3>
 <pre class="py" data-name="python3 l3_kereses.py, részlet">KÉRDÉS: VK-405-1E
   VEKTOR
@@ -351,17 +354,19 @@ legjobbak = np.argsort(pontszamok)[::-1][:k]</pre>
   [3] K-405_kurzusleiras.md — 3. Képzési ütem
   [4] K-402_kurzusleiras.md — 1. Általános adatok</pre>
     <p>Az első helyen a másik kurzus leírása áll. Miért? Mert abban a fejezetben szerepel a „K-402”, a „vizsga” és a „VK-402-2K” is, csak épp azért, hogy figyelmeztessen: ide nem való. Minden kulcsszó stimmel, a jelentés az ellenkezője.</p>
-    <p class="warn"><b>Ez a RAG legveszélyesebb hibatípusa.</b> Nem hallucináció: a rendszer valódi dokumentumból, valódi mondatot fog idézni, csak rossz kurzusról. Egy ügyfélszolgálatos, aki megbízik benne, rossz vizsgakódot mond a hallgatónak. És egyetlen prompttal sem lehet ezt megjavítani, mert a hiba a keresésben keletkezett, mielőtt a modell bármit látott volna.</p>
+    <p class="warn"><b>Ez a RAG legveszélyesebb hibatípusa.</b> Nem hallucináció: a rendszer valódi dokumentumból, valódi mondatot fog idézni, csak rossz kurzusról. Egy ügyfélszolgálatos, aki megbízik benne, rossz vizsgakódot mond a hallgatónak. A modell jobb utasítással néha kiválaszthatja a helyes kurzust a kontextusból, de erre nem lehet építeni: a hiba a keresésben keletkezett, mielőtt a modell bármit látott volna, és ott is javítható a legmegbízhatóbban.</p>
     <p>Két megoldás van, és mindkettőt érdemes megcsinálni:</p>
     <ul>
-      <li><b>Metaadat-szűrés.</b> Ha a kérdésből kinyered a kurzuskódot (egy reguláris kifejezés is elég: <code>[A-Z]-\d{3}</code>), és átadod a <code>kurzus_szuro</code> paraméternek, a K-405 darabjai kiesnek. Ez a leghatékonyabb egyetlen javítás az egész laborban.</li>
+      <li><b>Metaadat-szűrés.</b> Ha a kérdésből kinyered a kurzuskódot (egy reguláris kifejezés is elég: <code>[A-Z]-\d{3}</code>), és <em>mindkét</em> keresési ágnak átadod a <code>kurzus_szuro</code> paraméterben, a K-405 darabjai kiesnek. Ennél a hibánál ez a legközvetlenebb és legjobban ellenőrizhető javítás.</li>
       <li><b>Forrásjelölés a válaszban.</b> Ha a válasz mellett ott van, hogy melyik fájl melyik fejezetéből jött, az ember egy pillantással kiszúrja a tévedést. A gép hibázni fog; a rendszer feladata, hogy a hiba látható legyen.</li>
     </ul>
-    <p class="note"><b>Feladat.</b> Írd meg a kurzuskód-kinyerést. Az <code>l4_valasz.py</code> <code>kerdez()</code> függvényében egészítsd ki a vektoros keresést a szűrővel, aztán futtasd újra ugyanazt a kérdést. Kipróbáltuk: szűrővel a négy átadott forrás a K-402 vizsgája, általános adatai, egy K-402-es ügyféljegy és a teljesítési feltételek, a K-405 eltűnik. Ez az első saját javításod a rendszeren, és a 8. lépésben meg is tudod mérni, mennyit ért.</p>
+    <p class="note"><b>Feladat.</b> Írd meg a kurzuskód-kinyerést. Az <code>l4_valasz.py</code> <code>kerdez()</code> függvényében add át a szűrőt a vektoros és a BM25-ágnak is, aztán futtasd újra ugyanazt a kérdést. Kipróbáltuk: szűrővel a négy átadott forrás a K-402 vizsgája, általános adatai, egy K-402-es ügyféljegy és az előkészületről szóló fejezet, a K-405 pedig a tíz fúziós találat közül is eltűnik. Ha csak a vektoros ágat szűröd, a tíz találat között még két K-405-ös darab marad: a rangfúzió a helyezéseket nézi, és a szűretlen BM25-lista visszahozza őket. Ez az első saját javításod a rendszeren, és a 8. lépésben meg is tudod mérni, mennyit ért.</p>
 <pre class="py" data-name="l4_valasz.py, kiegészítés">import re
 talalat = re.search(r"[A-Z]-\d{3}", kerdes)
 kurzus = talalat.group(0) if talalat else None
-# és add át: vektor_kereses(kerdes, matrix, sorok, k=10, kurzus_szuro=kurzus)</pre>
+# és add át mindkét ágnak:
+#   vektor_kereses(kerdes, matrix, sorok, k=10, kurzus_szuro=kurzus)
+#   bm25_kereses(kerdes, bm25, k=10, sorok=sorok, kurzus_szuro=kurzus)</pre>
     <div class="quiz" data-level="6" data-title="Önellenőrzés"></div>
   </div>
 </section>
@@ -429,7 +434,7 @@ Válaszolj a fenti szabályok szerint, forrásjelöléssel."""</pre>
       </tbody>
     </table></div>
     <h3>8.2 · Ami kijön (beépített embedderrel)</h3>
-    <p class="note"><b>Saját mérés, nem benchmark.</b> Az alábbi számok a labor mellékelt, kitalált mintakorpuszán és kérdéssorán, a beépített embedderrel mért eredmények. Más korpuszon, más kérdésekkel és más modellel mások lesznek; általános tanulságot csak az irányokból érdemes levonni.</p>
+    <p class="note"><b>Saját mérés, nem benchmark.</b> Az alábbi számok a labor mellékelt, kitalált mintakorpuszán és kérdéssorán, a beépített embedderrel mért eredmények. Más korpuszon, más kérdésekkel és más modellel mások lesznek; általános tanulságot csak az irányokból érdemes levonni. Ez a futtatás a visszakeresést értékeli: a 15 kérdésből azt a 14-et, amelyre van válasz a dokumentumokban. A válaszgenerálás, a forráshűség és a hiányzó információ felismerése külön tesztet igényel.</p>
 <pre class="py" data-name="python3 l5_eval.py">k = 1:
   csak vektor            recall@1:  6/14  ( 42.9%)
   csak BM25              recall@1:  8/14  ( 57.1%)
@@ -460,7 +465,7 @@ TIPUSONKÉNTI BONTÁS (hibrid, k=3):
     <p class="key"><b>Ez a labor lényege, csináld meg.</b> Jegyezd fel a fenti számokat. Telepítsd a <code>sentence-transformers</code> csomagot, a <code>kozos.py</code>-ban állítsd a <code>BACKEND</code> értékét <code>"lokalis"</code>-ra, építsd újra az indexet (<code>python3 l2_index.py</code>, kötelező, a régi vektorok érvénytelenek), aztán futtasd újra az <code>l5_eval.py</code>-t, és hasonlítsd össze.</p>
     <p>Figyeld külön a szemantikus és a ragozás miatt bukott kérdéseket. Ott várható a legnagyobb ugrás, mert egy jó szemantikus embedding-modell olyan hasonlóságokat is felismerhet, amelyeket a puszta szóegyezés nem <a class="ref" href="#ref-4">[4]</a> <a class="ref" href="#ref-5">[5]</a>. Garancia erre sincs. Ha nem ugrik, az is információ: akkor a modell magyar nyelvi képessége a szűk keresztmetszet, és másik modellt kell próbálni. Előre nem tudjuk megmondani, mit fogsz látni: a magyar nyelvű teljesítmény modellenként erősen szór, és ezt őszintébb megmérni, mint megjósolni.</p>
     <details class="deeper"><summary>Mélyebben: amit ezen felül mérni kell éles rendszerben</summary>
-      <p>A recall@k a visszakeresést méri <a class="ref" href="#ref-6">[6]</a>. A generáláshoz két további mérőszám kell, és mindkettőt gyakran egy második nyelvi modellel, bíró-modellel mérik <a class="ref" href="#ref-7">[7]</a>:</p>
+      <p>A recall@k a visszakeresést méri <a class="ref" href="#ref-6">[6]</a>. Ebben a laborban kérdésenként egyetlen helyes fejezetet fogadunk el, ezért a mért érték valójában a találati arány (hit rate@k: a kérdések hány százalékánál van a helyes darab az első k-ban), ami ebben az esetben egybeesik a recall@k-val. Ha egy kérdéshez több releváns darab tartozik, a kettő eltér. A generáláshoz két további mérőszám kell, és mindkettőt gyakran egy második nyelvi modellel, bíró-modellel mérik <a class="ref" href="#ref-7">[7]</a>:</p>
       <ul>
         <li><b>Megalapozottság:</b> a válasz minden állítása levezethető-e az átadott darabokból? Bontsd a választ állításokra, és mindegyikre kérdezd meg egy modelltől, hogy a forrás alátámasztja-e. Bináris ítélet, egy állítás egy hívás.</li>
         <li><b>Válaszrelevancia:</b> a válasz a feltett kérdésre válaszol-e, vagy mellé.</li>
@@ -493,7 +498,7 @@ KÉRDÉS: Mennyi volt a K-402 ügyféljegyeinek összes megoldási ideje 2025-be
 
 Próbáld ki a hibás ágat is:
    {"hiba": "Nincs 'K-999' kódú kurzus. Ismert kurzusok: K-402, K-405."}</pre>
-    <p>Ezt keresésből nem lehet megválaszolni, akármilyen jó az embedding. A válasz nincs leírva sehol: három ügyféljegyből kell összeadni (6 + 9 + 4 = 19 óra). Ez nem keresési, hanem számítási feladat, és pontosan itt van a RAG határa. A megoldás, hogy a modell eszközt hívhat, visszakapja az eredményt, és ebből dönti el a következő lépést. Ez az egyszerű hurok (modell → eszköz → eredmény → modell) már agentikus működés, ehhez nem kell külön keretrendszer <a class="ref" href="#ref-9">[9]</a>.</p>
+    <p>Ezt keresésből nem lehet megválaszolni, akármilyen jó az embedding. A válasz nincs leírva sehol: három ügyféljegyből kell összeadni (6 + 9 + 4 = 19 óra). Ez nem keresési, hanem számítási feladat: itt a keresés önmagában kevés. Egy RAG-rendszer ezért számítást és eszközhívást is tartalmazhat; az eszközhasználat nem a RAG ellentéte, hanem kiegészítése. A megoldás, hogy a modell eszközt hívhat, visszakapja az eredményt, és ebből dönti el a következő lépést. Ez az egyszerű hurok (modell → eszköz → eredmény → modell) már agentikus működés, ehhez nem kell külön keretrendszer <a class="ref" href="#ref-9">[9]</a>.</p>
     <h3>9.1 · Az eszköz: egy közönséges függvény</h3>
 <pre class="py" data-name="l6_eszkoz.py">def ugyfeljegy_statisztika(kurzus=None):
     ...
@@ -507,7 +512,7 @@ Próbáld ki a hibás ágat is:
     <p>Az utolsó sor egy listaértelmezés: a <code>[s[0] for s in sorok]</code> ugyanaz, mintha ciklussal gyűjtenéd össze minden sor első elemét. A fontos rész viszont nem a szintaxis, hanem hogy mit ad vissza: összesített, tömör adatot. Nem a három teljes ügyféljegy szövegét, mert az bemenne a kontextusba, és tokent meg figyelmet enne. Az eszköz feladata a szűrés, nem a nyers adat átpasszolása.</p>
     <h3>9.2 · A tanító hibaüzenet</h3>
 <pre class="py" data-name="l6_eszkoz.py">return {"hiba": f"Nincs '{kurzus}' kódú kurzus. Ismert kurzusok: K-402, K-405."}</pre>
-    <p>A hibaüzenet nem azt mondja, hogy „érvénytelen paraméter”, hanem megmondja, mi a helyes. A modell ebből a következő lépésben ki tudja javítani magát, emberi beavatkozás nélkül. Egy „Hiba: 400” üzenettel viszont beragad, és találgatni kezd. Az eszközök hibaüzenete a modell egyetlen tanulási csatornája futás közben: írd őket úgy, mintha egy új kollégának magyaráznád.</p>
+    <p>A hibaüzenet nem azt mondja, hogy „érvénytelen paraméter”, hanem megmondja, mi a helyes. A modell ebből a következő lépésben ki tudja javítani magát, emberi beavatkozás nélkül. Egy „Hiba: 400” üzenettel viszont beragad, és találgatni kezd. A pontos hibaüzenet hasznos visszajelzés: segíthet a modellnek a következő eszközhívás javításában. Ez a beszélgetési előzményen keresztül hat, a modell súlyai nem változnak. Írd őket úgy, mintha egy új kollégának magyaráznád.</p>
     <h3>9.3 · Az agenthurok</h3>
 <pre class="py" data-name="l6_eszkoz.py, vázlat">for lepes in range(MAX_LEPES):
     valasz = kliens.messages.create(..., tools=[ESZKOZ_SEMA], messages=uzenetek)
@@ -527,7 +532,7 @@ Próbáld ki a hibás ágat is:
       <li><b>A <code>MAX_LEPES</code> nem díszlet.</b> Enélkül egy félresiklott modell a végtelenségig próbálkozhatna. Éles rendszerben mellé token- és költségkeret is kell.</li>
       <li><b>Az előzményt te tartod karban.</b> A modellnek nincs memóriája; a beszélgetés attól beszélgetés, hogy minden fordulóban visszaküldöd az egészet. Ezért drágul a hosszú agentfutás.</li>
     </ul>
-    <p class="note"><b>Feladat.</b> Írj egy második eszközt: <code>kurzus_adatok(kurzus)</code>, amely a kurzusleírásból visszaadja az alapadatokat (díj, létszám, megengedett hiányzás). Tedd be mindkét eszközt az eszközlistába, és tegyél fel egy kérdést, amelyhez mindkettő kell: „Hány ügyféljegy érkezett tavaly a K-402-ről, és hány alkalmat lehet hiányozni rajta?” Figyeld meg, hogy a modell két külön hívást indít: ez a többlépéses agent legkisebb valódi példája.</p>
+    <p class="note"><b>Feladat.</b> Írj egy második eszközt: <code>kurzus_adatok(kurzus)</code>, amely a kurzusleírásból visszaadja az alapadatokat (díj, létszám, megengedett hiányzás). Három helyen kell hozzányúlnod: a sémáját add át a modellnek (<code>tools=[...]</code>), vedd fel a <code>VEGREHAJTOK</code> szótárba, amely a hívott eszköz neve alapján választja ki a lefuttatandó függvényt, és ellenőrizd a bemenetét (az ismeretlen nevet és a hibás paramétert az <code>eszkoz_futtat()</code> már kezeli). Aztán tegyél fel egy kérdést, amelyhez mindkettő kell: „Hány ügyféljegy érkezett tavaly a K-402-ről, és hány alkalmat lehet hiányozni rajta?” Jó eséllyel a modell két külön hívást indít; ez a többlépéses agent legkisebb valódi példája. Garantálni nem lehet: futásonként eltérhet, hogyan bontja lépésekre a feladatot.</p>
     <div class="quiz" data-level="9" data-title="Önellenőrzés"></div>
   </div>
 </section>
@@ -549,7 +554,7 @@ Próbáld ki a hibás ágat is:
         <tr><td class="n">3</td><td>Naplózás: minden kérdés, találat, prompt, válasz, költség</td><td>enélkül nincs hibakeresés, és a golden set ebből fog bővülni</td></tr>
         <tr><td class="n">4</td><td>Költség- és lépéskorlát, időtúllépés, újrapróbálkozás</td><td>az első éles nap meg fogja mutatni, miért</td></tr>
         <tr><td class="n">5</td><td>Verziókezelés az indexben: frissülő dokumentum régi darabjainak törlése</td><td>az elavult szabály magabiztos idézése a legveszélyesebb hibatípus</td></tr>
-        <tr><td class="n">6</td><td>Jogosultság: a metaadat-szűrő arra is szűrjön, mit láthat a kérdező</td><td>a keresés és a jogosultság ugyanaz a mechanizmus; használd ki</td></tr>
+        <tr><td class="n">6</td><td>Jogosultság: a keresés csak azt adja vissza, amit a kérdező láthat</td><td>a technika hasonló (szűrés a rangsorolás előtt), de a jogosultságot a hitelesített felhasználóhoz kötött, megbízható szabály adja, nem a kérdésből kinyert kurzuskód</td></tr>
         <tr><td class="n">7</td><td>Igazi vektoradatbázis</td><td>csak ha már tízezres nagyságrendben vagy; előbb felesleges bonyolítás</td></tr>
       </tbody>
     </table></div>
@@ -638,7 +643,7 @@ window.KVIZ = {
  6: [
   { q: 'Miért nem adható össze a koszinusz-hasonlóság és a BM25-pontszám?', o: ['Mert más skálán vannak, és nyers összegüknél könnyen az egyik dönt.', 'Mert a BM25 mindig negatív.', 'Mert a numpy nem tud ilyen számokat összeadni.'], a: 0, x: 'A koszinusz legfeljebb 1 (általában −1 és +1 között), a BM25-nek nincs felső korlátja. A rang viszont mindkét listán ugyanazt jelenti.' },
   { q: 'Miért került a K-405 vizsgafejezete az első helyre a K-402 vizsgájáról szóló kérdésnél?', o: ['Mert a K-405 frissebb dokumentum.', 'Mert szerepel benne a „K-402”, a „vizsga” és a K-402 vizsgakódja is.', 'Mert a vektorkereső véletlenszerű.'], a: 1, x: 'Minden kulcsszó egyezik, csak a jelentés az ellenkezője: a fejezet épp arra figyelmeztet, hogy a K-402 kódja ott nem használható.' },
-  { q: 'Mi a leghatékonyabb egyetlen javítás erre a hibára?', o: ['Hosszabb rendszerprompt.', 'Metaadat-szűrés a kérdésből kinyert kurzuskódra.', 'Több darab átadása a modellnek.'], a: 1, x: 'A hiba a keresésben keletkezik, mielőtt a modell bármit látna, ezért prompttal nem javítható. A szűrővel a K-405 darabjai kiesnek.' }
+  { q: 'Mi a leghatékonyabb egyetlen javítás erre a hibára?', o: ['Hosszabb rendszerprompt.', 'Metaadat-szűrés a kérdésből kinyert kurzuskódra.', 'Több darab átadása a modellnek.'], a: 1, x: 'A hiba a keresésben keletkezik, mielőtt a modell bármit látna, ezért ott javítható a legmegbízhatóbban; prompttal nem javítható. A szűrővel a K-405 darabjai kiesnek.' }
  ],
  7: [
   { q: 'Miért kerül a kérdés a prompt végére, a dokumentumrészletek után?', o: ['Mert a modell a kontextus végét kezeli a legmegbízhatóbban.', 'Mert így rövidebb a prompt.', 'Mert a modell csak az utolsó sort olvassa el.'], a: 0, x: 'Ráadásul az állandó rész elöl gyorsítótárazható, a változó rész hátul van.' },
@@ -653,7 +658,7 @@ window.KVIZ = {
  9: [
   { q: 'Miért nem keresési feladat a „Mennyi volt a K-402 ügyféljegyeinek összes megoldási ideje?” kérdés?', o: ['Mert a válasz sehol nincs leírva, több jegyből kell kiszámolni.', 'Mert az ügyféljegyek titkosak.', 'Mert a kérdés angolul van.'], a: 0, x: 'Három jegy megoldási idejét kell összeadni (6 + 9 + 4 = 19 óra). Erre eszköz kell, nem jobb keresés.' },
   { q: 'Ki futtatja le ténylegesen az eszközt az agenthurokban?', o: ['A modell a saját szerverén.', 'A te kódod; a modell csak kéri a hívást.', 'Az SQLite automatikusan.'], a: 1, x: 'Ezért a te kódodban dől el minden jogosultsági és biztonsági kérdés, és a hívási kérést ellenőrizni kell.' },
-  { q: 'Miért jó, ha az eszköz hibaüzenete megmondja az ismert kurzuskódokat?', o: ['Mert a modell ebből ki tudja javítani magát a következő lépésben.', 'Mert így rövidebb a kód.', 'Mert a felhasználó nem látja a hibaüzenetet.'], a: 0, x: 'Az eszközök hibaüzenete a modell egyetlen tanulási csatornája futás közben.' }
+  { q: 'Miért jó, ha az eszköz hibaüzenete megmondja az ismert kurzuskódokat?', o: ['Mert a modell ebből ki tudja javítani magát a következő lépésben.', 'Mert így rövidebb a kód.', 'Mert a felhasználó nem látja a hibaüzenetet.'], a: 0, x: 'A pontos hibaüzenet a beszélgetési előzményen keresztül segíthet a modellnek javítani; a modell súlyai ettől nem változnak.' }
  ],
  10: [
   { q: 'Melyik fejlesztés jön a javasolt sorrendben a legelején?', o: ['Igazi vektoradatbázis.', 'Metaadat-szűrés a kérdésből kinyert kurzuskódra.', 'Nagyobb válaszoló modell.'], a: 1, x: 'Ez adja a legnagyobb minőségjavulást a legkevesebb munkából. A vektoradatbázis a hetedik.' },

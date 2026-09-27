@@ -134,6 +134,23 @@ ESZKOZ_SEMA = {
 
 MAX_LEPES = 5
 
+# Eszköznév -> végrehajtó függvény. Új eszköznél ide is fel kell venni,
+# és a sémáját is át kell adni a modellnek (tools=[...]).
+VEGREHAJTOK = {"ugyfeljegy_statisztika": ugyfeljegy_statisztika}
+
+
+def eszkoz_futtat(nev, bemenet):
+    """A modell csak KÉRI a hívást; mi döntjük el, mi fut le."""
+    fuggveny = VEGREHAJTOK.get(nev)
+    if fuggveny is None:
+        return {"hiba": f"Ismeretlen eszköz: {nev}. "
+                        f"Ismert eszközök: {', '.join(VEGREHAJTOK)}."}
+    try:
+        return fuggveny(**bemenet)
+    except TypeError as e:  # hiányzó vagy fölösleges paraméter
+        return {"hiba": f"Hibás paraméterek a(z) {nev} eszköznél: {e}"}
+
+
 def agenthurok(kerdes):
     """A hurok, ami az egész agentikus világot mozgatja.
 
@@ -178,7 +195,7 @@ def agenthurok(kerdes):
         for hivas in hivasok:
             print(f"  [lépés {lepes + 1}] eszközhívás: "
                   f"{hivas.name}({hivas.input})")
-            kimenet = ugyfeljegy_statisztika(**hivas.input)
+            kimenet = eszkoz_futtat(hivas.name, hivas.input)
             eredmenyek.append({
                 "type": "tool_result",
                 "tool_use_id": hivas.id,

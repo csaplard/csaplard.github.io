@@ -6,9 +6,12 @@ Eddig a rendszert építettük. Innentől azt kérdezzük: JÓ-E? És ami még
 fontosabb: ha holnap átírsz valamit, JOBB LETT-E?
 
 Amit mérünk, az a recall@k: a kérdések hány százalékánál van benne az
-első k találatban az a darab, ami valóban tartalmazza a választ.
-Ez a rendszer FELSŐ KORLÁTJA — ha a helyes darab nincs bent, a világ
-legjobb modellje sem fog jó választ adni belőle.
+első k találatban az a darab, ami valóban tartalmazza a választ. (Mivel
+kérdésenként egy helyes darabot fogadunk el, ez valójában a találati arány,
+hit rate@k; ilyenkor egybeesik a recall@k-val.)
+Ez a visszakeresést méri, nem a válaszokat: a generálás, a forráshűség és a
+"nincs adat" felismerése külön tesztet igényel. Ha a helyes darab nincs
+bent, a modell a szabályaink szerint nem tud belőle jó választ adni.
 """
 
 import json

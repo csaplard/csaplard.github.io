@@ -14,7 +14,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230b0c0e'/><path d='M16 5v22' stroke='%23e8b44c' stroke-width='3' stroke-linecap='round'/><rect x='6' y='9' width='7' height='5' fill='none' stroke='%23eceae4' stroke-width='1.5'/><rect x='19' y='18' width='7' height='5' fill='none' stroke='%23eceae4' stroke-width='1.5'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geologica:slnt,wght,CRSV,SHRP@-12..0,100..900,0..1,0..100&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&display=swap" rel="stylesheet">
-<script>try{var t=localStorage.getItem('ait-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<script>var t=null;try{t=localStorage.getItem('ait-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark')</script>
 <link rel="stylesheet" href="/assets/ait.css">
 <link rel="stylesheet" href="/assets/tananyag.css">
 <style>
@@ -51,10 +51,10 @@
     <section class="kit-sec" id="modszertan" aria-labelledby="h-modszertan">
       <h2 id="h-modszertan">Hogyan készülnek az anyagok</h2>
       <ul>
-        <li><b>Elsődleges források előbb.</b> Szakcikk, specifikáció és hivatalos dokumentáció az alap; blogbejegyzés legfeljebb kiegészítésként kerül be. A forrásjegyzék minden anyag végén megtalálható, a komolyabb állítások mellett szögletes zárójeles szám mutat a forrásra.</li>
-        <li><b>A kód fut, a számok stimmelnek.</b> A kódpéldákat lefuttatjuk, a számpéldákat újraszámoljuk. Ahol az oldal kimenetet vagy mért értéket közöl, az valódi futásból származik.</li>
+        <li><b>Elsődleges források előbb.</b> Szakcikk, specifikáció, hivatalos dokumentáció vagy egy kutatócsoport eredeti beszámolója az alap; másodlagos összefoglaló legfeljebb kiegészítésként kerül be. Nem a formátum dönt (egy eredeti kísérleti beszámoló blogon is elsődleges forrás), hanem az eredet, a módszer és az ellenőrizhetőség. A forrásjegyzék minden anyag végén megtalálható, a komolyabb állítások mellett szögletes zárójeles szám mutat a forrásra.</li>
+        <li><b>Kétféle kód, kétféle szám.</b> A futtatható példákhoz (például a RAG-labor letölthető csomagjához) megadjuk a szükséges környezetet és a várható kimenetet. A szemléltető kódvázlatok egy gondolatot mutatnak, nem kész programot. A közölt mérési eredményeknél jelöljük, milyen adatokkal és beállításokkal készültek.</li>
         <li><b>Kimondjuk, mi milyen szám.</b> Ami szemléltető, azt az oldal szemléltetőnek nevezi. Ami a saját mintaadatainkon mért eredmény, azt nem adjuk ki általános érvényűnek. Ami szakirodalomból származik, ott a forrás.</li>
-        <li><b>Az időérzékeny tartalomnak dátuma van.</b> Ahol egy anyag a mai eszközökről vagy gyakorlatról szól, ott „érvényes” dátum és felülvizsgálati időpont áll. Az időtálló elvek ilyen jelölést nem kapnak.</li>
+        <li><b>Az időérzékeny tartalomnak dátuma van.</b> Ahol egy anyag a mai eszközökről vagy gyakorlatról szól, ott „érvényes” dátum és felülvizsgálati időpont áll. A felülvizsgálati dátum terv, nem garancia arra, hogy addig minden változatlanul helyes marad. Az időtálló elvek ilyen jelölést nem kapnak.</li>
         <li><b>Hétköznapi, kitalált példák.</b> A példákban kitalált adatok és hétköznapi helyzetek szerepelnek: bolt, pékség, lakásár, ügyfélszolgálat. Cég- és márkanév a példákban nincs, csak a forrásjegyzékben.</li>
       </ul>
     </section>
@@ -71,7 +71,7 @@
 
     <section class="kit-sec" id="verzio" aria-labelledby="h-verzio">
       <h2 id="h-verzio">Verzió</h2>
-      <p>A verziószám az egész oldalra vonatkozik. Javításnál a második szám nő (v1.1), nagyobb átalakításnál az első (v2.0). Az egyes anyagoknál külön „frissítve” dátum is áll.</p>
+      <p>A verziószám az egész oldalra vonatkozik. Javításnál a második szám nő (v1.1), nagyobb átalakításnál az első (v2.0). Az egyes anyagoknál külön „frissítve” dátum is áll; az LLM-tananyagnak ezen felül saját tananyagverziója is van.</p>
       <ul>
         <li><b>v1.0 · 2026. szeptember 26.</b> Az első teljes kiadás: hét anyag, közös arculat, nyitóoldal forgatható 3D modellel, forrásjegyzékek és szakmai pontosítások.</li>
       </ul>
