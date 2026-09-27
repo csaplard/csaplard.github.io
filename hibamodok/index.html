@@ -908,10 +908,10 @@ window.KVIZ = {
     a: 0, x: 'Ha a „nem tudom” ugyanannyit ér, mint a rossz válasz, a tippelés megéri: néha bejön. Ez ösztönzési probléma, nem az architektúra hibája.' },
   { q: 'Mit mér az absztenciós ráta?',
     o: ['A válaszolható kérdéseken elért pontosságot.', 'A megválaszolhatatlan kérdéseknél a helyes visszalépések arányát.', 'Hányszor tagadja meg a modell a kérés teljesítését.'],
-    a: 1, x: 'Olyan kérdéseken mérjük, amelyekre a megadott kontextusban nincs válasz. Ott a „nincs adat” a jó válasz; minden más válasz alátámasztás nélküli.' },
-  { q: 'Egy ügyfélszolgálaton egy magabiztos, de téves válasz sokba kerül. Melyik rendszer a biztonságosabb itt?',
-    o: ['95% pontosság, 0% absztenciós ráta.', '85% pontosság, 80% absztenciós ráta.', 'Mindig az, amelyiknek nagyobb a pontossága.'],
-    a: 1, x: 'Az első rendszer a megválaszolhatatlan kérdéseknél sem jelez, így ezek a tévedései rejtve maradnak. A második kevesebbet tud, de jelez, ezért ha a téves válasz drága, a hibái jobban kezelhetők. Más helyzetben (olcsó tévedés, kevés megválaszolhatatlan kérdés) a mérleg máshogy is billenhet.' }
+    a: 1, x: 'Olyan kérdéseken mérjük, amelyekre a megadott kontextusban nincs válasz. Ott a „nincs adat”, egy pontosító kérdés vagy más bizonytalanságjelzés a jó válasz. Ha a rendszer ilyenkor mégis konkrét választ állít, azt a megadott forrás nem támasztja alá.' },
+  { q: 'Elég a pontosság és a megválaszolhatatlan kérdéseken mért visszalépési arány két rendszer biztonságának összehasonlításához?',
+    o: ['Igen, mindig a nagyobb pontosságú rendszer biztonságosabb.', 'Igen, mindig a gyakrabban visszalépő rendszer biztonságosabb.', 'Nem: a kérdéstípusok aránya és a hibák következménye is számít.'],
+    a: 2, x: 'A két mérőszám fontos, de önmagában nem dönti el, melyik rendszer alkalmasabb. A tényleges használat kérdéseit, a téves válaszok következményét és a visszalépés költségét együtt kell vizsgálni.' }
  ],
  2: [
   { q: 'Egy válasz forrásjelölt állítást tartalmaz, amely a megjelölt forrásban nem szerepel. Melyik típus ez?',
