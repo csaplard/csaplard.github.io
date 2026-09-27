@@ -1,7 +1,7 @@
 # RAG-labor — ügyfélszolgálati dokumentumasszisztens nulláról
 
 Ez a projekt a *„RAG-labor: építsünk egyet”* kézikönyv mellé tartozik
-(https://csaplard.github.io/rag-labor/). Minden script önállóan futtatható,
+(https://ailessons.hu/rag-labor/). Minden script önállóan futtatható,
 és mindegyik kiír valamit, amit érdemes megnézni.
 
 A dokumentumok egy kitalált, online tanfolyamokat szervező oktatási platform

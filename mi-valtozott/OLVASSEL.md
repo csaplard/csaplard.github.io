@@ -18,7 +18,7 @@ A bejegyzések egyetlen fájlban vannak: `bejegyzesek.json`. Az oldal
      - `kapcsolodo` (nem kötelező): link egy tananyagrészre, pl. `"/hibamodok/#szint-6"`
      - `forrasok`: legalább egy `{ "nev": "...", "url": "..." }`
 3. Amíg dolgozol rajta, maradjon `"piszkozat": true`. Előnézet:
-   `https://csaplard.github.io/mi-valtozott/?minta=1`
+   `https://ailessons.hu/mi-valtozott/?minta=1`
 4. Ha kész, töröld a `"piszkozat": true` sort (vagy írd `false`-ra), és
    pushold. A nyitóoldal automatikusan a legfrissebb közzétett hónap címét
    mutatja.

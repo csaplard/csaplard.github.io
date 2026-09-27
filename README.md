@@ -1,7 +1,7 @@
 # AI-tananyagok
 
 Ingyenes, magyar nyelvű AI-tananyagok a hétköznapi példáktól a kutatási szakirodalomig:
-https://csaplard.github.io/
+https://ailessons.hu/
 
 | Útvonal | Anyag |
 |---|---|

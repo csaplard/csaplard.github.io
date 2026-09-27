@@ -1,6 +1,6 @@
 # AI-tananyagok — nyitóoldal
 
-Ingyenes, magyar nyelvű AI-tananyagok nyitóoldala (csaplard.github.io). A bevezető hátterében egy forgatható 3D transzformer-modell áll. Minden szöveg magyar, a tegező, hétköznapi hangnemet tartsd meg.
+Ingyenes, magyar nyelvű AI-tananyagok nyitóoldala (https://ailessons.hu, korábban csaplard.github.io). A bevezető hátterében egy forgatható 3D transzformer-modell áll. Minden szöveg magyar, a tegező, hétköznapi hangnemet tartsd meg.
 
 ## Build nincs
 
