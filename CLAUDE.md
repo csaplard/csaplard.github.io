@@ -26,7 +26,7 @@ A repó statikus HTML; a GitHub Pages közvetlenül ezt szolgálja ki. Helyi kip
 ## Kereshetőség (SEO)
 
 - `robots.txt` és `sitemap.xml` a gyökérben. Új oldalnál vedd fel a sitemap-be, és frissítsd a `lastmod` dátumot a lényegesen módosított oldalaknál.
-- Minden nyilvános oldal fejében: beszédes `<title>` („Téma: mit tanulsz meg · AI-tananyagok”), `description`, `canonical`, Open Graph blokk (`og:*`, `twitter:card`) és a tananyagoknál `Course` típusú JSON-LD (szint, időigény, ingyenes, magyar). A megosztási kép: `/assets/og-kep.jpg` (1200×630, a nyitóoldal képernyőképe).
+- Minden nyilvános oldal fejében: beszédes `<title>` („Téma: mit tanulsz meg · AI-tananyagok”), `description`, `canonical`, Open Graph blokk (`og:*`, `twitter:card`) és a tananyagoknál `Course` típusú JSON-LD (szint, időigény, ingyenes, magyar). A megosztási kép: `/assets/og-kep-v2.jpg` (2400×1260, a nyitóoldal kétszeres felbontású képernyőképe; új képnél új fájlnév kell, mert a közösségi oldalak a régit tárolják).
 - A nyitóoldal JSON-LD-je (`WebSite` + `ItemList`) sorolja fel az anyagokat; új anyagnál ide is fel kell venni.
 - Csak valós adat kerülhet a strukturált adatokba (szint, idő, forrás), ugyanaz, ami az oldalon látszik.
 - A 3D modul (`scene.js` és a three.js) dinamikusan töltődik be (`import()` a `boot()`-ban), a fájlokat `modulepreload` jelzések töltik le előre.
