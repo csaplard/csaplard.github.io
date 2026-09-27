@@ -8,7 +8,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>3D Transformer · AI-tananyagok</title>
-<meta name="description" content="Egy kis, négyrétegű transzformer háromdimenziós modellje: egy token útja az embeddingtől az attentionön és az MLP-n át a következő token kiválasztásáig. 28 másodperces film és négy részletes ábra.">
+<meta name="description" content="Egy kis, négyrétegű transzformer háromdimenziós modellje: egy token útja az embeddingtől az attentionön és az MLP-n át a következő token kiválasztásáig. 28 másodperces videó és négy részletes ábra.">
 <meta name="author" content="Csaplár Dániel">
 <link rel="canonical" href="https://csaplard.github.io/transformer-3d/">
 <meta property="og:image" content="https://csaplard.github.io/transformer-3d/poszter.webp">
@@ -43,7 +43,7 @@
 <body data-material="transformer-3d" data-store="t3d_progress_v1" data-levels="1" data-nolock>
 <header class="top fixed">
   <a class="brand" href="/">AI-tananyagok</a>
-  <nav aria-label="Anyagon belüli navigáció"><a class="wide" href="#film">Film</a><a href="#abrak">Ábrák</a><a class="wide" href="#modell">A modell</a></nav>
+  <nav aria-label="Anyagon belüli navigáció"><a class="wide" href="#film">Videó</a><a href="#abrak">Ábrák</a><a class="wide" href="#modell">A modell</a></nav>
   <button class="theme" type="button" data-theme-toggle aria-label="Színtéma váltása"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
 </header>
 
@@ -55,8 +55,8 @@
     <div>
       <h1>3D Transformer: egy token útja</h1>
       <p class="lede">Egy kis, négyrétegű transzformer háromdimenziós modellje. A kamera egyetlen tokent követ az embeddingtől az attentionön és az MLP-n át a következő token kiválasztásáig.</p>
-      <p class="facts">28 mp-es film és 4 ábra · kb. 15 perc · kezdő. Legjobb az <a href="/llm-oktatoanyag/">LLM-tananyag</a> 4–5. szintje után, összefoglalóként.</p>
-      <a class="start" href="#film">A film megtekintése →</a>
+      <p class="facts">28 mp-es videó és 4 ábra · kb. 15 perc · kezdő. Legjobb az <a href="/llm-oktatoanyag/">LLM-tananyag</a> 4–5. szintje után, összefoglalóként.</p>
+      <a class="start" href="#film">A videó megtekintése →</a>
     </div>
     <figure class="hero-fig"><img src="attekintes-kicsi.webp" width="800" height="480" alt="A transzformer teljes modellje felülről, metszetben: balra a tokenek belépése, középen négy egymás utáni réteg, jobbra a kimenet" style="display:block;width:100%;height:auto"><figcaption>A teljes modell metszetben. A szerkezet végig egy irányba halad: balról jobbra, rétegről rétegre.</figcaption></figure>
   </section>
@@ -64,7 +64,7 @@
   <div class="lesson-col">
 
 <section class="intro-sec" id="film" aria-labelledby="h-film">
-  <h2 id="h-film">A film</h2>
+  <h2 id="h-film">A videó</h2>
   <div class="lvl-body">
     <figure class="film">
       <video id="video" controls preload="metadata" playsinline poster="poszter.webp" aria-describedby="film-leiras">
@@ -72,7 +72,7 @@
         A böngésződ nem tudja lejátszani a videót. <a href="egy-token-utja.mp4">Letöltés (MP4, 5,6 MB)</a>
       </video>
     </figure>
-    <p id="film-leiras" class="ui dim">Magyar feliratos, hang nélküli, 28 másodperces film. A lépésekre kattintva a film az adott részhez ugrik.</p>
+    <p id="film-leiras" class="ui dim">Magyar feliratos, hang nélküli, 28 másodperces videó. A lépésekre kattintva a videó az adott részhez ugrik.</p>
     <ol class="timeline" id="timeline">
       <li><button type="button" data-t="0"><span class="tc">0:00</span><b>Token → embedding</b><span class="d">A SAT tokenből 24 koordinátás reprezentáció lesz.</span></button></li>
       <li><button type="button" data-t="4.5"><span class="tc">0:04</span><b>Q · K · V és RoPE</b><span class="d">A pozíció a Query és a Key koordinátapárjait forgatja; a Value ezt kihagyja.</span></button></li>
@@ -150,7 +150,7 @@
   </ol>
 </section>
 
-<p class="m-foot-note">A 3D modell, a film és az ábrák Blenderben készültek. A számértékek a szemléltető modell numerikus számításából származnak; a futtatókód és a részletes számítási nyomkövetés ezen az oldalon még nem érhető el.</p>
+<p class="m-foot-note">A 3D modell, a videó és az ábrák Blenderben készültek. A számértékek a szemléltető modell numerikus számításából származnak; a futtatókód és a részletes számítási nyomkövetés ezen az oldalon még nem érhető el.</p>
   </div>
 </div>
 <div class="lesson-wrap"><p class="feedback">Tanításban vagy a munkahelyeden használod? Örülnék, ha megírnád: <a href="mailto:csaplar.d@gmail.com">csaplar.d@gmail.com</a></p></div>
@@ -160,8 +160,8 @@
 <script>
 window.KVIZ = {
  1: [
-  { q: 'Miért nem nyelvi jóslat, hogy a modell 90,65%-kal az „A” tokent választja?', o: ['Mert a súlyok betanítatlanok, véletlenmagból származnak.', 'Mert a szótár túl nagy.', 'Mert a film le van lassítva.'], a: 0, x: 'A számítás valódi és reprodukálható, de betanítatlan súlyokkal a kimenetnek nincs nyelvi érvényessége.' },
-  { q: 'Mit csinál a RoPE a filmben?', o: ['A Value-vektorokat forgatja.', 'A Query és a Key koordinátapárjait forgatja a token pozíciója szerint.', 'Összeadja a fejek kimenetét.'], a: 1, x: 'A forgatás szöge a pozíciótól függ, így a Query és a Key skalárszorzata a relatív távolságot is tükrözi. A Value-ág nem forog.' },
+  { q: 'Miért nem nyelvi jóslat, hogy a modell 90,65%-kal az „A” tokent választja?', o: ['Mert a súlyok betanítatlanok, véletlenmagból származnak.', 'Mert a szótár túl nagy.', 'Mert a videó le van lassítva.'], a: 0, x: 'A számítás valódi és reprodukálható, de betanítatlan súlyokkal a kimenetnek nincs nyelvi érvényessége.' },
+  { q: 'Mit csinál a RoPE a videóban?', o: ['A Value-vektorokat forgatja.', 'A Query és a Key koordinátapárjait forgatja a token pozíciója szerint.', 'Összeadja a fejek kimenetét.'], a: 1, x: 'A forgatás szöge a pozíciótól függ, így a Query és a Key skalárszorzata a relatív távolságot is tükrözi. A Value-ág nem forog.' },
   { q: 'Mi a KV-tár szerepe?', o: ['A korábbi tokenek Key- és Value-vektorait őrzi, hogy ne kelljen újraszámolni őket.', 'A betanított tudást tárolja.', 'A következő tokent választja ki.'], a: 0, x: 'A KV-tár gyorsítja az autoregresszív számítást; nem tudásarchívum, és nem helyettesíti a tanult súlyokat.' }
  ]
 };

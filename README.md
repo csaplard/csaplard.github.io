@@ -12,7 +12,7 @@ https://csaplard.github.io/
 | `/python-alapok/` | Python-alapok — 12 gyakorlólap + zárófeladat |
 | `/rag-labor/` | RAG-labor — 10 lépés, letölthető kód (`labor/`, `labor.zip`) |
 | `/ai-atlasz/` | AI Atlasz — 18 fejezet, interaktív eszközök |
-| `/transformer-3d/` | 3D Transformer — film és ábrák |
+| `/transformer-3d/` | 3D Transformer — videó és ábrák |
 | `/mi-valtozott/` | havi összefoglaló (útmutató: `mi-valtozott/OLVASSEL.md`) |
 | `/az-oldalrol/` | szerző, módszertan, AI-használat, hibajelzés, verzió (v1.1) |
 | `/stilus/` | belső komponenskészlet (noindex) |
