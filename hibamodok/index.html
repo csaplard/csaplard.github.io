@@ -267,7 +267,7 @@ def husegi_pontszam(model, valasz, forrasok):
 <p>Amit sokan hisznek: hőmérséklet nullára, és a teljes rendszer determinisztikus lesz. Rögzített logitokból a mohó választás valóban determinisztikus, de a teljes kiszolgálórendszer ettől még adhat eltérő kimenetet: a lebegőpontos összegzés sorrendje, a kiszolgáló kötegmérete, a hardver és a szoftververzió mind belejátszhat. Ha egy kérésedet más kérésekkel egy kötegben dolgozzák fel, az eredmény bitre nem feltétlenül ugyanaz. Saját, rögzített környezetben determinisztikus műveletekkel ismételhető futtatás is elérhető; más gépre vagy verzióra ez nem mindig vihető át.</p>
 
 <div class="note fault">
-<b>A gyakorlati következmény:</b> egy tesztből nem lehet következtetni. Ha lefuttatsz egy esetet és jó, az nem jelenti azt, hogy jó. Ötször kell lefuttatni, és megnézni, hányszor jó. Ettől lesz a tesztelésből mérés.
+<b>A gyakorlati következmény:</b> egy tesztből nem lehet következtetni. Ha lefuttatsz egy esetet és jó, az nem jelenti azt, hogy jó. Többször kell lefuttatni (induló értéknek jó az öt), és megnézni, hányszor jó. Ettől lesz a tesztelésből mérés. Öt egyforma eredmény sem bizonyít nagy megbízhatóságot, csak jobb kép, mint egy.
 <div class="demo" id="dtemp">
           <h4>Kísérlet: hőmérséklet és stabilitás</h4>
           <p class="hint">Szemléltető modell, nem mérés: azt mutatja, hogyan mozog egymással szemben a válaszok egyezése és a változatossága, ahogy a hőmérséklet nő. A számok illusztratívak, csak az irányok jellemzők.</p>
@@ -750,7 +750,7 @@ def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
     </div>
   </header>
   <div class="lvl-body">
-    <p class="lead-p">Ez az a szint, ami a legtöbbet éri, és amiből a legkevesebben tudnak valamit. Ha egy dolgot viszel el az anyagból, ez legyen az.</p>
+    <p class="lead-p">Ezen a szinten azt tanulod meg, hogyan állíts össze tesztkészletet és mérést, amellyel egy változtatásról kiderül, valóban javított-e.</p>
     <div class="depth">
       <div role="tablist" aria-label="Mélység">
         <button role="tab" id="t-9a" aria-controls="p-9a" aria-selected="true"><b>Egyszerűen</b><span>mi történik</span></button>
@@ -763,7 +763,7 @@ def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
 <p>Ami működik: egy <b>golden set</b> — néhány tucat vagy száz eset, amiről te magad eldöntötted, mi a jó válasz —, és rajta egy sor különböző típusú ellenőrzés. Nem egy szám, hanem néhány, mert a rendszer több irányban tud elromlani.</p>
 
 <div class="note">
-<b>Méretezés.</b> 30 gondosan összeállított eset többet ér, mint 500 összekapart. A gondosság azt jelenti: lefedi a valódi használat típusait, benne vannak a határesetek, és benne vannak a megválaszolhatatlan kérdések is.
+<b>Méretezés.</b> Kezdésnek 30 gondosan összeállított eset is sokat ad, gyakran többet, mint 500 összekapart. Hogy végül mennyi kell, a feladat változatosságán és a hibák költségén múlik. A gondosság azt jelenti: lefedi a valódi használat típusait, benne vannak a határesetek, és benne vannak a megválaszolhatatlan kérdések is.
       </div>
       <div role="tabpanel" id="p-9b" aria-labelledby="t-9b" hidden>
 <p>Az ellenőrzések három szintje, olcsótól drágáig. A helyes stratégia: amit lehet, told lefelé.</p>
@@ -835,14 +835,14 @@ def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
 <h3>Ha csak egy hetet szánsz rá</h3>
 <p>Ebben a sorrendben térül meg a legjobban:</p>
 <ol>
-<li><b>Építs 30 esetes golden setet.</b> Ez a hét fele. Minden más ezen múlik, és ez az egyetlen lépés, amit nem lehet megspórolni.</li>
+<li><b>Építs egy kezdő, kb. 30 esetes golden setet.</b> Ez a hét fele. A többi mérés erre épül, ezért ezzel érdemes kezdeni.</li>
 <li><b>Mérd külön a visszakeresést és a generálást.</b> Fél nap, és megmondja, min kell dolgoznod.</li>
 <li><b>Mérd az absztenciós rátát.</b> Fél nap, és megmutatja, milyen gyakran válaszol a rendszered alátámasztás nélkül.</li>
 <li><b>Futtass mindent háromszor.</b> Egy sor változtatás, és onnantól mérésed van, nem megfigyelésed.</li>
 <li><b>Rögzítsd a modellverziót és verziózd a promptot.</b> Egy óra, és megszűnik a „miért változott” kategória.</li>
 </ol>
 
-<p class="note"><b>Ami ebből átvihető bármilyen más területre:</b> az egész anyag egyetlen elvre megy vissza — előbb építsd meg a műszert, aztán hangolj. Aki fordítva csinálja, az nem fejleszt, hanem hisz.</p>
+<p class="note"><b>Ami ebből átvihető bármilyen más területre:</b> az egész anyag egyetlen elvre megy vissza — előbb építsd meg a műszert, aztán hangolj. Méréssel meg tudod különböztetni a valódi javulást az egyetlen sikeres példától.</p>
     <div class="quiz" data-level="10"></div>
   </div>
 </section>
@@ -908,10 +908,10 @@ window.KVIZ = {
     a: 0, x: 'Ha a „nem tudom” ugyanannyit ér, mint a rossz válasz, a tippelés megéri: néha bejön. Ez ösztönzési probléma, nem az architektúra hibája.' },
   { q: 'Mit mér az absztenciós ráta?',
     o: ['A válaszolható kérdéseken elért pontosságot.', 'A megválaszolhatatlan kérdéseknél a helyes visszalépések arányát.', 'Hányszor tagadja meg a modell a kérés teljesítését.'],
-    a: 1, x: 'Olyan kérdéseken mérjük, amelyekre a megadott kontextusban nincs válasz. Ott a „nincs adat” a jó válasz; minden más kitalálás.' },
-  { q: 'Melyik rendszer a biztonságosabb éles használatra?',
-    o: ['95% pontosság, 0% absztenciós ráta.', '85% pontosság, 80% absztenciós ráta.', 'A kettő egyenértékű, csak a pontosság számít.'],
-    a: 1, x: 'Az első rendszer sosem jelzi, ha nem tud valamit, vagyis a tévedései láthatatlanok. A második kevesebbet tud, de jelez, így a hibái kezelhetők.' }
+    a: 1, x: 'Olyan kérdéseken mérjük, amelyekre a megadott kontextusban nincs válasz. Ott a „nincs adat” a jó válasz; minden más válasz alátámasztás nélküli.' },
+  { q: 'Egy ügyfélszolgálaton egy magabiztos, de téves válasz sokba kerül. Melyik rendszer a biztonságosabb itt?',
+    o: ['95% pontosság, 0% absztenciós ráta.', '85% pontosság, 80% absztenciós ráta.', 'Mindig az, amelyiknek nagyobb a pontossága.'],
+    a: 1, x: 'Az első rendszer a megválaszolhatatlan kérdéseknél sem jelez, így ezek a tévedései rejtve maradnak. A második kevesebbet tud, de jelez, ezért ha a téves válasz drága, a hibái jobban kezelhetők. Más helyzetben (olcsó tévedés, kevés megválaszolhatatlan kérdés) a mérleg máshogy is billenhet.' }
  ],
  2: [
   { q: 'Egy válasz forrásjelölt állítást tartalmaz, amely a megjelölt forrásban nem szerepel. Melyik típus ez?',
@@ -922,7 +922,7 @@ window.KVIZ = {
     a: 0, x: 'A kettő független: egy válasz lehet hűséges egy téves forráshoz, és lehet igaz úgy, hogy a megadott forrásból nem következik.' },
   { q: 'Miért kell a modellbírót kézzel címkézett mintán is ellenőrizni?',
     o: ['Mert a bíró kimenete nem érvényes JSON.', 'Mert a bíró is modell, és maga is tévedhet.', 'Mert a kézi címke mindig tévedhetetlen.'],
-    a: 1, x: 'Ha a bíró és a kézi címkék egyezése 80% alatt van, a mérőeszköz rosszabb, mint amit mér. A kézi címke sem tévedhetetlen, de ez a viszonyítási alap.' }
+    a: 1, x: 'A kézi címkékkel mért egyezés mutatja meg, mennyire bízhatsz a bíróban (induló ökölszabálynak jó a 80%). A kézi címke sem tévedhetetlen, de ez a viszonyítási alap.' }
  ],
  3: [
   { q: 'Determinisztikus-e a kimenet 0-s hőmérsékleten?',
@@ -930,7 +930,7 @@ window.KVIZ = {
     a: 1, x: 'A lebegőpontos összegzés sorrendje, a kiszolgáló kötegmérete és a hardver miatt 0-s hőmérsékleten is előfordulhat eltérés.' },
   { q: 'Egy teszteset egyszer sikeresen lefutott. Mi a helyes következő lépés?',
     o: ['Elfogadni, hiszen átment.', 'Többször lefuttatni, és a sikerarányt nézni.', 'Emelni a hőmérsékletet, és újra futtatni.'],
-    a: 1, x: 'Egy futás csak megfigyelés. Ötször kell lefuttatni, és megnézni, hányszor jó: ettől lesz a tesztelésből mérés.' },
+    a: 1, x: 'Egy futás csak megfigyelés. Többször kell lefuttatni (induló értéknek jó az öt), és megnézni, hányszor jó: ettől lesz a tesztelésből mérés.' },
   { q: 'Mire jó az önkonzisztencia-szavazásnál a válaszok egyetértési aránya?',
     o: ['Bizonytalansági jelnek: alacsony egyetértésnél ember döntsön.', 'Költségcsökkentésre, mert kevesebb hívás kell.', 'A hőmérséklet automatikus beállítására.'],
     a: 0, x: 'Ha az öt minta között kevés az egyetértés, a modell bizonytalan, és a választ nem érdemes automatikusan kiadni. A módszer drágább, nem olcsóbb: n minta n-szeres költség.' }
@@ -955,12 +955,12 @@ window.KVIZ = {
     a: 0, x: 'Két cikkszám a vektortérben nagyon közel eshet egymáshoz, pedig egy karakter eltérés is mást jelent. Ezért érdemes kulcsszavas ágat is használni, és mérni, hogy a hibrid (szemantikus és kulcsszavas) keresés javít-e.' },
   { q: 'Miért a rangokból számol a reciprok rangfúzió, nem a pontszámokból?',
     o: ['Mert a rangokat gyorsabb kiszámolni.', 'Mert a keresők pontszámai nem összemérhetők.', 'Mert a pontszámok mindig negatívak.'],
-    a: 1, x: 'A szemantikus és a kulcsszavas kereső más skálán pontoz, így a pontszámaik összeadása értelmetlen. A rang mindkettőnél ugyanazt jelenti.' }
+    a: 1, x: 'A szemantikus és a kulcsszavas kereső más skálán pontoz, így a nyers pontszámaik összeadása nem megbízható (normalizálással és hangolt súlyokkal lehetne, de az több munka). A rang mindkettőnél ugyanazt jelenti.' }
  ],
  6: [
   { q: 'Miért nehéz a prompt injection ellen védekezni?',
     o: ['Mert a modell ugyanabban a folyamban kapja az utasítást és az adatot.', 'Mert a támadások mindig titkosítva érkeznek.', 'Mert a felhasználó bármikor átírhatja a rendszerpromptot.'],
-    a: 0, x: 'A rendszerprompt, a kérdés és a beolvasott dokumentum ugyanabban a token-folyamban érkezik. Nincs olyan határ, mint egy adatbázisnál a paraméterezett lekérdezés.' },
+    a: 0, x: 'A rendszerprompt, a kérdés és a beolvasott dokumentum ugyanabban a token-folyamban érkezik. A modell tanulhatja ezek eltérő kezelését, de nincs olyan kikényszerített határ, mint egy adatbázisnál a paraméterezett lekérdezés.' },
   { q: 'Melyik a valódi védelem a felsoroltak közül?',
     o: ['A gyanús minták szűrése a bemenetben.', 'Jogosultságkorlátozás és emberi jóváhagyás.', 'Egy hosszabb, szigorúbb rendszerprompt.'],
     a: 1, x: 'A szűrés és a szigorúbb utasítás csak a lécet emeli. Ha az ágens nem tud többet, mint a felhasználó, és a visszafordíthatatlan műveletekhez ember kell, a sikeres támadás kára is korlátozott.' },
@@ -972,7 +972,7 @@ window.KVIZ = {
   { q: 'Egy lépés 95%-ban sikerül. Független lépéseket feltételezve nagyjából mennyi egy tízlépéses lánc sikeraránya?',
     o: ['95%', '60%', '86%'],
     a: 1, x: '0,95¹⁰ ≈ 0,60. A siker valószínűségei szorzódnak, ezért a lánc sikeraránya gyorsan csökken.' },
-  { q: 'Tíz lépés, 95%-os lépéspontosság. Melyik javít többet?',
+  { q: 'Tíz független lépés, 95%-os lépéspontosság. Melyik javít többet?',
     o: ['A lépésszám felezése ötre.', 'A lépéspontosság emelése 96%-ra.', 'A kettő pontosan ugyanannyit.'],
     a: 0, x: 'Öt lépéssel 0,95⁵ ≈ 77%, 96%-os lépésekkel tíz lépésen 0,96¹⁰ ≈ 66%. A tízlépéses láncnak kb. 97,5%-os lépésekre lenne szüksége a 77%-hoz.' },
   { q: 'Milyen ellenőrzőt érdemes a lánc lépései közé tenni, ha megoldható?',
@@ -993,7 +993,7 @@ window.KVIZ = {
  9: [
   { q: 'Mi a golden set?',
     o: ['Kézzel összeállított tesztesetek, ismert jó válasszal.', 'A modell legjobb válaszainak automatikus gyűjteménye.', 'A tanítóadat legjobb minőségű része.'],
-    a: 0, x: 'Néhány tucat vagy száz eset, amelyről te döntötted el, mi a jó válasz. Harminc gondosan összeállított eset többet ér ötszáz összekapartnál.' },
+    a: 0, x: 'Néhány tucat vagy száz eset, amelyről te döntötted el, mi a jó válasz. Kezdésnek harminc gondosan összeállított eset is sokat ad, gyakran többet, mint ötszáz összekapart.' },
   { q: 'Miért kell minden mérési esetet többször lefuttatni?',
     o: ['Mert az első futás mindig lassabb.', 'Mert a rendszer nem determinisztikus.', 'Mert a bíró csak átlagot tud értékelni.'],
     a: 1, x: 'Egy futás csak megfigyelés. A futások közti szórás önálló jel is: nagy szórás instabil promptot jelez, akkor is, ha az átlag elfogadható.' },
@@ -1004,13 +1004,13 @@ window.KVIZ = {
  10: [
   { q: 'Ha csak egy hetet szánsz a rendszer javítására, mivel érdemes kezdeni?',
     o: ['Egy 30 esetes golden set összeállításával.', 'A prompt teljes átírásával.', 'Nagyobb modellre váltással.'],
-    a: 0, x: 'Minden más mérés ezen múlik, és ez az egyetlen lépés, amelyet nem lehet megspórolni.' },
+    a: 0, x: 'A többi mérés erre épül: tesztkészlet nélkül nem tudod megmondani, javított-e egy változtatás.' },
   { q: 'Melyik a hibaszorzódás legolcsóbb hatásos ellenszere?',
     o: ['Magasabb hőmérséklet minden lépésben.', 'Kevesebb lépés és determinisztikus ellenőrzőpontok.', 'Több dokumentum minden lépés kontextusában.'],
-    a: 1, x: 'A lépésszám csökkentése többet ér a lépésenkénti pontosság emelésénél, az ellenőrzőpontok pedig megállítják a hibás állapot továbbterjedését.' },
+    a: 1, x: 'A fölösleges lépések elhagyása és az olcsó, determinisztikus ellenőrzés gyakran a legtöbbet hozza: az ellenőrzőpontok megállítják a hibás állapot továbbterjedését. Egy szükséges ellenőrző lépést viszont nem érdemes elhagyni.' },
   { q: 'Mi az anyag egészének egyetlen elve?',
     o: ['Mindig a legújabb modellt használd.', 'Előbb építsd meg a mérést, aztán hangolj.', 'Minden hibánál bővítsd a promptot egy szabállyal.'],
-    a: 1, x: 'Aki mérés nélkül hangol, az nem fejleszt, hanem hisz. A promptbővítés mérés nélkül épp a csendes romlás egyik forrása.' }
+    a: 1, x: 'Mérés nélkül nem derül ki, hogy egy hangolás valóban javított-e. A promptbővítés mérés nélkül épp a csendes romlás egyik forrása.' }
  ]
 };
 </script>
