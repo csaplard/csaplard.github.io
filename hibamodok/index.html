@@ -159,7 +159,7 @@ def absztencios_rata(model, tesztsor):
     }</pre>
 
 <div class="note">
-<b>Ezt a számot kevesen mérik, és ez az egyik legjobban megtérülő eval.</b> Egy rendszer, ami 95%-os pontosságú a válaszolható kérdéseken, de 0%-os absztenciós rátájú, sok éles környezetben rosszabb, mint egy 85%-os, ami 80%-ban vissza tud lépni, főleg ha egy téves válasz sokba kerül. Az első akkor is válaszol, ha nincs mire alapoznia; a második jelez. Hogy melyik a jobb, a hibák költségén és a kérdések arányán múlik.
+<b>Ezt a számot kevesen mérik, és ez az egyik legjobban megtérülő kiértékelés.</b> Egy rendszer, ami 95%-os pontosságú a válaszolható kérdéseken, de 0%-os absztenciós rátájú, sok éles környezetben rosszabb, mint egy 85%-os, ami 80%-ban vissza tud lépni, főleg ha egy téves válasz sokba kerül. Az első akkor is válaszol, ha nincs mire alapoznia; a második jelez. Hogy melyik a jobb, a hibák költségén és a kérdések arányán múlik.
       </div>
       <div role="tabpanel" id="p-1c" aria-labelledby="t-1c" hidden>
 <p>A tétel formális magja: a generálást visszavezetik egy bináris osztályozási feladatra (<i>Is-It-Valid</i>), és megmutatják, hogy a generatív hibaarány alulról korlátos az IIV-tévesztési arány többszörösével. A következmény erős: a korlát nem egy adott architektúrából vagy a gyenge adatminőségből fakad, hanem magából a statisztikai feladatból. <a class="ref" href="#ref-1">[1]</a><a class="ref" href="#ref-3">[3]</a></p>
@@ -706,18 +706,22 @@ class PromptVerzio:
 JOBB_IRANY = {"pontossag": +1, "absztencio": +1, "hibaarany": -1,
               "koltseg": -1, "kesleltetes": -1}
 
-def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
-    """Nem engedjük ki, ha bármelyik metrika a zajsávon túl romlik.
+# Tűréshatár metrikánként, a metrika saját skáláján: a pontosság és az
+# arányok 0–1 közöttiek, a költség Ft/kérés, a késleltetés másodperc.
+# Ugyanaz a 0.02 mást jelentene mindegyiknél. Ezek a példa induló értékei:
+# a saját rendszerednél a futások szórásából érdemes megválasztani őket.
+TURES = {"pontossag": 0.02, "absztencio": 0.02, "hibaarany": 0.01,
+         "koltseg": 0.5, "kesleltetes": 0.3}
 
-    A 'zajsav' azért kell, mert a mérés maga is zajos (lásd 3. szint).
-    A 0,02 a példa induló értéke: a saját rendszerednél a mérés
-    ismételhetőségéből (a futások szórásából) érdemes megválasztani."""
+def regresszio_kapu(uj, referencia, golden, tures=TURES):
+    """Nem engedjük ki, ha bármelyik metrika a saját tűrésén túl romlik.
+    A tűrés azért kell, mert a mérés maga is zajos (lásd 3. szint)."""
     u = merj(uj, golden)
     r = merj(referencia, golden)
 
     # romlás = mennyit rosszabb az új a jó irányhoz képest
     romlas = {k: (r[k] - u[k]) * JOBB_IRANY[k] for k in r
-              if (r[k] - u[k]) * JOBB_IRANY[k] &gt; zajsav}
+              if (r[k] - u[k]) * JOBB_IRANY[k] &gt; tures[k]}
     if romlas:
         return {"kiadhato": False, "romlott": romlas,
                 "uzenet": f"{uj.hash}: regresszió a(z) "
@@ -728,11 +732,11 @@ def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
 <b>Egyetlen konkrét szabály, ami sok bajtól megóv:</b> soha ne mutass a legfrissebb modellverzióra („latest”). Mindig rögzített verzióra hivatkozz, és a váltás legyen tudatos, mért lépés. A csendes modellfrissítés az egyik leggyakoribb oka annak, hogy „hirtelen elromlott”.
       </div>
       <div role="tabpanel" id="p-8c" aria-labelledby="t-8c" hidden>
-<p>A használatelmozdulás mérése az érdekes rész, mert a bemenetek eloszlását kell figyelni, nem a kimenetet. Használható eljárás: a beérkező kérdéseket beágyazod, klaszterezed, és hetente összeveted az eloszlást a golden set eloszlásával. Ha új klaszterek jelennek meg, amikre nincs teszteseted, az előrejelzi a romlást, mielőtt panasz lenne.</p>
+<p>A használatelmozdulás mérése az érdekes rész, mert a bemenetek eloszlását kell figyelni, nem a kimenetet. Használható eljárás: a beérkező kérdéseket beágyazod, klaszterezed, és hetente összeveted az eloszlást a tesztkészlet eloszlásával. Ha új klaszterek jelennek meg, amikre nincs teszteseted, az előrejelzi a romlást, mielőtt panasz lenne.</p>
 
 <p>A formális eszközök (populációstabilitási index, Kullback–Leibler-divergencia a klasztereloszláson) itt jól működnek. A gondolat ugyanaz, mint amikor egy orvos azt figyeli, eltolódnak-e egy beteg laborértékei a megszokott tartományhoz képest, csak itt a figyelt mennyiség egy beágyazási eloszlás.</p>
 
-<p>Ami nyitott: nincs jó gyakorlat arra, hogyan kell a golden setet karbantartani úgy, hogy ne „fagyjon rá” egy elavult használati mintára. Ha mindig ugyanazon a 200 kérdésen mérsz, akkor egy idő után arra optimalizálsz, ami már nem az, amit a felhasználók csinálnak. Ez csendesebb és alattomosabb, mint maga a romlás.</p>
+<p>Ami nyitott: nincs jó gyakorlat arra, hogyan kell a tesztkészletet karbantartani úgy, hogy ne „fagyjon rá” egy elavult használati mintára. Ha mindig ugyanazon a 200 kérdésen mérsz, akkor egy idő után arra optimalizálsz, ami már nem az, amit a felhasználók csinálnak. Ez csendesebb és alattomosabb, mint maga a romlás.</p>
       </div>
     </div>
     <div class="quiz" data-level="8"></div>
@@ -760,7 +764,7 @@ def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
       <div role="tabpanel" id="p-9a" aria-labelledby="t-9a">
 <p>A mérés alapproblémája: nincs egyetlen helyes válasz. Egy összefoglaló lehet jó ötféleképpen. Egy kódrészlet helyes lehet más szerkezettel. Ezért a szabad szöveges minőséget nem lehet egyetlen pontosságmutatóval leírni. A mérőszámot a feladathoz válaszd: osztályozásnál és adatkinyerésnél a pontosság vagy az F1 is hasznos; nyitott szöveges válaszoknál ezeket tartalmi, forráshelyességi és emberi értékeléssel kell kiegészíteni.</p>
 
-<p>Ami működik: egy <b>golden set</b> — néhány tucat vagy száz eset, amiről te magad eldöntötted, mi a jó válasz —, és rajta egy sor különböző típusú ellenőrzés. Nem egy szám, hanem néhány, mert a rendszer több irányban tud elromlani.</p>
+<p>Ami működik: egy <b>ellenőrzött tesztkészlet</b> (angolul <em>golden set</em>) — néhány tucat vagy száz eset, amiről te magad eldöntötted, mi a jó válasz —, és rajta egy sor különböző típusú ellenőrzés. Nem egy szám, hanem néhány, mert a rendszer több irányban tud elromlani.</p>
 
 <div class="note">
 <b>Méretezés.</b> Kezdésnek 30 gondosan összeállított eset is sokat ad, gyakran többet, mint 500 összekapart. Hogy végül mennyi kell, a feladat változatosságán és a hibák költségén múlik. A gondosság azt jelenti: lefedi a valódi használat típusait, benne vannak a határesetek, és benne vannak a megválaszolhatatlan kérdések is.
@@ -770,7 +774,7 @@ def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
 
 <div class="tbl"><table><thead><tr><th scope="col">Szint</th><th scope="col">Eszköz</th><th scope="col">Költség</th><th scope="col">Mit fog meg</th></tr></thead><tbody><tr><td>1. Determinisztikus</td><td>Séma, regex, tartomány, JSON-érvényesség</td><td>~0</td><td>Formai hibák, hiányzó mezők</td></tr><tr><td>2. Referenciás</td><td>Kulcstény-lefedettség, forrásjelölés megléte</td><td>Alacsony</td><td>Tartalmi hiányok</td></tr><tr><td>3. Modellbíró</td><td>LLM-as-judge rubrikával</td><td>Magas</td><td>Minőség, hangnem, érvelés</td></tr></tbody></table></div>
 
-<pre class="py" data-name="rétegzett eval-futtató">def eval_futtatas(rendszer, golden, ismetles=3):
+<pre class="py" data-name="rétegzett kiértékelés">def eval_futtatas(rendszer, golden, ismetles=3):
     """Ismétlés nélkül egy futás csak megfigyelés, ha a rendszer
     nem-determinisztikus (lásd 3. szint). A 3 induló érték; hogy mennyi
     elég, a feladat változatosságától és a hibák költségétől függ."""
@@ -811,7 +815,7 @@ def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
 
 <p>Külön kockázat, ami a 6. szinthez kapcsolódik: a modellbíró maga is támadható prompt injectionnel — ha az értékelendő szöveg tartalmaz utasítást a bírónak, az működhet. Éles környezetben, ahol felhasználói tartalom kerül a bíró elé, ezt figyelembe kell venni.</p>
 
-<p>A terület legnagyobb nyitott kérdése a konstruktumérvényesség: honnan tudod, hogy amit mérsz, az az, amit mérni akartál. Egy eval-szám sokszor a saját rubrikádat méri, nem a felhasználói értéket. A legjobb ellenszer nem statisztikai: rendszeresen olvasni a valódi beszélgetéseket. Ötven éles beszélgetés átolvasása többet mond, mint egy tizedesjegy a dashboardon.</p>
+<p>A terület legnagyobb nyitott kérdése a konstruktumérvényesség: honnan tudod, hogy amit mérsz, az az, amit mérni akartál. Egy kiértékelési szám sokszor a saját rubrikádat méri, nem a felhasználói értéket. A legjobb ellenszer nem statisztikai: rendszeresen olvasni a valódi beszélgetéseket. Ötven éles beszélgetés átolvasása többet mond, mint egy tizedesjegy a dashboardon.</p>
       </div>
     </div>
     <div class="quiz" data-level="9"></div>
@@ -835,7 +839,7 @@ def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
 <h3>Ha csak egy hetet szánsz rá</h3>
 <p>Ebben a sorrendben térül meg a legjobban:</p>
 <ol>
-<li><b>Építs egy kezdő, kb. 30 esetes golden setet.</b> Ez a hét fele. A többi mérés erre épül, ezért ezzel érdemes kezdeni.</li>
+<li><b>Építs egy kezdő, kb. 30 esetes ellenőrzött tesztkészletet.</b> Ez a hét fele. A többi mérés erre épül, ezért ezzel érdemes kezdeni.</li>
 <li><b>Mérd külön a visszakeresést és a generálást.</b> Fél nap, és megmondja, min kell dolgoznod.</li>
 <li><b>Mérd az absztenciós rátát.</b> Fél nap, és megmutatja, milyen gyakran válaszol a rendszered alátámasztás nélkül.</li>
 <li><b>Futtass mindent háromszor.</b> Egy sor változtatás, és onnantól mérésed van, nem megfigyelésed.</li>
@@ -852,7 +856,7 @@ def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
   <h2 id="h-gl">Glosszárium</h2>
   <dl class="gloss full">
     <div><dt><b>Absztenciós ráta</b></dt><dd>A megválaszolhatatlan kérdések aránya, amelyeknél a rendszer helyesen jelzi, hogy nincs adata, ahelyett hogy kitalálna valamit.</dd></div>
-    <div><dt><b>Golden set</b></dt><dd>Kézzel összeállított és ellenőrzött teszteset-gyűjtemény, amelyre ismert a helyes válasz. Minden mérés alapja.</dd></div>
+    <div><dt><b>Ellenőrzött tesztkészlet</b><span>golden set</span></dt><dd>Kézzel összeállított és ellenőrzött teszteset-gyűjtemény, amelyre ismert a helyes válasz. Minden mérés alapja.</dd></div>
     <div><dt><b>Hűség</b><span>faithfulness</span></dt><dd>Mennyire következik a válasz a megadott forrásból. Független attól, hogy a válasz a világban igaz-e.</dd></div>
     <div><dt><b>Hibrid keresés</b></dt><dd>Szemantikus (vektoros) és kulcsszavas (BM25) keresés kombinálása, jellemzően rangfúzióval.</dd></div>
     <div><dt><b>LLM-as-judge</b></dt><dd>Nyelvi modell használata egy másik modell kimenetének értékelésére, rubrika alapján. Torzításai miatt kalibrálni kell.</dd></div>
@@ -897,7 +901,7 @@ def regresszio_kapu(uj, referencia, golden, zajsav=0.02):
 </div>
 <div class="lesson-wrap"><p class="feedback">Tanításban vagy a munkahelyeden használod? Örülnék, ha megírnád: <a href="mailto:csaplar.d@gmail.com">csaplar.d@gmail.com</a></p></div>
 </main>
-<footer class="foot wrap"><span>© 2026 Csaplár Dániel · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu" rel="license">CC BY-NC-SA 4.0</a> · v1.0</span><span><a href="/az-oldalrol/">Az oldalról</a> · <a href="mailto:csaplar.d@gmail.com?subject=Hibajelz%C3%A9s%3A%20Hibam%C3%B3dok">Hibát találtál?</a> · <a href="mailto:csaplar.d@gmail.com">Kapcsolat</a></span></footer>
+<footer class="foot wrap"><span>© 2026 Csaplár Dániel · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu" rel="license">CC BY-NC-SA 4.0</a> · v1.1</span><span><a href="/az-oldalrol/">Az oldalról</a> · <a href="mailto:csaplar.d@gmail.com?subject=Hibajelz%C3%A9s%3A%20Hibam%C3%B3dok">Hibát találtál?</a> · <a href="mailto:csaplar.d@gmail.com">Kapcsolat</a></span></footer>
 
 <script>
 /* Szintzáró kvízek. A helyes válasz sorszáma: a (0-tól). A megjelenítéskor a sorrend véletlen. */
@@ -991,7 +995,7 @@ window.KVIZ = {
     a: 1, x: 'A kérdéseket beágyazod, csoportosítod, és hetente összeveted a tesztkészlet eloszlásával. Ha új csoportok jelennek meg, arra még nincs teszteseted.' }
  ],
  9: [
-  { q: 'Mi a golden set?',
+  { q: 'Mi az ellenőrzött tesztkészlet (golden set)?',
     o: ['Kézzel összeállított tesztesetek, ismert jó válasszal.', 'A modell legjobb válaszainak automatikus gyűjteménye.', 'A tanítóadat legjobb minőségű része.'],
     a: 0, x: 'Néhány tucat vagy száz eset, amelyről te döntötted el, mi a jó válasz. Kezdésnek harminc gondosan összeállított eset is sokat ad, gyakran többet, mint ötszáz összekapart.' },
   { q: 'Miért érdemes egy nem determinisztikus rendszer mérési eseteit többször lefuttatni?',
@@ -1003,7 +1007,7 @@ window.KVIZ = {
  ],
  10: [
   { q: 'Ha csak egy hetet szánsz a rendszer javítására, mivel érdemes kezdeni?',
-    o: ['Egy 30 esetes golden set összeállításával.', 'A prompt teljes átírásával.', 'Nagyobb modellre váltással.'],
+    o: ['Egy kb. 30 esetes ellenőrzött tesztkészlet összeállításával.', 'A prompt teljes átírásával.', 'Nagyobb modellre váltással.'],
     a: 0, x: 'A többi mérés erre épül: tesztkészlet nélkül nem tudod megmondani, javított-e egy változtatás.' },
   { q: 'Melyik a hibaszorzódás legolcsóbb hatásos ellenszere?',
     o: ['Magasabb hőmérséklet minden lépésben.', 'Kevesebb lépés és determinisztikus ellenőrzőpontok.', 'Több dokumentum minden lépés kontextusában.'],

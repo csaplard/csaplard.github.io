@@ -14,7 +14,7 @@ https://csaplard.github.io/
 | `/ai-atlasz/` | AI Atlasz — 18 fejezet, interaktív eszközök |
 | `/transformer-3d/` | 3D Transformer — film és ábrák |
 | `/mi-valtozott/` | havi összefoglaló (útmutató: `mi-valtozott/OLVASSEL.md`) |
-| `/az-oldalrol/` | szerző, módszertan, AI-használat, hibajelzés, verzió (v1.0) |
+| `/az-oldalrol/` | szerző, módszertan, AI-használat, hibajelzés, verzió (v1.1) |
 | `/stilus/` | belső komponenskészlet (noindex) |
 
 Közös keret: `assets/ait.css`, `assets/ait.js` (arculat, téma, komponensek),

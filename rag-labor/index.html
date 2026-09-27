@@ -421,7 +421,7 @@ Válaszolj a fenti szabályok szerint, forrásjelöléssel."""</pre>
   </div></header>
   <div class="lvl-body">
     <p>Futtasd: <code>python3 l5_eval.py</code>. Eddig építettünk. Innentől azt kérdezzük: jó-e? És ami még fontosabb: ha holnap átírsz valamit, jobb lett-e? Enélkül minden változtatás vakrepülés: úgy érzed, javult, mert három példát megnéztél, és nem tudod, hogy közben tíz másik elromlott.</p>
-    <h3>8.1 · A golden set</h3>
+    <h3>8.1 · Az ellenőrzött tesztkészlet (golden set)</h3>
     <p>A <code>kerdesek.json</code> tizenöt kérdést tartalmaz, mindegyikhez azt, hogy melyik dokumentum melyik fejezetében van a válasz. A rétegzés szándékos:</p>
     <div class="tbl"><table>
       <thead><tr><th scope="col">Típus</th><th scope="col">Mit tesztel</th></tr></thead>
@@ -551,7 +551,7 @@ Próbáld ki a hibás ágat is:
       <tbody>
         <tr><td class="n">1</td><td>Metaadat-szűrés a kérdésből kinyert kurzuskódra</td><td>a legnagyobb minőségjavulás a legkevesebb munkából (6.4)</td></tr>
         <tr><td class="n">2</td><td>Újrarangsorolás: keress 50-et, rendezd újra egy erősebb modellel, adj át 5-öt</td><td>a legjobb ár-érték arányú javítás; gyakran többet hoz, mint egy nagyobb válaszoló modell</td></tr>
-        <tr><td class="n">3</td><td>Naplózás: minden kérdés, találat, prompt, válasz, költség</td><td>enélkül nincs hibakeresés, és a golden set ebből fog bővülni</td></tr>
+        <tr><td class="n">3</td><td>Naplózás: minden kérdés, találat, prompt, válasz, költség</td><td>enélkül nincs hibakeresés, és a tesztkészlet ebből fog bővülni</td></tr>
         <tr><td class="n">4</td><td>Költség- és lépéskorlát, időtúllépés, újrapróbálkozás</td><td>az első éles nap meg fogja mutatni, miért</td></tr>
         <tr><td class="n">5</td><td>Verziókezelés az indexben: frissülő dokumentum régi darabjainak törlése</td><td>az elavult szabály magabiztos idézése a legveszélyesebb hibatípus</td></tr>
         <tr><td class="n">6</td><td>Jogosultság: a keresés csak azt adja vissza, amit a kérdező láthat</td><td>a technika hasonló (szűrés a rangsorolás előtt), de a jogosultságot a hitelesített felhasználóhoz kötött, megbízható szabály adja, nem a kérdésből kinyert kurzuskód</td></tr>
@@ -562,7 +562,7 @@ Próbáld ki a hibás ágat is:
     <h3>10.2 · Ha a saját anyagodra ülteted át</h3>
     <ul>
       <li>Kezdd 20–50 dokumentummal, ne az egész archívummal. A tanulságok ugyanazok, a ciklusidő a tizede.</li>
-      <li>Írd meg a golden setet előbb, mint hogy megnéznéd, mit tud a rendszer. Ötven valódi kérdés azoktól, akik használni fogják: ez a legértékesebb fél nap az egész projektben.</li>
+      <li>Írd meg a tesztkészletet előbb, mint hogy megnéznéd, mit tud a rendszer. Ötven valódi kérdés azoktól, akik használni fogják: ez a legértékesebb fél nap az egész projektben.</li>
       <li>Tisztázd az adatvédelmet, mielőtt egyetlen dokumentumot feltöltenél bármilyen felhőszolgáltatásba. A <code>lokalis</code> mód pontosan azért van a laborban, hogy úgy is dolgozhass, hogy semmi nem hagyja el a gépedet.</li>
       <li>Ne akarj rögtön csevegőrobotot. A legjobb első verzió egy keresődoboz, amely forrásjelölt választ ad. A beszélgetés jöhet később, ha egyáltalán kell.</li>
     </ul>
@@ -582,7 +582,7 @@ Próbáld ki a hibás ágat is:
         <tr><td>A találatok értelmetlenek modellváltás után</td><td>régi vektorok az új embedderrel</td><td>futtasd újra az <code>l2_index.py</code>-t</td></tr>
         <tr><td>Minden pontszám 0 körüli</td><td>a kérdés szavai egyáltalán nem szerepelnek a korpuszban</td><td>beépített módban ez normális: ez maga a szemantikai vakság</td></tr>
         <tr><td>Ékezetes szavak nem találnak</td><td>kódolási hiba a fájlbeolvasásnál</td><td>mindenhol <code>encoding="utf-8"</code>; a kódban így van, saját fájlnál figyelj rá</td></tr>
-        <tr><td>Az eval mindig 100%</td><td>túl könnyű a kérdéssor</td><td>ez nem siker, hanem jelzés: írj nehezebb és határesetekre vonatkozó kérdéseket</td></tr>
+        <tr><td>A kiértékelés mindig 100%</td><td>túl könnyű a kérdéssor</td><td>ez nem siker, hanem jelzés: írj nehezebb és határesetekre vonatkozó kérdéseket</td></tr>
       </tbody>
     </table></div>
     <p class="key"><b>Az utolsó gondolat.</b> Ha ezt végigcsináltad, többet tudsz a RAG-rendszerekről, mint aki tíz cikket olvasott róluk, mert láttad, hol romlik el, és megmérted, mennyivel lett jobb, amikor javítottál. A következő lépés nem újabb olvasnivaló: vedd a saját dokumentumaidat, és futtasd le rajtuk ugyanezt a hét lépést.</p>
@@ -610,7 +610,7 @@ Próbáld ki a hibás ágat is:
 </div>
 <div class="lesson-wrap"><p class="feedback">Tanításban vagy a munkahelyeden használod? Örülnék, ha megírnád: <a href="mailto:csaplar.d@gmail.com">csaplar.d@gmail.com</a></p></div>
 </main>
-<footer class="foot wrap"><span>© 2026 Csaplár Dániel · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu" rel="license">CC BY-NC-SA 4.0</a> · v1.0</span><span><a href="/az-oldalrol/">Az oldalról</a> · <a href="mailto:csaplar.d@gmail.com?subject=Hibajelz%C3%A9s%3A%20RAG-labor">Hibát találtál?</a> · <a href="mailto:csaplar.d@gmail.com">Kapcsolat</a></span></footer>
+<footer class="foot wrap"><span>© 2026 Csaplár Dániel · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hu" rel="license">CC BY-NC-SA 4.0</a> · v1.1</span><span><a href="/az-oldalrol/">Az oldalról</a> · <a href="mailto:csaplar.d@gmail.com?subject=Hibajelz%C3%A9s%3A%20RAG-labor">Hibát találtál?</a> · <a href="mailto:csaplar.d@gmail.com">Kapcsolat</a></span></footer>
 
 <script>
 /* Önellenőrző kvízek. a: a helyes válasz sorszáma (0-tól); fill: elfogadott válaszok. */

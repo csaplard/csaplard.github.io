@@ -63,9 +63,9 @@ igazítani.
 | `l2_index.py` | SQLite + numpy index építése |
 | `l3_kereses.py` | vektorkeresés, BM25, reciprok rangfúzió |
 | `l4_valasz.py` | kontextusépítés, forrásjelölési szerződés |
-| `l5_eval.py` | golden set, recall@k, típusonkénti bontás |
+| `l5_eval.py` | kiértékelés: ellenőrzött tesztkészlet, recall@k, típusonkénti bontás |
 | `l6_eszkoz.py` | eszközleírás, agenthurok, ügyféljegy-statisztika |
-| `kerdesek.json` | a golden set — ezt bővítsd, ahogy hibákat találsz |
+| `kerdesek.json` | az ellenőrzött tesztkészlet (golden set) — ezt bővítsd, ahogy hibákat találsz |
 
 ## Ha elakadsz
 
