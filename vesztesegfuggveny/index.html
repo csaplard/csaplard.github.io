@@ -286,7 +286,7 @@ print(np.var(y))                     # = mse(y.mean()): ennél lejjebb nem lehet
         </div>
 
         <p>Két paraméternél (például ha a modell <span class="m">ár = w · alapterület + b</span>, vagyis egy alapárat is tanul, amely nem függ a mérettől) a táj már felület, mint a lap tetején lévő szintvonalas térkép. Egy neurális hálónak milliónyi vagy milliárdnyi paramétere van, így a tája ennyi dimenziós. Ezt senki nem látja. Az algoritmus sem látja: csak azt érzékeli, merre lejt a talaj ott, ahol éppen áll. Erről szól a 4. szint.</p>
-        <p class="key"><b>Kulcsgondolat.</b> A veszteségtáj alakját az adatok, a modell (milyen függvényeket tud felvenni) és a választott veszteségfüggvény (mit tartunk rossznak) együtt határozzák meg; az optimalizáló pedig azt szabályozza, hogyan haladunk ezen a tájon. Ha bármelyiket kicseréled, más tájat kapsz, és más lehet a legmélyebb pont.</p>
+        <p class="key"><b>Kulcsgondolat.</b> A veszteségtáj alakját az adatok, a modell (milyen függvényeket tud felvenni) és a választott veszteségfüggvény (mit tartunk rossznak) együtt határozzák meg; az optimalizáló pedig azt szabályozza, hogyan haladunk ezen a tájon. Ha az adatokat, a modellt vagy a veszteségfüggvényt módosítod, megváltozhat a veszteségtáj és a minimum helye is.</p>
       </div>
 
       <div role="tabpanel" id="p-3b" aria-labelledby="t-3b" hidden>
@@ -917,7 +917,7 @@ window.KVIZ = {
     a: 0, x: 'Kibontva L(w) = (x² átlaga) · w² − 2 · (xy átlaga) · w + (y² átlaga), ami másodfokú w-ben, tehát parabola. A csúcsa zárt képlettel kiszámolható.' },
   { q: 'Mi határozza meg a veszteségtáj alakját?',
     o: ['Csak a modell felépítése.', 'Csak a választott veszteségfüggvény.', 'Az adatok, a modell és a veszteség együtt.'],
-    a: 2, x: 'A modell adja, milyen jóslatok lehetségesek, a veszteség azt, mennyire rossz egy-egy jóslat, az adatok pedig azt, mihez mérjük a jóslatokat. A képletben is látszik: más x és y értékekkel más L(w) jön ki. Bármelyiket cseréled, más tájat kapsz.' }
+    a: 2, x: 'A modell adja, milyen jóslatok lehetségesek, a veszteség azt, mennyire rossz egy-egy jóslat, az adatok pedig azt, mihez mérjük a jóslatokat. A képletben is látszik: más x és y értékekkel más L(w) jön ki. Ha a három közül bármelyiket módosítod, megváltozhat a táj és a minimum helye is.' }
  ],
  4: [
   { q: 'Merre lép a gradiens-módszer?',

@@ -170,4 +170,10 @@ h1.say{font:500 clamp(44px,4.5vw,66px)/1.04 var(--serif);letter-spacing:-.025em}
 .tilt[aria-checked="true"] .tilt-sw{border-color:var(--gold);background:var(--gold-wash)}
 .tilt[aria-checked="true"] .tilt-sw::after{transform:translateX(12px);background:var(--gold)}
 @media (min-width:1280px){.tilt{top:auto;bottom:64px}}
+/* széles kijelzőn a 3D vászon a teljes képernyőszélességet kitölti (a .hero-hoz igazodik),
+   a szöveg és az útvonal marad a középső, legfeljebb 1440 px széles sávban */
+@media (min-width:1280px){
+  .hero-grid{position:static}
+  .hint,.tilt{right:max(var(--pad),calc((100% - 1440px) / 2 + var(--pad)))}
+}
 .tilt:disabled{cursor:default;color:var(--ink-3)}

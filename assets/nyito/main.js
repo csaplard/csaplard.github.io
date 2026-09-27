@@ -70,9 +70,16 @@ const LAB = [
 ];
 const host = $("#model");
 let model = null;
+// A modell közepe a középső tartalomsáv 58,5%-ánál álljon (a szöveg- és az útvonaloszlop között),
+// akkor is, ha a vászon széles kijelzőn a teljes képernyőt kitölti.
+function offsetFor(w) {
+  if (innerWidth < 1280 || !w) return 0;
+  const g = $(".hero-grid").getBoundingClientRect(), h = host.getBoundingClientRect();
+  return (g.left - h.left + g.width * 0.585 - w / 2) / w;
+}
 function boot() {
   try {
-    model = mountModel(host, { labels: LAB, offsetX: () => (innerWidth >= 1280 ? 0.085 : 0) });
+    model = mountModel(host, { labels: LAB, offsetX: offsetFor });
     host.classList.add("ready");
   } catch (e) { host.classList.add("no-webgl"); console.warn(e); return; }
   setupTilt();

@@ -44,6 +44,15 @@ export function mountModel(host, opts = {}) {
     C.ink = cssVar("--ink") || "#ece9e3";
   }
   readColors();
+  // háttér: sötét módban a ragyogás-utófeldolgozás átlátszatlan képet ad, ezért a vászon
+  // pontosan az oldal hátterével töltődik ki; világosban átlátszó marad
+  function applyClear() {
+    const c = new THREE.Color(cssVar("--bg") || "#0b0c0e");
+    // a sötét mód utófeldolgozási lánca a háttérszínt még egyszer sRGB-be alakítja, ezért előre visszaalakítjuk
+    if (!C.light) c.convertSRGBToLinear();
+    renderer.setClearColor(c, C.light ? 0 : 1);
+  }
+  applyClear();
 
   const regions = {}; // név → { edges:[], faces:[], extra:[] }
   function reg(name) { return regions[name] || (regions[name] = { edges: [], faces: [], glows: [] }); }
@@ -170,7 +179,7 @@ export function mountModel(host, opts = {}) {
   const sparkMat = new THREE.PointsMaterial({ color: C.gold, size: 0.07, transparent: true, opacity: 0.9, blending: C.light ? THREE.NormalBlending : THREE.AdditiveBlending, depthWrite: false });
   root.add(new THREE.Points(sparkGeo, sparkMat));
   // talajháló
-  const grid = new THREE.GridHelper(26, 26, C.light ? 0xc7c9cd : 0x1c1f24, C.light ? 0xd5d7da : 0x15171b);
+  const grid = new THREE.GridHelper(64, 64, C.light ? 0xc7c9cd : 0x1c1f24, C.light ? 0xd5d7da : 0x15171b);
   grid.position.y = -0.1; grid.material.transparent = true; grid.material.opacity = 0.5; grid.visible = !C.light; root.add(grid); // világos módban a rács zavarja a képet
 
   /* ---------------- kamera, vezérlés ---------------- */
@@ -406,7 +415,7 @@ export function mountModel(host, opts = {}) {
 
   /* téma */
   function retheme() {
-    readColors();
+    readColors(); applyClear();
     flow.forEach(f => { f.line.material.blending = C.light ? THREE.NormalBlending : THREE.AdditiveBlending; f.line.material.needsUpdate = true; });
     sparkMat.blending = C.light ? THREE.NormalBlending : THREE.AdditiveBlending; sparkMat.needsUpdate = true;
     grid.material.color = new THREE.Color(C.light ? 0xd0d2d6 : 0x16181c); grid.visible = !C.light;
