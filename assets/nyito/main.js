@@ -1,6 +1,5 @@
 /* AI-tananyagok — nyitóoldal: téma, élő cím, 3D modell, útvonal
    © 2026 Csaplár Dániel · CC BY-NC-SA 4.0 */
-import { mountModel } from "./scene.js";
 const $ = (s, r) => (r || document).querySelector(s);
 const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
@@ -77,8 +76,11 @@ function offsetFor(w) {
   const g = $(".hero-grid").getBoundingClientRect(), h = host.getBoundingClientRect();
   return (g.left - h.left + g.width * 0.585 - w / 2) / w;
 }
-function boot() {
+// A 3D modult (és vele a three.js-t) csak itt töltjük be, így a cím, a menü és a téma-kapcsoló
+// nem várja meg a nagy könyvtár letöltését.
+async function boot() {
   try {
+    const { mountModel } = await import("./scene.js");
     model = mountModel(host, { labels: LAB, offsetX: offsetFor });
     host.classList.add("ready");
   } catch (e) { host.classList.add("no-webgl"); console.warn(e); return; }

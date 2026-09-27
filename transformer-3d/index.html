@@ -7,11 +7,18 @@
 <html lang="hu">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>3D Transformer · AI-tananyagok</title>
+<title>3D Transformer: egy token útja a nyelvi modellben · AI-tananyagok</title>
 <meta name="description" content="Egy kis, négyrétegű transzformer háromdimenziós modellje: egy token útja az embeddingtől az attentionön és az MLP-n át a következő token kiválasztásáig. 28 másodperces videó és négy részletes ábra.">
 <meta name="author" content="Csaplár Dániel">
 <link rel="canonical" href="https://ailessons.hu/transformer-3d/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="hu_HU">
+<meta property="og:site_name" content="AI-tananyagok">
+<meta property="og:url" content="https://ailessons.hu/transformer-3d/">
+<meta property="og:title" content="3D Transformer: egy token útja a nyelvi modellben">
+<meta property="og:description" content="Egy kis, négyrétegű transzformer háromdimenziós modellje: egy token útja az embeddingtől az attentionön és az MLP-n át a következő token kiválasztásáig. 28 másodperces videó és négy részletes ábra.">
 <meta property="og:image" content="https://ailessons.hu/transformer-3d/poszter.webp">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230b0c0e'/><path d='M6 22 16 27 26 22 16 17Z' fill='none' stroke='%23eceae4' stroke-width='1.3'/><path d='M6 15 16 20 26 15 16 10Z' fill='none' stroke='%23eceae4' stroke-width='1.3'/><path d='M16 4v24' stroke='%23e8b44c' stroke-width='2.4'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geologica:slnt,wght,CRSV,SHRP@-12..0,100..900,0..1,0..100&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&display=swap" rel="stylesheet">
@@ -39,6 +46,31 @@
 .spec dd{margin:0}
 .probs .bar{grid-template-columns:70px minmax(0,1fr) 72px}
 </style>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "Course",
+ "name": "3D Transformer: egy token útja",
+ "description": "Egy kis, négyrétegű transzformer háromdimenziós modellje: egy token útja az embeddingtől az attentionön és az MLP-n át a következő token kiválasztásáig. 28 másodperces videó és négy részletes ábra.",
+ "url": "https://ailessons.hu/transformer-3d/",
+ "inLanguage": "hu",
+ "isAccessibleForFree": true,
+ "educationalLevel": "kezdő",
+ "provider": {
+  "@type": "Person",
+  "name": "Csaplár Dániel",
+  "url": "https://ailessons.hu/az-oldalrol/"
+ },
+ "author": {
+  "@type": "Person",
+  "name": "Csaplár Dániel",
+  "url": "https://ailessons.hu/az-oldalrol/"
+ },
+ "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+ "dateModified": "2026-09-27",
+ "timeRequired": "PT15M"
+}
+</script>
 </head>
 <body data-material="transformer-3d" data-store="t3d_progress_v1" data-levels="1" data-nolock>
 <header class="top fixed">

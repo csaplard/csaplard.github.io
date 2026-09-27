@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://ailessons.hu/</loc><lastmod>2026-09-27</lastmod><priority>1.0</priority></url>
+  <url><loc>https://ailessons.hu/llm-oktatoanyag/</loc><lastmod>2026-09-27</lastmod><priority>0.9</priority></url>
+  <url><loc>https://ailessons.hu/llm-oktatoanyag/en/</loc><lastmod>2026-09-27</lastmod><priority>0.6</priority></url>
+  <url><loc>https://ailessons.hu/vesztesegfuggveny/</loc><lastmod>2026-09-27</lastmod><priority>0.8</priority></url>
+  <url><loc>https://ailessons.hu/hibamodok/</loc><lastmod>2026-09-27</lastmod><priority>0.8</priority></url>
+  <url><loc>https://ailessons.hu/python-alapok/</loc><lastmod>2026-09-27</lastmod><priority>0.8</priority></url>
+  <url><loc>https://ailessons.hu/rag-labor/</loc><lastmod>2026-09-27</lastmod><priority>0.8</priority></url>
+  <url><loc>https://ailessons.hu/ai-atlasz/</loc><lastmod>2026-09-27</lastmod><priority>0.8</priority></url>
+  <url><loc>https://ailessons.hu/transformer-3d/</loc><lastmod>2026-09-27</lastmod><priority>0.8</priority></url>
+  <url><loc>https://ailessons.hu/az-oldalrol/</loc><lastmod>2026-09-27</lastmod><priority>0.4</priority></url>
+  <url><loc>https://ailessons.hu/mi-valtozott/</loc><lastmod>2026-09-27</lastmod><priority>0.4</priority></url>
+</urlset>

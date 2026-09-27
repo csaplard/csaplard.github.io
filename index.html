@@ -7,22 +7,104 @@
 <html lang="hu">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI-tananyagok</title>
+<title>AI-tananyagok: mesterséges intelligencia magyarul, érthetően</title>
 <meta name="description" content="Ingyenes, magyar nyelvű mesterségesintelligencia-tananyagok a hétköznapi példáktól a kutatási szakirodalomig: nagy nyelvi modellek, veszteségfüggvény, hibamódok, Python, RAG és gyakorlati AI-használat.">
 <meta name="author" content="Csaplár Dániel">
 <link rel="canonical" href="https://ailessons.hu/">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230b0c0e'/><path d='M16 5v22' stroke='%23e8b44c' stroke-width='3' stroke-linecap='round'/><rect x='6' y='9' width='7' height='5' fill='none' stroke='%23eceae4' stroke-width='1.5'/><rect x='19' y='18' width='7' height='5' fill='none' stroke='%23eceae4' stroke-width='1.5'/></svg>">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="hu_HU">
+<meta property="og:site_name" content="AI-tananyagok">
 <meta property="og:url" content="https://ailessons.hu/">
-<meta property="og:title" content="AI-tananyagok — mesterséges intelligencia, érthetően">
+<meta property="og:title" content="AI-tananyagok: mesterséges intelligencia, érthetően">
 <meta property="og:description" content="Ingyenes, magyar nyelvű tananyagok a hétköznapi példáktól a kutatási szakirodalomig.">
+<meta property="og:image" content="https://ailessons.hu/assets/og-kep.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230b0c0e'/><path d='M16 5v22' stroke='%23e8b44c' stroke-width='3' stroke-linecap='round'/><rect x='6' y='9' width='7' height='5' fill='none' stroke='%23eceae4' stroke-width='1.5'/><rect x='19' y='18' width='7' height='5' fill='none' stroke='%23eceae4' stroke-width='1.5'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geologica:slnt,wght,CRSV,SHRP@-12..0,100..900,0..1,0..100&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&display=swap" rel="stylesheet">
 <script>var t=null;try{t=localStorage.getItem('ait-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark')</script>
 <link rel="stylesheet" href="/assets/nyito/nyito.css">
 <script type="importmap">{"imports":{"three":"/assets/vendor/three-0.169.0/three.module.min.js","three/addons/":"/assets/vendor/three-0.169.0/addons/"}}</script>
 <link rel="modulepreload" href="/assets/vendor/three-0.169.0/three.module.min.js">
+<link rel="modulepreload" href="/assets/nyito/scene.js">
+<link rel="modulepreload" href="/assets/vendor/three-0.169.0/addons/controls/OrbitControls.js">
+<link rel="modulepreload" href="/assets/vendor/three-0.169.0/addons/postprocessing/EffectComposer.js">
+<link rel="modulepreload" href="/assets/vendor/three-0.169.0/addons/postprocessing/RenderPass.js">
+<link rel="modulepreload" href="/assets/vendor/three-0.169.0/addons/postprocessing/UnrealBloomPass.js">
+<link rel="modulepreload" href="/assets/vendor/three-0.169.0/addons/postprocessing/OutputPass.js">
+<link rel="modulepreload" href="/assets/vendor/three-0.169.0/addons/postprocessing/ShaderPass.js">
+<link rel="modulepreload" href="/assets/vendor/three-0.169.0/addons/postprocessing/MaskPass.js">
+<link rel="modulepreload" href="/assets/vendor/three-0.169.0/addons/postprocessing/Pass.js">
+<link rel="modulepreload" href="/assets/vendor/three-0.169.0/addons/shaders/CopyShader.js">
+<link rel="modulepreload" href="/assets/vendor/three-0.169.0/addons/shaders/LuminosityHighPassShader.js">
+<link rel="modulepreload" href="/assets/vendor/three-0.169.0/addons/shaders/OutputShader.js">
+<script type="application/ld+json">
+[
+ {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "AI-tananyagok",
+  "url": "https://ailessons.hu/",
+  "inLanguage": "hu",
+  "description": "Ingyenes, magyar nyelvű mesterségesintelligencia-tananyagok a hétköznapi példáktól a kutatási szakirodalomig: nagy nyelvi modellek, veszteségfüggvény, hibamódok, Python, RAG és gyakorlati AI-használat.",
+  "author": {
+   "@type": "Person",
+   "name": "Csaplár Dániel",
+   "url": "https://ailessons.hu/az-oldalrol/"
+  },
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+ },
+ {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "AI-tananyagok",
+  "itemListElement": [
+   {
+    "@type": "ListItem",
+    "position": 1,
+    "url": "https://ailessons.hu/llm-oktatoanyag/",
+    "name": "LLM-tananyag"
+   },
+   {
+    "@type": "ListItem",
+    "position": 2,
+    "url": "https://ailessons.hu/vesztesegfuggveny/",
+    "name": "A veszteségfüggvény"
+   },
+   {
+    "@type": "ListItem",
+    "position": 3,
+    "url": "https://ailessons.hu/hibamodok/",
+    "name": "Miért romlik el egy LLM-rendszer?"
+   },
+   {
+    "@type": "ListItem",
+    "position": 4,
+    "url": "https://ailessons.hu/python-alapok/",
+    "name": "Python-alapok"
+   },
+   {
+    "@type": "ListItem",
+    "position": 5,
+    "url": "https://ailessons.hu/rag-labor/",
+    "name": "RAG-labor: építsünk egyet"
+   },
+   {
+    "@type": "ListItem",
+    "position": 6,
+    "url": "https://ailessons.hu/ai-atlasz/",
+    "name": "AI Atlasz"
+   },
+   {
+    "@type": "ListItem",
+    "position": 7,
+    "url": "https://ailessons.hu/transformer-3d/",
+    "name": "3D Transformer: egy token útja"
+   }
+  ]
+ }
+]
+</script>
 </head>
 <body>
 <header class="top">
