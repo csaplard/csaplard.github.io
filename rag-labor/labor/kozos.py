@@ -11,9 +11,10 @@ Itt dől el, MELYIK MOTORRAL fut az egész projekt. Egyetlen sort kell
                   soha ne kerüljön.
     "lokalis"   : igazi embedding-modell a saját gépeden (az első futásnál
                   letölti, utána offline is megy). Válaszgeneráló modellt
-                  nem futtat. Telepítés: pip install sentence-transformers
+                  nem futtat. Telepítés: python -m pip install sentence-transformers
     "api"       : Anthropic API a generáláshoz (+ lokális embedding).
-                  Kell hozzá: pip install anthropic, és egy ANTHROPIC_API_KEY
+                  Kell hozzá: python -m pip install anthropic sentence-transformers,
+                  és egy ANTHROPIC_API_KEY
                   környezeti változó.
 """
 
@@ -58,11 +59,11 @@ def _beepitett_embedding(szoveg):
     (0..DIMENZIO-1), és ott növeljük az értéket. Két szöveg vektora akkor
     lesz hasonló, ha SOK KÖZÖS SZAVUK van.
 
-    Ez pontosan azt mutatja meg, amit egy igazi embeddingtől NEM kapsz meg
-    ingyen: a szemantikát. A 'nem tudok belépni' és a 'bejelentkezési hiba'
-    itt két teljesen különböző vektor lesz. Amikor átváltasz "lokalis" módra,
-    ugyanaz a kód hirtelen sokkal jobb találatokat ad — és látni fogod,
-    pontosan mennyivel. Ez a labor egyik legfontosabb tanulsága.
+    Szemantikát ez NEM tud: a 'nem tudok belépni' és a 'bejelentkezési hiba'
+    itt két teljesen különböző vektor lesz. Egy igazi embedding-modell
+    ("lokalis" mód) az ilyen jelentésbeli hasonlóságokat is felismerheti,
+    de hogy a te anyagodon mennyit javít (és javít-e egyáltalán), azt a
+    8. lépésben méréssel látod. Ez a labor egyik legfontosabb tanulsága.
     """
     vektor = np.zeros(DIMENZIO, dtype=np.float32)
     for szo in _szavakra_bont(szoveg):

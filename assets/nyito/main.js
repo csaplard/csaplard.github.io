@@ -72,11 +72,41 @@ const host = $("#model");
 let model = null;
 function boot() {
   try {
-    model = mountModel(host, { labels: LAB, offsetX: w => (w >= 1100 ? 0.085 : 0) });
+    model = mountModel(host, { labels: LAB, offsetX: () => (innerWidth >= 1280 ? 0.085 : 0) });
     host.classList.add("ready");
   } catch (e) { host.classList.add("no-webgl"); console.warn(e); return; }
   setupTilt();
+  fitLabels();
 }
+
+/* ---------- a 3D címkék ne lógjanak rá a bevezető szövegére ----------
+   Asztali elrendezésben a modell a szöveg mögött áll. Alapnézetben megmérjük a címkék és a
+   szövegsorok távolságát, és ha kevés, a képet pontosan annyival toljuk jobbra (a nézeteltolás
+   az egész képet eltolja, így egy mérés elég). */
+const GAP = 28, MAX_SHIFT = 0.16;
+function ledeRects() {
+  const out = [], tw = document.createTreeWalker($(".lede"), NodeFilter.SHOW_TEXT); let n;
+  while ((n = tw.nextNode())) { if (!n.textContent.trim()) continue; const r = document.createRange(); r.selectNodeContents(n); out.push(...r.getClientRects()); }
+  $$(".lede .btn, .lede .lnk").forEach(e => out.push(e.getBoundingClientRect()));
+  return out;
+}
+let fitTimer = 0;
+function fitLabels() {
+  if (!model || current) return; // nézetváltás közben nem mérünk, az eddigi eltolás marad
+  model.shift(0);
+  if (innerWidth < 1280) return; // keskenyebb kijelzőn a modell a szöveg alatt van
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const rows = ledeRects(); let need = 0;
+    $$(".tag3d", host).forEach(t => {
+      if (t.style.opacity === "0" || getComputedStyle(t).display === "none") return;
+      const r = t.getBoundingClientRect(), hit = rows.filter(q => q.bottom > r.top && q.top < r.bottom);
+      if (hit.length) need = Math.max(need, GAP - (r.left - Math.max(...hit.map(q => q.right))));
+    });
+    if (need > 0) model.shift(Math.min(need, innerWidth * MAX_SHIFT));
+  }));
+}
+addEventListener("resize", () => { clearTimeout(fitTimer); fitTimer = setTimeout(fitLabels, 150); });
+if (document.fonts) document.fonts.ready.then(() => fitLabels());
 
 /* ---------- döntés mobilon: Androidon magától indul, iOS-en kapcsolóval kér engedélyt ---------- */
 function setupTilt() {
@@ -106,7 +136,7 @@ if ("IntersectionObserver" in window) {
 const route = $("#route"), arcSvg = $("#route-arc");
 function layoutArc() {
   const items = $$("li", route); if (!items.length) return;
-  const H = route.clientHeight, R = Math.max(H * 0.95, 420), cy = H / 2, desk = innerWidth >= 1100;
+  const H = route.clientHeight, R = Math.max(H * 0.95, 420), cy = H / 2, desk = innerWidth >= 1280;
   let d = "";
   for (let y = 0; y <= H; y += 6) { const x = R - Math.sqrt(Math.max(0, R * R - (y - cy) * (y - cy))); d += (y ? "L" : "M") + (x + 12).toFixed(1) + " " + y; }
   arcSvg.setAttribute("viewBox", `0 0 120 ${H}`); arcSvg.style.height = H + "px";

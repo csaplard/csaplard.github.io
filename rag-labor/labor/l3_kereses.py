@@ -54,6 +54,10 @@ def _szurt_rangsor(pontszamok, sorok, k, kurzus_szuro):
     k nagyobb értékénél (vagy kevés megengedett darabnál) visszajönnének.
     Ha kevesebb megengedett találat van k-nál, rövidebb listát adunk vissza."""
     if kurzus_szuro:
+        # a kért szűrés ne maradjon el észrevétlenül, ha nincsenek meg a metaadatok
+        if sorok is None or len(sorok) != len(pontszamok):
+            raise ValueError("A kurzusszűréshez a darabok metaadatai (sorok) is "
+                             "kellenek, a pontszámokkal azonos hosszban.")
         for i, sor in enumerate(sorok):
             if not megengedett(sor, kurzus_szuro):
                 pontszamok[i] = -np.inf
@@ -137,9 +141,10 @@ class BM25:
 
 
 def bm25_kereses(kerdes, bm25, k=5, sorok=None, kurzus_szuro=None):
-    """A szűrőhöz a sorok (metaadatok) is kellenek; szűrő nélkül elhagyható."""
+    """A szűrőhöz a sorok (metaadatok) is kellenek; nélkülük ValueError jön.
+    Szűrő nélkül a sorok elhagyhatók."""
     pontszamok = bm25.pontoz(kerdes)
-    return _szurt_rangsor(pontszamok, sorok or [], k, kurzus_szuro)
+    return _szurt_rangsor(pontszamok, sorok, k, kurzus_szuro)
 
 
 # ---------------------------------------------------------------------------

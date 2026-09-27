@@ -21,7 +21,7 @@ python3 l6_eszkoz.py            # eszközhívás, agenthurok
 ```
 
 A keresési és mérési lépésekhez semmit nem kell telepíteni a numpyon kívül
-(`pip install numpy`), és nem kell API-kulcs. Ebben a módban az `l4_valasz.py`
+(`python -m pip install numpy`), és nem kell API-kulcs. Ebben a módban az `l4_valasz.py`
 válasz helyett a modellnek szánt teljes promptot írja ki, az `l6_eszkoz.py`
 pedig kézi példán mutatja be az eszközhívást. Nyelvi válaszhoz `api` mód kell
 (a szolgáltatónál díjjal járhat). Az alapértelmezett mód egy szándékosan buta,
@@ -38,8 +38,8 @@ BACKEND = "beepitett"   # -> "lokalis" -> "api"
 | mód | mit csinál | mi kell hozzá |
 |---|---|---|
 | `beepitett` | hash-alapú játék-embedding, nincs modellhívás (a promptot írja ki) | numpy |
-| `lokalis` | igazi többnyelvű embedding a gépeden; válaszgeneráló modellt nem futtat | `pip install sentence-transformers` (első futáskor letölti a modellt) |
-| `api` | lokális embedding + valódi generálás | `pip install anthropic`, `ANTHROPIC_API_KEY` |
+| `lokalis` | igazi többnyelvű embedding a gépeden; válaszgeneráló modellt nem futtat | `python -m pip install sentence-transformers` (első futáskor letölti a modellt) |
+| `api` | lokális embedding + valódi generálás | `python -m pip install anthropic sentence-transformers`, `ANTHROPIC_API_KEY` |
 
 **A labor fő kísérlete:** futtasd le az `l5_eval.py`-t `beepitett` módban,
 jegyezd fel a számokat, majd válts `lokalis`-ra, építsd újra az indexet

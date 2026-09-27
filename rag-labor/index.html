@@ -54,9 +54,9 @@ python3 l6_eszkoz.py</code></pre>
     <div>
       <h2 id="h-szintek">Mit építünk, és miért pont ezt</h2>
       <p>A végén ez lesz a kezedben: egy rendszer, amely egy online tanfolyamokat szervező oktatási platform hat belső dokumentumából (két kurzusleírás, ügyfélszolgálati útmutató, adatvédelmi szabályzat, ügyféljegy-kivonat, visszatérítési szabályzat) meg tud válaszolni ügyfélszolgálati kérdéseket: forrásmegjelöléssel, mérhető pontossággal, és ott, ahol számolni kell, eszközhívással. A platform és minden adat kitalált. Az ilyen, a válasz előtt keresést futtató felépítést visszakereséssel kiegészített generálásnak (RAG) nevezik. <a class="ref" href="#ref-1">[1]</a></p>
-      <p>Miért éppen ez a feladat? Mert ez a legkisebb rendszer, amelyben az összes valódi nehézség benne van. A felépítést a saját dokumentumaidra is átültetheted; ehhez a beolvasást, a darabolást, a metaadatokat és a tesztkérdéseket az új anyaghoz kell igazítanod, mert a kód ennek a hat dokumentumnak a szerkezetére készült. És három olyan dolgot tanít, amit olvasásból nem lehet megérteni:</p>
+      <p>Miért éppen ez a feladat? Mert ez egy kis rendszer, amelyben több fontos gyakorlati nehézség is megjelenik. A felépítést a saját dokumentumaidra is átültetheted; ehhez a beolvasást, a darabolást, a metaadatokat és a tesztkérdéseket az új anyaghoz kell igazítanod, mert a kód ennek a hat dokumentumnak a szerkezetére készült. És három olyan dolgot tanít, amit olvasásból nem lehet megérteni:</p>
       <ol>
-        <li><b>A darabolás dönt.</b> A saját méréseiden látod majd, hogy a rendszer minőségét nem a modell, hanem a bemenő adat előkészítése határozza meg.</li>
+        <li><b>A darabolás dönt.</b> A saját méréseiden látod majd, hogy a dokumentumok előkészítése jelentősen befolyásolja a keresés és a válaszadás minőségét.</li>
         <li><b>Mérés nélkül vakrepülés.</b> Építünk egy kiértékelő készletet, és minden változtatást megmérünk.</li>
         <li><b>Az eszköz a határ.</b> Kiderül, hol ér véget a keresés hatóköre, és hol kell a modellnek eszközt adni. Ez az agentikus rendszerek kiindulópontja.</li>
       </ol>
@@ -76,7 +76,7 @@ python3 l6_eszkoz.py</code></pre>
     <div>
       <div class="layers" data-total="10" data-done="0"><svg viewBox="0 0 140 200" aria-hidden="true"></svg><div><div class="count"><span data-count>0</span><span> / 10</span></div><p>Minden teljesített önellenőrző kvíz egy réteg. A haladásod csak ebben a böngészőben tárolódik.</p></div></div>
       <div class="tools"><button class="pill" type="button" data-reset>Haladás törlése</button></div>
-      <p class="key"><b>Mi fut kulcs nélkül?</b> A darabolás, az indexelés, a keresés és a kiértékelés a szükséges csomagok telepítése után internet és API-kulcs nélkül is fut. Ebben a módban a program a modellnek szánt teljes promptot írja ki válasz helyett, az eszközhívást pedig kézi példán mutatja be. Nyelvi válaszok generálásához a mellékelt API-integráció kell (ez a szolgáltatónál díjjal járhat), vagy egy külön bekötött helyi nyelvi modell. Az alapértelmezett üzemmód egy szándékosan primitív, beépített embedding: épp elég ahhoz, hogy minden mechanizmus működjön, és épp elég rossz ahhoz, hogy a 8. lépésben látványos legyen a különbség, amikor igazi modellre váltasz.</p>
+      <p class="key"><b>Mi fut kulcs nélkül?</b> A darabolás, az indexelés, a keresés és a kiértékelés a szükséges csomagok telepítése után internet és API-kulcs nélkül is fut. Ebben a módban a program a modellnek szánt teljes promptot írja ki válasz helyett, az eszközhívást pedig kézi példán mutatja be. Nyelvi válaszok generálásához a mellékelt API-integráció kell (ez a szolgáltatónál díjjal járhat; telepítése: <code>python -m pip install anthropic sentence-transformers</code>, és egy API-kulcs), vagy egy külön bekötött helyi nyelvi modell. Az alapértelmezett üzemmód egy szándékosan primitív, beépített embedding: épp elég ahhoz, hogy minden mechanizmus működjön, és épp elég rossz ahhoz, hogy a 8. lépésben látványos legyen a különbség, amikor igazi modellre váltasz.</p>
     </div>
   </section>
 
@@ -95,7 +95,7 @@ python3 l6_eszkoz.py</code></pre>
 <pre class="py" data-name="terminál">$ python3 --version
 Python 3.12.3
 
-$ pip install numpy</pre>
+$ python3 -m pip install numpy</pre>
     <p>Ha a <code>python3</code> nem működik, próbáld <code>python</code>-ként; Windowson a <code>py -3</code> is jó. Ha egyik sem, a python.org-ról telepíts, és a telepítőben pipáld ki az „Add Python to PATH” opciót.</p>
     <h3>1.2 · A projektmappa</h3>
     <p>Töltsd le a <a href="labor.zip" download>labor.zip</a> fájlt, csomagold ki valahová, ahol megtalálod, és lépj bele:</p>
@@ -199,7 +199,7 @@ darabhossz: legrovidebb 176, atlag 272, leghosszabb 610 karakter</pre>
     <details class="deeper"><summary>Mélyebben: amit valós dokumentumoknál kell megoldani</summary>
       <p>A mi korpuszunk tiszta markdown. A valóság PDF, szövegszerkesztős dokumentum, szkennelt papír. Amit ott meg kell oldani, sorrendben:</p>
       <ul>
-        <li><b>Szövegkinyerés.</b> PDF-hez a <code>pymupdf</code> a legjobb ár-érték arányú (<code>pip install pymupdf</code>). Ha a PDF szkennelt kép, OCR kell, de előbb ellenőrizd: sok „szkenneltnek” hitt PDF valójában tartalmaz szövegréteget.</li>
+        <li><b>Szövegkinyerés.</b> PDF-hez a <code>pymupdf</code> a legjobb ár-érték arányú (<code>python -m pip install pymupdf</code>). Ha a PDF szkennelt kép, OCR kell, de előbb ellenőrizd: sok „szkenneltnek” hitt PDF valójában tartalmaz szövegréteget.</li>
         <li><b>Szerkezetfelismerés.</b> Ha nincsenek markdown-fejezetcímek, a betűméret és a félkövérség alapján lehet címeket felismerni. A <code>pymupdf</code> ezt blokkonként megadja.</li>
         <li><b>Táblázatok.</b> A naiv szövegkinyerés a táblázat sorait összefolyatja, és a végeredmény nem hiányos, hanem hamis lesz. Ezért érdemes a táblázatokat külön kezelni (<code>camelot</code>, <code>pdfplumber</code>), vagy vizuális modellel strukturált formába alakítani indexelés előtt.</li>
         <li><b>Verziókezelés.</b> Ha egy szabályzat frissül, a régi darabokat törölni kell az indexből. Enélkül a rendszer magabiztosan idéz elavult szabályt, és ez a legveszélyesebb hibatípus, mert nem hallucinációnak látszik, hanem hiteles válasznak.</li>
@@ -255,7 +255,7 @@ for szo in _szavakra_bont(szoveg):
     return normalizal(nyers)</pre>
     <p>Ez a hét sor az, amiért az egész labor cserélhető motorral fut. A rendszer többi része soha nem tudja meg, melyik embedder dolgozik. Ez a mintázat (a változó rész egyetlen függvény mögé zárva) teszi lehetővé, hogy egy AI-rendszer túlélje a modellváltásokat. Éles fejlesztésnél ugyanezt csinálod a modellhívással is: egy vékony réteg, amely mögött cserélhető a szolgáltató.</p>
     <details class="deeper"><summary>Mélyebben: amikor igazi embeddingre váltasz</summary>
-      <p>A <code>lokalis</code> mód egy többnyelvű mondat-embedding modellt tölt le és futtat a gépeden (<code>pip install sentence-transformers</code>). Az első futásnál letölti a modellt (néhány száz MB), utána offline is megy. Az ilyen modelleket kifejezetten arra tanítják, hogy a jelentésükben hasonló mondatok vektorai közel essenek egymáshoz. <a class="ref" href="#ref-4">[4]</a> A magyar szöveg működik vele, de a minőség nyelvenként és szakterületenként erősen szór, ezért a saját anyagodon kell mérni, nem a benchmarkokban bízni.</p>
+      <p>A <code>lokalis</code> mód egy többnyelvű mondat-embedding modellt tölt le és futtat a gépeden (<code>python -m pip install sentence-transformers</code>). Az első futásnál letölti a modellt (néhány száz MB), utána offline is megy. Az ilyen modelleket kifejezetten arra tanítják, hogy a jelentésükben hasonló mondatok vektorai közel essenek egymáshoz. <a class="ref" href="#ref-4">[4]</a> A magyar szöveg működik vele, de a minőség nyelvenként és szakterületenként erősen szór, ezért a saját anyagodon kell mérni, nem a benchmarkokban bízni.</p>
       <ul>
         <li><b>Újra kell indexelni.</b> A vektorok nem vihetők át modellek között: a régi és az új tér semmilyen viszonyban nincs egymással. Futtasd újra az <code>l2_index.py</code>-t.</li>
         <li><b>Aszimmetrikus modellek.</b> Sok embedding-modell külön előtagot vár a kérdéshez és a dokumentumhoz (<code>query: …</code> / <code>passage: …</code>). Ha ezt elrontod, mérhetően romlik a találati arány, és nagyon nehéz észrevenni, mert minden „működik”. Nézd meg a modell dokumentációjában.</li>
@@ -327,7 +327,7 @@ legjobbak = np.argsort(pontszamok)[::-1][:k]</pre>
 rendezett = np.argsort(pontszamok)[::-1]
 return [(int(i), float(pontszamok[i])) for i in rendezett
         if np.isfinite(pontszamok[i])][:k]</pre>
-    <p>A <code>-np.inf</code> (mínusz végtelen) a kizárt darabokat a lista végére teszi, az <code>np.isfinite</code> pedig ki is veszi őket. Mindkettő kell: ha csak a végére kerülnének, nagyobb <code>k</code> mellett (vagy ha kevés a megengedett darab) visszajönnének a találatok közé. Ha kevesebb megengedett darab van <code>k</code>-nál, rövidebb listát kapsz. Ugyanez a függvény szűri a BM25-ágat is. Az <code>"altalanos"</code> és a <code>"tobb"</code> azért van a megengedettek között, mert az általános szabályzatok és az ügyféljegy-kivonat minden kurzusra vonatkoznak.</p>
+    <p>A <code>-np.inf</code> (mínusz végtelen) a kizárt darabokat a lista végére teszi, az <code>np.isfinite</code> pedig ki is veszi őket. Mindkettő kell: ha csak a végére kerülnének, nagyobb <code>k</code> mellett (vagy ha kevés a megengedett darab) visszajönnének a találatok közé. Ha kevesebb megengedett darab van <code>k</code>-nál, rövidebb listát kapsz. Ugyanez a függvény szűri a BM25-ágat is; ehhez a <code>sorok</code> metaadatait is át kell adni, különben a kód hibát jelez, hogy a kért szűrés ne maradjon el észrevétlenül. Az <code>"altalanos"</code> és a <code>"tobb"</code> azért van a megengedettek között, mert az általános szabályzatok és az ügyféljegy-kivonat minden kurzusra vonatkoznak.</p>
     <h3>6.2 · BM25: a kulcsszavas ág</h3>
 <pre class="py" data-name="python3 l3_kereses.py, részlet">KÉRDÉS: VK-405-1E
   VEKTOR
@@ -532,7 +532,7 @@ Próbáld ki a hibás ágat is:
       <li><b>A <code>MAX_LEPES</code> nem díszlet.</b> Enélkül egy félresiklott modell a végtelenségig próbálkozhatna. Éles rendszerben mellé token- és költségkeret is kell.</li>
       <li><b>Az előzményt te tartod karban.</b> A modellnek nincs memóriája; a beszélgetés attól beszélgetés, hogy minden fordulóban visszaküldöd az egészet. Ezért drágul a hosszú agentfutás.</li>
     </ul>
-    <p class="note"><b>Feladat.</b> Írj egy második eszközt: <code>kurzus_adatok(kurzus)</code>, amely a kurzusleírásból visszaadja az alapadatokat (díj, létszám, megengedett hiányzás). Három helyen kell hozzányúlnod: a sémáját add át a modellnek (<code>tools=[...]</code>), vedd fel a <code>VEGREHAJTOK</code> szótárba, amely a hívott eszköz neve alapján választja ki a lefuttatandó függvényt, és ellenőrizd a bemenetét (az ismeretlen nevet és a hibás paramétert az <code>eszkoz_futtat()</code> már kezeli). Aztán tegyél fel egy kérdést, amelyhez mindkettő kell: „Hány ügyféljegy érkezett tavaly a K-402-ről, és hány alkalmat lehet hiányozni rajta?” Jó eséllyel a modell két külön hívást indít; ez a többlépéses agent legkisebb valódi példája. Garantálni nem lehet: futásonként eltérhet, hogyan bontja lépésekre a feladatot.</p>
+    <p class="note"><b>Feladat.</b> Írj egy második eszközt: <code>kurzus_adatok(kurzus)</code>, amely a kurzusleírásból visszaadja az alapadatokat (díj, létszám, megengedett hiányzás). Három helyen kell hozzányúlnod: a sémáját add át a modellnek (<code>tools=[...]</code>), vedd fel a <code>VEGREHAJTOK</code> szótárba, amely a hívott eszköz neve alapján választja ki a lefuttatandó függvényt, és ellenőrizd a bemenetét az adatbázis-hívás előtt, ahogy az <code>ugyfeljegy_statisztika()</code> teszi a kurzuskód típusával. Az ismeretlen eszköznevet, a hibás paraméternevet és a nem objektum formájú bemenetet az <code>eszkoz_futtat()</code> kezeli. Aztán tegyél fel egy kérdést, amelyhez mindkettő kell: „Hány ügyféljegy érkezett tavaly a K-402-ről, és hány alkalmat lehet hiányozni rajta?” Jó eséllyel a modell két külön hívást indít; ez a többlépéses agent legkisebb valódi példája. Garantálni nem lehet: futásonként eltérhet, hogyan bontja lépésekre a feladatot.</p>
     <div class="quiz" data-level="9" data-title="Önellenőrzés"></div>
   </div>
 </section>
@@ -576,7 +576,7 @@ Próbáld ki a hibás ágat is:
     <div class="tbl"><table>
       <thead><tr><th scope="col">Tünet</th><th scope="col">Ok</th><th scope="col">Megoldás</th></tr></thead>
       <tbody>
-        <tr><td><code>ModuleNotFoundError: numpy</code></td><td>nincs telepítve</td><td><code>pip install numpy</code>; ha nem megy, <code>python3 -m pip install numpy</code></td></tr>
+        <tr><td><code>ModuleNotFoundError: numpy</code></td><td>nincs telepítve</td><td><code>python3 -m pip install numpy</code> (Windowson <code>py -3 -m pip install numpy</code>)</td></tr>
         <tr><td><code>FileNotFoundError: darabok.json</code></td><td>kimaradt egy lépés</td><td>futtasd sorban: keszits_korpuszt → l1 → l2</td></tr>
         <tr><td><code>ModuleNotFoundError: kozos</code></td><td>nem a labor mappájából futtatod</td><td><code>cd labor</code>, és onnan indítsd</td></tr>
         <tr><td>A találatok értelmetlenek modellváltás után</td><td>régi vektorok az új embedderrel</td><td>futtasd újra az <code>l2_index.py</code>-t</td></tr>

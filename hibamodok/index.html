@@ -38,13 +38,13 @@
       <a class="start" href="#bevezetes">Kezdés a bevezetővel →</a>
     </div>
     <figure class="hero-fig">
-      <svg class="hm-chain" viewBox="0 0 400 300" role="img" aria-label="Egy tízlépéses lánc sikeraránya lépésről lépésre csökken: 95 százalékos lépésenkénti pontosságnál a végén 60 százalék">
+      <svg class="hm-chain" viewBox="0 0 400 300" role="img" aria-label="Egy tízlépéses lánc sikeraránya lépésről lépésre csökken: tíz független, egyenként 95 százalékos sikerű lépésnél a végén körülbelül 60 százalék">
         <g class="axis"><line x1="40" y1="250" x2="380" y2="250"/><line x1="40" y1="30" x2="40" y2="250"/></g>
         <g id="chainBars"></g>
         <text x="40" y="275" class="ax">1. lépés</text><text x="380" y="275" class="ax" text-anchor="end">10. lépés</text>
         <text x="46" y="24" class="ax">a lánc eddigi sikeraránya</text>
       </svg>
-      <figcaption>Ha minden lépés 95%-ban sikerül, tíz lépés után a lánc már csak 60%-ban. A 7. szint erről szól.</figcaption>
+      <figcaption>Tíz független, egyenként 95%-os sikerű lépés mindegyikének sikere körülbelül 60%-os valószínűségű. A valódi rendszerekben a lépések összefüggése és a hibajavítás is számít; a 7. szint erről szól.</figcaption>
     </figure>
   </section>
 
@@ -77,17 +77,17 @@
 <section class="intro-sec" id="bevezetes" aria-labelledby="h-bev">
   <h2 id="h-bev">Bevezetés: a hiba természete</h2>
   <div class="lvl-body">
-<p class="chaplead">Ha eddig determinisztikus rendszereket üzemeltettél, az első dolog, amit le kell vetkőzni, a hibáról alkotott képed.</p>
+<p class="chaplead">Ha eddig hagyományos programokkal dolgoztál, érdemes átgondolnod, mit jelent itt a hiba.</p>
 
-<p>Egy hagyományos programban a hiba <em>esemény</em>. Valami kivételt dob, valami leáll, a naplóban van egy sor, ami megmondja, hol. A javítás iránya tiszta: reprodukálod, leszűkíted, kijavítod, visszateszteled.</p>
+<p>Egy hagyományos programban a hiba gyakran <em>esemény</em>: valami kivételt dob, valami leáll, a naplóban van egy sor, ami megmondja, hol. Ilyenkor a javítás iránya tiszta: reprodukálod, leszűkíted, kijavítod, visszateszteled. (Csendes, hibaüzenet nélküli hiba ott is előfordul.)</p>
 
-<p>Egy LLM-alapú rendszerben a hiba <em>eloszlás</em>. Nincs pillanat, amikor elromlik — csak egy arány, ami rossz. Ugyanaz a bemenet ma jó választ ad, holnap rosszat. A kimenet mindig formailag helyes: folyékony, magabiztos, jól tagolt. A rendszer nem tudja, hogy hibázott, és a naplóban semmi nem különbözteti meg a jó választ a rossztól.</p>
+<p>Egy LLM-rendszer hibája gyakran hihető, de téves válaszként jelenik meg: folyékony, magabiztos, jól tagolt szövegként, hibaüzenet nélkül. Hasonló csendes hibák hagyományos programokban is előfordulnak, és egy LLM-rendszer is leállhat vagy adhat formailag hibás kimenetet. Ami itt más: a hiba sokszor inkább <em>arány</em>, mint egyetlen esemény, és ugyanaz a bemenet egyszer jó, máskor rossz választ adhat. Az okot a teljes feldolgozási folyamatban kell keresni: a bemeneti adatokban, a keresésben, a modellben, az utasításokban vagy az eszközök használatában. A hibakeresés megmutathatja, mi romlott el; a mérés azt, milyen gyakran történik meg, és segített-e a javítás.</p>
 
 <p>Ez a különbség két gyakorlati következménnyel jár, és lényegében az egész anyag ebből a kettőből bomlik ki:</p>
 
 <ul>
 <li><b>A hibakeresés mellé mérés is kell.</b> Egy konkrét rossz válasz megmutathatja a hibát: érdemes végignézni a feldolgozás lépéseit (a dokumentumot, a keresést, a promptot, az eszközhívást, a verziót). Azt viszont, hogy a hiba milyen gyakran fordul elő, és hogy egy javítás tényleg javított-e, csak sok teszteseten végzett mérés mutatja meg.</li>
-<li><b>A hiba nem a modellben van, hanem a rendszerben.</b> A legtöbb éles hiba nem abból fakad, hogy a modell buta, hanem hogy rossz kontextust kapott, rossz sorrendben, rossz határokkal.</li>
+<li><b>A hiba a modellből és a környező rendszerből is eredhet.</b> Sok éles hiba nem a modell képességein múlik, hanem azon, hogy rossz kontextust kapott, rossz sorrendben, rossz határokkal.</li>
 </ul>
 
 <p class="note"><b>Hasonlat.</b> Ez nem egy eltört váza, hanem egy lassan elhangolódó hangszer. Nincs törés, amit megmutathatnál, csak a hangzás csúszik el észrevétlenül. A hangolókészülék, amellyel ezt észreveszed, ugyanolyan fontos, mint maga a hangszer.</p>
@@ -116,7 +116,7 @@
       </div>
       <div role="tabpanel" id="p-1a" aria-labelledby="t-1a">
 <p>Képzelj el egy vizsgát, ahol a rossz válaszért nulla pont jár, az üresen hagyásért szintén nulla. Mit csinál minden racionális vizsgázó? Tippel. Nincs mit veszíteni.</p>
-<p>Pontosan ez a helyzet a nyelvi modellekkel. A tanítás és az értékelés túlnyomó része pontosság alapú: vagy eltaláltad, vagy nem. A „nem tudom” ugyanannyit ér, mint a rossz válasz — vagyis semmit. Így a modell megtanulja, hogy bizonytalanság esetén is érdemes magabiztos választ adni, mert néha bejön.</p>
+<p>Hasonló a helyzet a nyelvi modellek sok értékelésénél. Ha egy értékelésben a téves válasz és a válasz elhagyása ugyanannyit ér (vagyis semmit), a tippelés előnyt adhat, és a modell ebből azt tanulhatja, hogy bizonytalanság esetén is érdemes magabiztos választ adni. Ez az értékelés és az utótanítás egyik lehetséges ösztönzője; az előtanítás jellemző célja ettől különböző, valószínűségi tanulási feladat (a következő szövegdarab jóslása).</p>
 <p>A hallucináció tehát nem egyszerűen hiba a rendszerben: a modell részben pontosan azt tanulta meg, amit jutalmaztunk benne. Ez egy fontos ok, de nem az egyetlen. Hallucinációhoz vezethet a hiányzó vagy elavult tudás, a félrevezető kérdés vagy kontextus, a rossz visszakeresés és a mintavételezés is; ezekről a következő szintek szólnak.</p>
 <div class="note warn">
 <b>Amit ebből érdemes elvinni:</b> a „majd egy jobb modell megoldja” várakozás félrevezető. Amíg az értékelési pontrendszer a tippelést jutalmazza, a tippelés megmarad. Ez a rész ösztönzési probléma, nem architekturális.
@@ -166,7 +166,7 @@ def absztencios_rata(model, tesztsor):
 
 <p>A korábbi, 2024-es eredmény (Kalai–Vempala) ennél is élesebb: a <em>kalibrált</em> nyelvi modellek szükségszerűen hallucinálnak. Ha a modell eloszlása jól kalibrált a tanító eloszláshoz, akkor az adatokból ki nem következtethető, ritka („önkényes”) tényeknél elkerülhetetlen a téves generálás; a szabályszerű összefüggésekre és a többször előforduló tényekre a tétel nem ezt mondja — ez az ún. „monofaktum-ráta” (egyszer előforduló tények aránya) által alulról korlátozott. <a class="ref" href="#ref-3">[3]</a></p>
 
-<p>Nyitott vitapont: a 2025-ös papír állítása szerint a hallucináció csak az alapmodelleknél elkerülhetetlen, utótanítással és értékelésváltoztatással érdemben szorítható. Mások (Xu és tsai.) <a class="ref" href="#ref-19">[19]</a> amellett érvelnek, hogy elvi, kiszámíthatósági korlátról van szó. A kettő nem feltétlenül mond ellent — más objektumról beszélnek —, de a szakirodalomban nem tisztázott a viszonyuk.</p>
+<p>Nyitott vitapont: a 2025-ös tanulmány állítása szerint a hallucináció csak az alapmodelleknél elkerülhetetlen, utótanítással és értékelésváltoztatással érdemben szorítható. Mások (Xu és tsai.) <a class="ref" href="#ref-19">[19]</a> amellett érvelnek, hogy elvi, kiszámíthatósági korlátról van szó. A kettő nem feltétlenül mond ellent — más objektumról beszélnek —, de a szakirodalomban nem tisztázott a viszonyuk.</p>
 
 <p>Amit gyakorlati kutatási fogódzónak érdemes tudni: a modellek kalibrációja belső szinten gyakran jobb, mint a kimenetük sugallja (Kadavath és tsai. szerint a modellek többnyire tudják, mit tudnak) <a class="ref" href="#ref-12">[12]</a>. A kalibrációs jel tehát létezik — a kérdés, hogy a felszínre hozható-e. Ez az egyik legaktívabb terület.</p>
       </div>
@@ -320,7 +320,7 @@ if egyetertes &lt; 0.6:
 
 <p>Érdekes és kevéssé ismert részlet: a hőmérséklet nulla melletti maradék nem-determinizmus jelentős része nem a mintavételből jön, hanem a lebegőpontos műveletek nem-asszociativitásából párhuzamos kernelekben. Ugyanaz a modell, ugyanaz a súly, más batch-összetétel — más numerikus eredmény, és ha két token valószínűsége közel van, ez át is billentheti a választást. A szolgáltatók által kínált <code>seed</code> paraméter ezért „legjobb erőfeszítés”, nem garancia.</p>
 
-<p>Nyitott: hogyan definiáljuk az értelmes reprodukálhatóságot egy olyan rendszerben, ahol a bitpontos egyezés se nem elérhető, se nem a helyes cél. A javaslatok többsége eloszlásszintű egyezést mér — ez viszont sokkal nagyobb mintát igényel, mint amennyit a legtöbb csapat futtat.</p>
+<p>Nyitott: hogyan definiáljuk az értelmes reprodukálhatóságot egy olyan rendszerben, ahol a bitpontos egyezés sok kiszolgálási környezetben nem biztosított (rögzített környezetben, determinisztikus műveletekkel elérhető), és gyakran nem is ez a helyes cél. A javaslatok többsége eloszlásszintű egyezést mér — ez viszont sokkal nagyobb mintát igényel, mint amennyit a legtöbb csapat futtat.</p>
       </div>
     </div>
     <div class="quiz" data-level="3"></div>
@@ -565,7 +565,7 @@ def eszkoz_hivas(nev, argumentumok, forras_bizalom):
 <li><b>Benchmarkolás</b> (Yi és tsai., 2023) <a class="ref" href="#ref-11">[11]</a>: mérhetővé tétel, ami nélkül a védelmi állítások ellenőrizhetetlenek.</li>
 </ul>
 
-<p>Az elvi probléma, amit érdemes megérteni: amíg a modell bemenete egyetlen, típus nélküli token-folyam, addig a támadó ugyanazon a csatornán beszél a modellhez, mint a fejlesztő. A megoldás valószínűleg architekturális lesz — szétválasztott csatornák vagy a bizalmi szint token-szintű kódolása —, nem promptmérnökségi.</p>
+<p>Az elvi probléma, amit érdemes megérteni: a szerepjelölők ellenére a modell bemenete végül egyetlen token-folyam, és a modell csak tanult hajlamból követi a bizalmi határokat, nem garantáltan. Ezért a támadó lényegében ugyanazon a csatornán beszél a modellhez, mint a fejlesztő. A megoldás valószínűleg architekturális lesz — szétválasztott csatornák vagy a bizalmi szint token-szintű kódolása —, nem promptmérnökségi.</p>
 
 <p>Ez az a terület, ahol a legnagyobb rés van az iparági gyakorlat és a nyilvános tudás között: a legtöbb éles ágens-rendszer ma olyan jogosultsági modellel fut, ami akkor lenne elfogadható, ha a prompt injection megoldott lenne. Nem az.</p>
       </div>
@@ -593,7 +593,7 @@ def eszkoz_hivas(nev, argumentumok, forras_bizalom):
         <button role="tab" id="t-7c" aria-controls="p-7c" aria-selected="false" tabindex="-1"><b>Kutatói szint</b><span>forrásokkal</span></button>
       </div>
       <div role="tabpanel" id="p-7a" aria-labelledby="t-7a">
-<p>Ha egy lépés 95%-ban sikerül, és tíz lépést fűzöl össze, a teljes lánc nem 95%-ban sikerül, hanem 0,95<sup>10</sup> ≈ <b>60%</b>-ban. Húsz lépésnél 36%. Harmincnál 21%.</p>
+<p>Ha egy lépés 95%-ban sikerül, és tíz egymástól független lépést fűzöl össze, a teljes lánc nem 95%-ban sikerül, hanem 0,95<sup>10</sup> ≈ <b>60%</b>-ban. Húsz lépésnél 36%. Harmincnál 21%.</p>
 
 <p>Ezért van az, hogy a demók működnek és az éles rendszerek nem. A demó három lépés. Az éles feladat tizenöt.</p>
 
@@ -927,7 +927,7 @@ window.KVIZ = {
  3: [
   { q: 'Determinisztikus-e a kimenet 0-s hőmérsékleten?',
     o: ['Igen, minden futás bitre azonos.', 'Közelebb kerül hozzá, de még ingadozhat.', 'Nem, sőt véletlenszerűbb lesz.'],
-    a: 1, x: 'A lebegőpontos összegzés sorrendje, a kiszolgáló kötegmérete és a hardver miatt 0-s hőmérsékleten is előfordulhat eltérés.' },
+    a: 1, x: 'A lebegőpontos összegzés sorrendje, a kiszolgáló kötegmérete és a hardver miatt 0-s hőmérsékleten is előfordulhat eltérés. Saját, rögzített környezetben determinisztikus műveletekkel ismételhető futtatás is elérhető.' },
   { q: 'Egy teszteset egyszer sikeresen lefutott. Mi a helyes következő lépés?',
     o: ['Elfogadni, hiszen átment.', 'Többször lefuttatni, és a sikerarányt nézni.', 'Emelni a hőmérsékletet, és újra futtatni.'],
     a: 1, x: 'Egy futás csak megfigyelés. Többször kell lefuttatni (induló értéknek jó az öt), és megnézni, hányszor jó: ettől lesz a tesztelésből mérés.' },
@@ -994,7 +994,7 @@ window.KVIZ = {
   { q: 'Mi a golden set?',
     o: ['Kézzel összeállított tesztesetek, ismert jó válasszal.', 'A modell legjobb válaszainak automatikus gyűjteménye.', 'A tanítóadat legjobb minőségű része.'],
     a: 0, x: 'Néhány tucat vagy száz eset, amelyről te döntötted el, mi a jó válasz. Kezdésnek harminc gondosan összeállított eset is sokat ad, gyakran többet, mint ötszáz összekapart.' },
-  { q: 'Miért kell minden mérési esetet többször lefuttatni?',
+  { q: 'Miért érdemes egy nem determinisztikus rendszer mérési eseteit többször lefuttatni?',
     o: ['Mert az első futás mindig lassabb.', 'Mert a rendszer nem determinisztikus.', 'Mert a bíró csak átlagot tud értékelni.'],
     a: 1, x: 'Egy futás csak megfigyelés. A futások közti szórás önálló jel is: nagy szórás instabil promptot jelez, akkor is, ha az átlag elfogadható.' },
   { q: 'Melyik a modellbírók ismert torzítása?',

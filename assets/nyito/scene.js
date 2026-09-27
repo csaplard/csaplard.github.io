@@ -195,7 +195,7 @@ export function mountModel(host, opts = {}) {
   });
 
   const VIEWS = {
-    home:  { pos: [15.5, 8.2, 20], tgt: [0.3, 4.9, 0], lit: null },
+    home:  { pos: [19.5, 8.2, 16.2], tgt: [0.3, 4.9, 0], lit: null },
     llm:   { pos: [11, 6, 16], tgt: [0, 4.4, 0], lit: ["tokens", "embed", "attn", "mlp", "out", "stream", "flow"] },
     t3d:   { pos: [-15, 11, 14], tgt: [0, 4.8, 0], lit: "all" },
     loss:  { pos: [10, 13, 15], tgt: [0, 7.6, 0], lit: ["out", "top"] },
@@ -204,7 +204,9 @@ export function mountModel(host, opts = {}) {
     py:    { pos: [12, 8, 15], tgt: [0, 4.8, 0], lit: "all", wire: true },
     rag:   { pos: [-13, 6, 15], tgt: [-1.8, 2.2, 0], lit: ["docs", "tokens", "embed"] }
   };
-  function viewDist() { return host.clientWidth < 700 ? 30 : 25; }
+  // keskenyebb asztali kijelzőn (1280–1480 px) kicsit távolabbról nézünk, hogy a modell a szövegoszlopok közé férjen
+  // az elrendezés határait az ablakszélességhez mérjük, mint a CSS (a tároló a görgetősáv miatt keskenyebb)
+  function viewDist() { const w = innerWidth; return w < 700 ? 30 : w < 1280 ? 25 : 25 * Math.min(1.3, Math.max(1, 1480 / w)); }
   function setCam(v) { controls.target.set(...v.tgt); camera.position.set(...v.pos).sub(controls.target).setLength(viewDist()).add(controls.target); }
   setCam(VIEWS.home);
 
@@ -383,12 +385,20 @@ export function mountModel(host, opts = {}) {
     kick();
   }
 
-  /* méret */
+  /* méret; a shiftPx a kép pótlólagos jobbra tolása (lásd main.js: címkék és szöveg) */
+  let shiftPx = 0;
+  function viewOffset(w, h) {
+    camera.setViewOffset(w, h, -((opts.offsetX ? w * opts.offsetX(w) : 0) + shiftPx), 0, w, h);
+    camera.updateProjectionMatrix();
+  }
+  function shift(px) {
+    shiftPx = px; const w = host.clientWidth, h = host.clientHeight;
+    if (w && h) { viewOffset(w, h); kick(); }
+  }
   function size() {
     const w = host.clientWidth, h = host.clientHeight; if (!w || !h) return;
     renderer.setSize(w, h, false); camera.aspect = w / h;
-    camera.setViewOffset(w, h, opts.offsetX ? -w * opts.offsetX(w) : 0, 0, w, h);
-    camera.updateProjectionMatrix();
+    viewOffset(w, h);
     if (composer) { composer.setSize(w, h); bloom.setSize(w / 2, h / 2); }
     sized = true; kick();
   }
@@ -423,5 +433,5 @@ export function mountModel(host, opts = {}) {
   canvas.addEventListener("keydown", e => { if (e.key === "+" || e.key === "=") zoom(0.88); else if (e.key === "-") zoom(1.14); });
 
   kick();
-  return { go, kick, zoom, tilt, reset: () => go(state === VIEWS.home ? "home" : "home", true) };
+  return { go, kick, zoom, tilt, shift, reset: () => go(state === VIEWS.home ? "home" : "home", true) };
 }

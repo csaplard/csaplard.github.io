@@ -253,7 +253,7 @@ print(np.var(y))                     # = mse(y.mean()): ennél lejjebb nem lehet
     <div>
       <p class="lvl-meta">3. szint a 8-ból · kb. 30 perc · három mélységben · szintzáró kvíz</p>
       <h2 id="h-3">A veszteségtáj: a paraméterek térképe</h2>
-      <p class="lvl-goal"><b>Cél:</b>megérteni, hogy a tanulás egy táj legmélyebb pontjának keresése, és hogy ezt a tájat a modell és a veszteség együtt adja.</p>
+      <p class="lvl-goal"><b>Cél:</b>megérteni, hogy a tanulás egy táj legmélyebb pontjának keresése, és hogy ezt a tájat az adatok, a modell és a veszteség együtt adják.</p>
       <p class="lock" hidden><span class="lock-text"></span></p>
     </div>
   </header>
@@ -286,7 +286,7 @@ print(np.var(y))                     # = mse(y.mean()): ennél lejjebb nem lehet
         </div>
 
         <p>Két paraméternél (például ha a modell <span class="m">ár = w · alapterület + b</span>, vagyis egy alapárat is tanul, amely nem függ a mérettől) a táj már felület, mint a lap tetején lévő szintvonalas térkép. Egy neurális hálónak milliónyi vagy milliárdnyi paramétere van, így a tája ennyi dimenziós. Ezt senki nem látja. Az algoritmus sem látja: csak azt érzékeli, merre lejt a talaj ott, ahol éppen áll. Erről szól a 4. szint.</p>
-        <p class="key"><b>Kulcsgondolat.</b> A táj alakját két dolog együtt adja: a modell (milyen függvényeket tud felvenni) és a veszteségfüggvény (mit tartunk rossznak). Ha bármelyiket kicseréled, más tájat kapsz, és más lesz a legmélyebb pont.</p>
+        <p class="key"><b>Kulcsgondolat.</b> A veszteségtáj alakját az adatok, a modell (milyen függvényeket tud felvenni) és a választott veszteségfüggvény (mit tartunk rossznak) együtt határozzák meg; az optimalizáló pedig azt szabályozza, hogyan haladunk ezen a tájon. Ha bármelyiket kicseréled, más tájat kapsz, és más lehet a legmélyebb pont.</p>
       </div>
 
       <div role="tabpanel" id="p-3b" aria-labelledby="t-3b" hidden>
@@ -641,7 +641,7 @@ nll = np.mean(e**2 / (2 * sigma**2) + np.log(sigma * np.sqrt(2 * np.pi)))
         </div>
 
         <h3>Túl jó tanulás: a túlillesztés</h3>
-        <p>Ha a modell elég nagy, a tanítóadaton a veszteséget szinte nullára is le tudja vinni. Ez gyanús, mert az adatokban mindig marad olyan ingadozás, amelyet a bemenetek nem magyaráznak meg (a 2. szint irreducibilis hibája). Ilyenkor a modell a zajt is bemagolta, és új lakásokon rosszabbul teljesít. Olyan ez, mint a diák, aki a tavalyi feladatsor megoldásait tanulta meg, nem a módszert.</p>
+        <p>Egy elég rugalmas modell nagyon kis hibát érhet el a tanítóadatokon. Ez önmagában még nem bizonyít túlillesztést: nagyon túlparaméterezett modellek nulla tanítási hiba mellett is általánosíthatnak jól <a class="ref" href="#ref-25">[25]</a>. Túlillesztésre az utal, ha a tanítási veszteség tovább csökken, miközben a félretett, megfelelően választott adatokon mért teljesítmény romlik. Zajos adatoknál (a 2. szint irreducibilis hibája) ennek egyik oka lehet, hogy a modell a tanítóminta véletlen sajátosságaihoz is alkalmazkodik. Olyan ez, mint a diák, aki a tavalyi feladatsor megoldásait tanulta meg, nem a módszert.</p>
         <p>Ezért az adatok egy részét félretesszük, és csak ellenőrzésre használjuk: ez a <b>validációs halmaz</b>. A tanítás közben mindkét veszteséget figyeljük.</p>
         <div class="demo" id="d7b">
           <h4>Tanítási és validációs veszteség</h4>
@@ -916,8 +916,8 @@ window.KVIZ = {
     o: ['Felfelé nyíló parabola, egyetlen minimummal.', 'Sok völggyel tarkított, hullámos görbe.', 'Vízszintes egyenes, minimum nélkül.'],
     a: 0, x: 'Kibontva L(w) = (x² átlaga) · w² − 2 · (xy átlaga) · w + (y² átlaga), ami másodfokú w-ben, tehát parabola. A csúcsa zárt képlettel kiszámolható.' },
   { q: 'Mi határozza meg a veszteségtáj alakját?',
-    o: ['Csak a modell felépítése.', 'Csak a választott veszteségfüggvény.', 'A modell és a veszteség együtt.'],
-    a: 2, x: 'A modell adja, milyen jóslatok lehetségesek, a veszteség pedig azt, mennyire rossz egy-egy jóslat. Bármelyiket cseréled, más tájat kapsz.' }
+    o: ['Csak a modell felépítése.', 'Csak a választott veszteségfüggvény.', 'Az adatok, a modell és a veszteség együtt.'],
+    a: 2, x: 'A modell adja, milyen jóslatok lehetségesek, a veszteség azt, mennyire rossz egy-egy jóslat, az adatok pedig azt, mihez mérjük a jóslatokat. A képletben is látszik: más x és y értékekkel más L(w) jön ki. Bármelyiket cseréled, más tájat kapsz.' }
  ],
  4: [
   { q: 'Merre lép a gradiens-módszer?',
@@ -958,7 +958,7 @@ window.KVIZ = {
     a: 0, x: 'P(hiány) = 1/(k + 1) = 1/10. Nulla százalékot csak nagyon sok kenyérrel érhetnél el, amit a kidobott maradékon fizetnél meg. Az 50% a k = 1 esete, vagyis a medián.' },
   { q: 'Mi a túlillesztés tipikus jele?',
     o: ['Mindkét veszteség együtt csökken.', 'A tanítási csökken, a validációs nőni kezd.', 'A tanítási veszteség nőni kezd.'],
-    a: 1, x: 'A modell ilyenkor már a tanítóadat zaját tanulja, ami új adaton nem segít, sőt árt.' },
+    a: 1, x: 'A modell ilyenkor a tanítóminta véletlen sajátosságaihoz is alkalmazkodik, ami új adaton nem segít, sőt árt. Az alacsony tanítási veszteség önmagában még nem ennek a jele.' },
   { q: 'Mit tesz az L2-regularizáció a célfüggvénnyel?',
     o: ['Büntetést ad a nagy súlyokért.', 'Eltávolítja a kiugró adatpontokat.', 'Menet közben növeli a tanulási rátát.'],
     a: 0, x: 'J = adatveszteség + λ·Σθ². A λ szabályozza, mennyire erős az egyszerűség iránti igény. A kiugró adatokat nem távolítja el, azokra a 2. szint robusztus veszteségei valók.' }

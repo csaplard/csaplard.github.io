@@ -78,7 +78,15 @@ def ugyfeljegy_statisztika(kurzus=None):
     Figyeld meg, mit ad vissza: TÖMÖR, aggregált adatot. Nem az öt teljes
     ügyféljegy szövegét — az bemenne a kontextusba, tokent és figyelmet enne.
     Az eszköz feladata a szűrés, nem a nyers adat átpasszolása.
+
+    A bemenetet az adatbázis-hívás ELŐTT ellenőrizzük: a modell hibás típusú
+    értéket is küldhet. Megengedett: hiányzó vagy None (= összes kurzus),
+    illetve nem üres szöveg. Minden más strukturált hibaüzenetet kap.
     """
+    if kurzus is not None and (not isinstance(kurzus, str) or not kurzus.strip()):
+        return {"hiba": "A 'kurzus' paraméter egy kurzuskód szövegként, például "
+                        f"'K-402'; az összes kurzushoz hagyd el. Kapott érték: {kurzus!r}."}
+    kurzus = kurzus.strip() if kurzus else None
     kapcsolat = sqlite3.connect(ADATBAZIS)
     if kurzus:
         sorok = kapcsolat.execute(
@@ -119,7 +127,7 @@ ESZKOZ_SEMA = {
         "properties": {
             "kurzus": {
                 "type": "string",
-                "description": "A kurzus kódja, például 'K-402'. "
+                "description": "A kurzus kódja szövegként, például 'K-402'. "
                                "Ha elhagyod, az összes kurzusra számol.",
             }
         },
@@ -141,6 +149,9 @@ VEGREHAJTOK = {"ugyfeljegy_statisztika": ugyfeljegy_statisztika}
 
 def eszkoz_futtat(nev, bemenet):
     """A modell csak KÉRI a hívást; mi döntjük el, mi fut le."""
+    if not isinstance(bemenet, dict):
+        return {"hiba": f"Az eszköz bemenete kulcs–érték párokból álló objektum legyen, "
+                        f"nem {type(bemenet).__name__}."}
     fuggveny = VEGREHAJTOK.get(nev)
     if fuggveny is None:
         return {"hiba": f"Ismeretlen eszköz: {nev}. "

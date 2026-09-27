@@ -35,6 +35,8 @@ A repó statikus HTML; a GitHub Pages közvetlenül ezt szolgálja ki. Helyi kip
 - **Érintés:** egy ujj forgat, két ujj csippentve nagyít, dupla koppintás: alapnézet. Érintőképernyőn nincsenek gombok. A modell mobilon csak a képernyő kb. 60%-át foglalja, hogy mellette görgetni lehessen.
 - **Billentyű:** a kijelölt modellen a bal/jobb nyíl forgat, a +/− nagyít.
 - **Világos módban nincs talajrács** (`grid.visible = !C.light`), mert zavarja a képet.
+- **Elrendezés:** 1280 px-től háromhasábos (szöveg, modell a háttérben, útvonal); alatta egymás alatti (szöveg, modell, útvonal). A határt a CSS (`max-width:1279.98px`) és a JS (`innerWidth`, nem a tároló szélessége) ugyanígy méri.
+- **Címkék és szöveg:** asztali elrendezésben a `fitLabels()` (main.js) megméri a 3D címkék és a bevezető szövegsorainak távolságát, és ha 28 px-nél kevesebb, a képet a szükséges mértékben jobbra tolja (`model.shift`). 1280–1480 px között a kamera kicsit távolabb áll (`viewDist`), hogy a modell a hasábok közé férjen.
 - **Eltolás (pan) nincs,** hogy a modell ne csússzon a szöveg alá. A nagyításnak alsó határa van (`minDistance`) ugyanezért.
 - **Anyagváltás:** a listában egy anyagra mutatva a kamera ugyanabból a távolságból arra a részre fordul, és kiemeli. Egérrel a listáról lemenve visszaáll.
 
